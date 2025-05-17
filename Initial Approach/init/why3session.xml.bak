@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
+"https://www.why3.org/why3session.dtd">
+<why3session shape_version="6">
+<prover id="1" name="CVC5" version="1.1.0" timelimit="5" steplimit="0" memlimit="1000"/>
+<prover id="6" name="Alt-Ergo" version="2.6.1" timelimit="5" steplimit="0" memlimit="1000"/>
+<file format="whyml" proved="true">
+<path name=".."/><path name="init.mlw"/>
+<theory name="AStar">
+ <goal name="Nonneg_path">
+ <transf name="induction_pr" >
+  <goal name="Nonneg_path.0">
+  <proof prover="1"><result status="valid" time="0.007684" steps="6976"/></proof>
+  </goal>
+  <goal name="Nonneg_path.1">
+  <proof prover="1"><result status="valid" time="0.019052" steps="10664"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="Path_inversion">
+ <proof prover="6"><result status="valid" time="0.014366" steps="19"/></proof>
+ </goal>
+ <goal name="Path_implies_shortest_path">
+ <transf name="introduce_premises" >
+  <goal name="Path_implies_shortest_path.0">
+  <transf name="induction" arg1="d">
+   <goal name="Path_implies_shortest_path.0.0" expl="base case">
+   <proof prover="1"><result status="valid" time="0.017524" steps="8573"/></proof>
+   <proof prover="6"><result status="timeout" time="5.000000" steps="45426"/></proof>
+   </goal>
+   <goal name="Path_implies_shortest_path.0.1" expl="recursive case">
+   <proof prover="1"><result status="valid" time="0.028575" steps="14110"/></proof>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="Path_implies_shortest_path_from_neighbours">
+ <proof prover="6"><result status="valid" time="0.077694" steps="769"/></proof>
+ </goal>
+ <goal name="Completeness_of_paths_in_a_graph">
+ <transf name="induction_pr" >
+  <goal name="Completeness_of_paths_in_a_graph.0">
+  <proof prover="1"><result status="valid" time="0.011234" steps="10249"/></proof>
+  </goal>
+  <goal name="Completeness_of_paths_in_a_graph.1">
+  <proof prover="1"><result status="valid" time="0.014574" steps="11249"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="reconstruct_path&#39;vc" expl="VC for reconstruct_path">
+ </goal>
+ <goal name="a_star_algorithm&#39;vc" expl="VC for a_star_algorithm">
+ <proof prover="1" obsolete="true"><result status="timeout" time="5.000000" steps="613432"/></proof>
+ <proof prover="6" obsolete="true"><result status="timeout" time="5.000000" steps="98229"/></proof>
+ </goal>
+</theory>
+</file>
+</why3session>

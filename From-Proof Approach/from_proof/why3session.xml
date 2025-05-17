@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
+"https://www.why3.org/why3session.dtd">
+<why3session shape_version="6">
+<prover id="0" name="Z3" version="4.15.0" timelimit="5" steplimit="0" memlimit="1000"/>
+<prover id="1" name="CVC5" version="1.1.0" timelimit="5" steplimit="0" memlimit="1000"/>
+<prover id="2" name="Alt-Ergo" version="2.6.1" timelimit="5" steplimit="0" memlimit="1000"/>
+<file format="whyml" proved="true">
+<path name=".."/><path name="from_proof.mlw"/>
+<theory name="MyProof">
+ <goal name="weight&#39;refn&#39;vc" expl="VC for weight&#39;refn">
+ <proof prover="0" timelimit="1" obsolete="true"><result status="valid" time="0.006166" steps="4571"/></proof>
+ </goal>
+ <goal name="LengthNonneg">
+ <transf name="induction_pr" >
+  <goal name="LengthNonneg.0">
+  <proof prover="1" obsolete="true"><result status="valid" time="0.016756" steps="13057"/></proof>
+  </goal>
+  <goal name="LengthNonneg.1">
+  <proof prover="2" obsolete="true"><result status="valid" time="0.024849" steps="137"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="PathImpliesOptimalPathexists">
+ <proof prover="0" obsolete="true"><result status="valid" time="0.011554" steps="60363"/></proof>
+ </goal>
+</theory>
+</file>
+</why3session>
