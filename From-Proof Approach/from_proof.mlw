@@ -144,8 +144,9 @@ module PathWeights
   clone export MyGraph
   
   val function weight (a b: node) : int
-      ensures { result >= 0 }
       ensures { a = b -> result = 0 }
+      ensures { a <> b -> result > 0 }
+      
   
   function path_weight (l: list node) : int = match l with
       | Nil -> 0
@@ -155,6 +156,16 @@ module PathWeights
   
   lemma positive_path_weight: 
       forall x y: node, l: list node. path l x y -> path_weight l >= 0
+  
+  lemma path_implies_path_weight_before:
+      forall x y z: node, t: list node. path (Cons x (Cons z t)) x y -> 
+          let d = path_weight (Cons x (Cons z t)) in
+          path_weight (Cons z t) = d - weight x z
+  
+  lemma split_weight:
+      forall x y a b: node, l1 l2: list node.
+          path ((l1 ++ (Cons a Nil)) ++ (Cons b l2)) x y -> 
+          path_weight ((l1 ++ (Cons a Nil)) ++ (Cons b l2)) = path_weight (l1 ++ (Cons a Nil)) + weight a b + path_weight (Cons b l2)
   
 end 
 
@@ -166,10 +177,10 @@ module GraphsAndOptimalPaths
   predicate optimal_path (l: list node) (src dst: node) =
       path l src dst /\ 
       (forall l': list node. path l' src dst -> path_weight l' >= path_weight l)
-                  
-  lemma optimal_path_is_shortest:
-      forall a b: node, l l': list node. 
-          optimal_path l a b -> path l' a b -> path_weight l <= path_weight l'
+  
+  predicate smallest_edge (src n: node) = 
+      edge src n /\
+      forall x: node. edge src x -> weight src n <= weight src x
   
   lemma path_existance_implies_optimal_path_existance:
       forall a b: node. exists l : list node. 
@@ -181,8 +192,20 @@ module GraphsAndOptimalPaths
           
   lemma optimal_paths:
       forall x y z: node, l: list node.
-        optimal_path l y z -> edge x y -> not (Mem.mem x l) ->
-        path (Cons x l) x z /\ path_weight (Cons x l) - weight x y = path_weight l
+          optimal_path l y z -> edge x y -> not (Mem.mem x l) ->
+          path (Cons x l) x z /\ path_weight (Cons x l) - weight x y = path_weight l
+  
+  goal optimal_path_to_self_is_empty :
+      forall x:node, l:list node.
+          optimal_path l x x -> l = Cons x (Nil: list node)
+          
+  lemma optimal_neighbour_is_optimal_path:
+      forall src dst n: node, l: list node. 
+          optimal_path (Cons src (Cons n l)) src dst -> 
+          (forall ns: node, ls: list node. 
+              edge src ns -> 
+              optimal_path (Cons ns ls) ns dst -> 
+              weight src n + path_weight (Cons n l) <=  weight src ns + path_weight (Cons ns ls))
   
   lemma subpath_of_optimal_is_optimal:
       forall x y z: node, l: list node. optimal_path (Cons x (Cons y l)) x z -> optimal_path (Cons y l) y z
