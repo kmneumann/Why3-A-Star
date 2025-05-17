@@ -2,12 +2,229 @@
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
 "https://www.why3.org/why3session.dtd">
 <why3session shape_version="6">
-<prover id="0" name="Z3" version="4.15.0" timelimit="1" steplimit="0" memlimit="1000"/>
-<file format="whyml" proved="true">
+<prover id="0" name="Z3" version="4.15.0" timelimit="5" steplimit="0" memlimit="1000"/>
+<prover id="1" name="CVC5" version="1.1.0" timelimit="5" steplimit="0" memlimit="1000"/>
+<prover id="2" name="Alt-Ergo" version="2.6.1" timelimit="5" steplimit="0" memlimit="1000"/>
+<file format="whyml">
 <path name=".."/><path name="from_proof.mlw"/>
-<theory name="MyProof" proved="true">
- <goal name="weight&#39;refn&#39;vc" expl="VC for weight&#39;refn" proved="true">
- <proof prover="0"><result status="valid" time="0.006166" steps="3040"/></proof>
+<theory name="SubList" proved="true">
+ <goal name="not_mem_is_nil" proved="true">
+ <transf name="introduce_premises" proved="true" >
+  <goal name="not_mem_is_nil.0" proved="true">
+  <transf name="induction_arg_ty_lex" proved="true" arg1="l">
+   <goal name="not_mem_is_nil.0.0" proved="true">
+   <proof prover="0"><result status="valid" time="0.011477" steps="12987"/></proof>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="sublist_from_mem_is_not_nil" proved="true">
+ <transf name="introduce_premises" proved="true" >
+  <goal name="sublist_from_mem_is_not_nil.0" proved="true">
+  <transf name="induction_arg_ty_lex" proved="true" arg1="l">
+   <goal name="sublist_from_mem_is_not_nil.0.0" proved="true">
+   <proof prover="1"><result status="valid" time="0.007868" steps="2025"/></proof>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="first_elem_is_x" proved="true">
+ <transf name="introduce_premises" proved="true" >
+  <goal name="first_elem_is_x.0" proved="true">
+  <transf name="induction_arg_ty_lex" proved="true" arg1="l">
+   <goal name="first_elem_is_x.0.0" proved="true">
+   <proof prover="0"><result status="valid" time="0.007965" steps="11089"/></proof>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+</theory>
+<theory name="MyGraph" proved="true">
+ <goal name="no_self_edges" proved="true">
+ <proof prover="2"><result status="valid" time="0.014281" steps="6"/></proof>
+ </goal>
+ <goal name="non_mem_lemma" proved="true">
+ <proof prover="2"><result status="valid" time="0.014668" steps="8"/></proof>
+ </goal>
+ <goal name="path_one_inversion" proved="true">
+ <proof prover="0"><result status="valid" time="0.013331" steps="62473"/></proof>
+ </goal>
+ <goal name="path_cons_inversion" proved="true">
+ <proof prover="2"><result status="valid" time="0.034102" steps="370"/></proof>
+ </goal>
+ <goal name="path_implies_path" proved="true">
+ <proof prover="0"><result status="valid" time="0.012504" steps="57394"/></proof>
+ </goal>
+ <goal name="path_is_subset" proved="true">
+ <transf name="induction_pr" proved="true" >
+  <goal name="path_is_subset.0" proved="true">
+  <proof prover="1"><result status="valid" time="0.015592" steps="11975"/></proof>
+  </goal>
+  <goal name="path_is_subset.1" proved="true">
+  <proof prover="2"><result status="valid" time="0.082621" steps="1330"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="simple_path" proved="true">
+ <transf name="induction_pr" proved="true" >
+  <goal name="simple_path.0" proved="true">
+  <proof prover="2"><result status="valid" time="0.020179" steps="98"/></proof>
+  </goal>
+  <goal name="simple_path.1" proved="true">
+  <proof prover="2"><result status="valid" time="0.024026" steps="178"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="paths_are_a_subset" proved="true">
+ <proof prover="0"><result status="valid" time="0.011876" steps="52882"/></proof>
+ </goal>
+ <goal name="cardinal_of_elements_is_length" proved="true">
+ <transf name="induction_pr" proved="true" >
+  <goal name="cardinal_of_elements_is_length.0" proved="true">
+  <proof prover="2"><result status="valid" time="0.015956" steps="21"/></proof>
+  </goal>
+  <goal name="cardinal_of_elements_is_length.1" proved="true">
+  <proof prover="1"><result status="valid" time="0.044298" steps="14564"/></proof>
+  </goal>
+  <goal name="cardinal_of_elements_is_length.2" proved="true">
+  <proof prover="2"><result status="valid" time="0.018944" steps="52"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="paths_not_longer_than_num_nodes" proved="true">
+ <proof prover="0"><result status="valid" time="0.026120" steps="110100"/></proof>
+ </goal>
+ <goal name="path_imples_edge" proved="true">
+ <proof prover="1"><result status="valid" time="0.032219" steps="11870"/></proof>
+ </goal>
+ <goal name="path_imples_path_before" proved="true">
+ <proof prover="2"><result status="valid" time="0.017889" steps="69"/></proof>
+ </goal>
+ <goal name="path_suffix_exists" proved="true">
+ <transf name="induction_pr" proved="true" >
+  <goal name="path_suffix_exists.0" proved="true">
+  <proof prover="2"><result status="valid" time="0.020409" steps="94"/></proof>
+  </goal>
+  <goal name="path_suffix_exists.1" proved="true">
+  <proof prover="2"><result status="valid" time="0.144891" steps="2192"/></proof>
+  </goal>
+ </transf>
+ </goal>
+</theory>
+<theory name="PathWeights" proved="true">
+ <goal name="positive_path_weight" proved="true">
+ <transf name="induction_pr" proved="true" >
+  <goal name="positive_path_weight.0" proved="true">
+  <proof prover="2"><result status="valid" time="0.016099" steps="19"/></proof>
+  </goal>
+  <goal name="positive_path_weight.1" proved="true">
+  <proof prover="0"><result status="valid" time="0.014300" steps="67063"/></proof>
+  </goal>
+ </transf>
+ </goal>
+</theory>
+<theory name="GraphsAndOptimalPaths">
+ <goal name="optimal_path_is_shortest" proved="true">
+ <proof prover="2"><result status="valid" time="0.019164" steps="40"/></proof>
+ </goal>
+ <goal name="path_existance_implies_optimal_path_existance" proved="true">
+ <proof prover="2"><result status="valid" time="0.031712" steps="245"/></proof>
+ </goal>
+ <goal name="path_bounds_optimal" proved="true">
+ <proof prover="0"><result status="valid" time="0.011897" steps="56784"/></proof>
+ </goal>
+ <goal name="optimal_paths" proved="true">
+ <proof prover="2"><result status="valid" time="0.051489" steps="584"/></proof>
+ </goal>
+ <goal name="subpath_of_optimal_is_optimal">
+ <proof prover="0"><result status="timeout" time="5.000000" steps="17943364"/></proof>
+ <proof prover="1"><result status="timeout" time="5.000000" steps="419198"/></proof>
+ <proof prover="2"><result status="timeout" time="5.000000" steps="68856"/></proof>
+ </goal>
+</theory>
+<theory name="Heuristic">
+ <goal name="weaker_consistancy_across_path" proved="true">
+ <transf name="introduce_premises" proved="true" >
+  <goal name="weaker_consistancy_across_path.0" proved="true">
+  <transf name="induction_arg_ty_lex" proved="true" arg1="l">
+   <goal name="weaker_consistancy_across_path.0.0" proved="true">
+   <proof prover="1"><result status="valid" time="0.039906" steps="13950"/></proof>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="consistancy_implies_consistancy_across_path" proved="true">
+ <proof prover="1"><result status="valid" time="0.022875" steps="11863"/></proof>
+ </goal>
+ <goal name="consistancy_lower_estimate" proved="true">
+ <transf name="induction_pr" proved="true" >
+  <goal name="consistancy_lower_estimate.0" proved="true">
+  <proof prover="0"><result status="valid" time="0.015532" steps="77279"/></proof>
+  </goal>
+  <goal name="consistancy_lower_estimate.1" proved="true">
+  <proof prover="2"><result status="valid" time="0.106539" steps="1524"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="consistancy_implies_admissibility">
+ <proof prover="0"><result status="timeout" time="5.000000" steps="13790381"/></proof>
+ <proof prover="1"><result status="timeout" time="5.000000" steps="354165"/></proof>
+ <proof prover="2"><result status="timeout" time="5.000000" steps="84333"/></proof>
+ <transf name="introduce_premises" >
+  <goal name="consistancy_implies_admissibility.0">
+  <proof prover="0"><result status="timeout" time="5.000000" steps="13782192"/></proof>
+  <proof prover="1"><result status="timeout" time="5.000000" steps="354092"/></proof>
+  <proof prover="2"><result status="timeout" time="5.000000" steps="81992"/></proof>
+  <transf name="unfold" arg1="admissible">
+   <goal name="consistancy_implies_admissibility.0.0">
+   <proof prover="0"><result status="timeout" time="5.000000" steps="12639437"/></proof>
+   <proof prover="1"><result status="timeout" time="5.000000" steps="431126"/></proof>
+   <proof prover="2"><result status="timeout" time="5.000000" steps="86960"/></proof>
+   <transf name="unfold" arg1="monotonic" arg2="in" arg3="H1">
+    <goal name="consistancy_implies_admissibility.0.0.0">
+    <proof prover="0"><result status="timeout" time="5.000000" steps="13336652"/></proof>
+    <proof prover="1"><result status="timeout" time="5.000000" steps="430755"/></proof>
+    <proof prover="2"><result status="timeout" time="5.000000" steps="90835"/></proof>
+    </goal>
+   </transf>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+</theory>
+<theory name="MyProof">
+ <goal name="weight&#39;refn&#39;vc" expl="VC for weight&#39;refn">
+ <proof prover="0" timelimit="1" obsolete="true"><result status="valid" time="0.006166" steps="4571"/></proof>
+ </goal>
+ <goal name="LengthNonneg">
+ <transf name="induction_pr" >
+  <goal name="LengthNonneg.0">
+  <proof prover="2" obsolete="true"><result status="valid" time="0.024849" steps="137"/></proof>
+  </goal>
+  <goal name="LengthNonneg.1">
+  <proof prover="1" obsolete="true"><result status="valid" time="0.016756" steps="13057"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="NoShorterPathToSelf">
+ </goal>
+ <goal name="OptimalPathToSelf">
+ </goal>
+ <goal name="OptimalPathIsShortest">
+ <proof prover="0" obsolete="true"><result status="valid" time="0.011554" steps="60363"/></proof>
+ </goal>
+ <goal name="PathBoundsOptimal">
+ </goal>
+ <goal name="PathImpliesOptimalExists">
+ </goal>
+ <goal name="ConsistancyImpliesAdmissibility">
+ </goal>
+ <goal name="a_star_search&#39;vc" expl="VC for a_star_search">
  </goal>
 </theory>
 </file>
