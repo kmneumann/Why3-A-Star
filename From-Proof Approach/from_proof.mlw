@@ -195,17 +195,9 @@ module GraphsAndOptimalPaths
           optimal_path l y z -> edge x y -> not (Mem.mem x l) ->
           path (Cons x l) x z /\ path_weight (Cons x l) - weight x y = path_weight l
   
-  goal optimal_path_to_self_is_empty :
+  lemma optimal_path_to_self_is_empty :
       forall x:node, l:list node.
           optimal_path l x x -> l = Cons x (Nil: list node)
-          
-  lemma optimal_neighbour_is_optimal_path:
-      forall src dst n: node, l: list node. 
-          optimal_path (Cons src (Cons n l)) src dst -> 
-          (forall ns: node, ls: list node. 
-              edge src ns -> 
-              optimal_path (Cons ns ls) ns dst -> 
-              weight src n + path_weight (Cons n l) <=  weight src ns + path_weight (Cons ns ls))
   
   lemma subpath_of_optimal_is_optimal:
       forall x y z: node, l: list node. optimal_path (Cons x (Cons y l)) x z -> optimal_path (Cons y l) y z

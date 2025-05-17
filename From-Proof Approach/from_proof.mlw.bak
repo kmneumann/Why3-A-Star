@@ -178,7 +178,6 @@ module GraphsAndOptimalPaths
       path l src dst /\ 
       (forall l': list node. path l' src dst -> path_weight l' >= path_weight l)
   
-  
   predicate smallest_edge (src n: node) = 
       edge src n /\
       forall x: node. edge src x -> weight src n <= weight src x
@@ -196,9 +195,20 @@ module GraphsAndOptimalPaths
           optimal_path l y z -> edge x y -> not (Mem.mem x l) ->
           path (Cons x l) x z /\ path_weight (Cons x l) - weight x y = path_weight l
   
-  lemma optimal_path_to_self_is_empty:
-      forall x: node, l: list node. 
-          optimal_path l x x -> l = (Cons x Nil)
+  lemma optimal_path_to_self_is_empty :
+      forall x:node, l:list node.
+          optimal_path l x x -> l = Cons x (Nil: list node)
+  
+  lemma temp:
+      forall src dst x: node, t: list node.
+          let l = Cons src (Cons x t) in
+          path l src dst /\ 
+          (forall l': list node. path l' src dst -> path_weight l' >= path_weight l)
+          -> (forall t': list node. 
+              let l' = Cons src (Cons x t') in 
+              path l' src dst ->
+              path_weight t' + weight src x >= path_weight t + weight src x
+          )
           
   lemma optimal_neighbour_is_optimal_path:
       forall src dst n: node, l: list node. 

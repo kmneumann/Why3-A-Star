@@ -152,47 +152,41 @@
  <goal name="optimal_path_to_self_is_empty" proved="true">
  <proof prover="0"><result status="valid" time="0.011571" steps="75687"/></proof>
  </goal>
+ <goal name="subpath_of_optimal_is_optimal">
+ <transf name="introduce_premises" >
+  <goal name="subpath_of_optimal_is_optimal.0">
+  </goal>
+ </transf>
+ </goal>
+ <goal name="temp">
+ </goal>
  <goal name="optimal_neighbour_is_optimal_path">
  <transf name="introduce_premises" >
   <goal name="optimal_neighbour_is_optimal_path.0">
   <transf name="case" arg1="((weight src n + path_weight (Cons n l)) &gt; (weight src ns + path_weight (Cons ns ls)))">
    <goal name="optimal_neighbour_is_optimal_path.0.0" expl="true case">
-   <proof prover="0"><result status="timeout" time="5.000000" steps="14317907"/></proof>
-   <proof prover="1"><result status="timeout" time="5.000000" steps="548280"/></proof>
-   <proof prover="2"><result status="timeout" time="5.000000" steps="56194"/></proof>
+   <proof prover="0" obsolete="true"><result status="timeout" time="5.000000" steps="14317907"/></proof>
+   <proof prover="1" obsolete="true"><result status="timeout" time="5.000000" steps="548280"/></proof>
+   <proof prover="2" obsolete="true"><result status="timeout" time="5.000000" steps="56194"/></proof>
    </goal>
-   <goal name="optimal_neighbour_is_optimal_path.0.1" expl="false case" proved="true">
-   <proof prover="0"><result status="valid" time="0.004585" steps="5690"/></proof>
+   <goal name="optimal_neighbour_is_optimal_path.0.1" expl="false case">
+   <proof prover="0" obsolete="true"><result status="valid" time="0.004585" steps="5690"/></proof>
    </goal>
   </transf>
   <transf name="cut" arg1="(not (optimal_path (Cons ns ls) ns dst) -&gt; false)">
    <goal name="optimal_neighbour_is_optimal_path.0.0">
-   <proof prover="0"><result status="timeout" time="5.000000" steps="14425910"/></proof>
-   <proof prover="1"><result status="timeout" time="5.000000" steps="563312"/></proof>
-   <proof prover="2"><result status="timeout" time="5.000000" steps="61063"/></proof>
+   <proof prover="0" obsolete="true"><result status="timeout" time="5.000000" steps="14425910"/></proof>
+   <proof prover="1" obsolete="true"><result status="timeout" time="5.000000" steps="563312"/></proof>
+   <proof prover="2" obsolete="true"><result status="timeout" time="5.000000" steps="61063"/></proof>
    </goal>
-   <goal name="optimal_neighbour_is_optimal_path.0.1" expl="asserted formula" proved="true">
-   <proof prover="0"><result status="valid" time="0.004491" steps="5637"/></proof>
+   <goal name="optimal_neighbour_is_optimal_path.0.1" expl="asserted formula">
+   <proof prover="0" obsolete="true"><result status="valid" time="0.004491" steps="5637"/></proof>
    </goal>
   </transf>
   </goal>
  </transf>
  </goal>
- <goal name="subpath_of_optimal_is_optimal">
- <transf name="introduce_premises" >
-  <goal name="subpath_of_optimal_is_optimal.0">
-  <proof prover="0"><result status="timeout" time="5.000000" steps="17587583"/></proof>
-  <proof prover="1"><result status="timeout" time="5.000000" steps="461437"/></proof>
-  <proof prover="2"><result status="timeout" time="5.000000" steps="61305"/></proof>
-  </goal>
- </transf>
- </goal>
  <goal name="lemma_1">
- <proof prover="0"><undone/></proof>
- <proof prover="1"><undone/></proof>
- <proof prover="2"><undone/></proof>
- </goal>
- <goal name="lemma_0">
  <proof prover="0"><undone/></proof>
  <proof prover="1"><undone/></proof>
  <proof prover="2"><undone/></proof>
