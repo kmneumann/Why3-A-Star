@@ -1,0 +1,48 @@
+module AlternativePath
+
+    use import set.Fset as Fset
+    use export int.Int
+    
+    type node
+    constant nodes : fset node
+    
+    val ghost function successor (a: node) : fset node
+      requires { Fset.mem a nodes }
+      ensures { subset result nodes }
+      ensures { not (Fset.mem a result) } 
+    
+    val function weight (a b: node) : int
+      ensures { a = b -> result = 0 }
+      ensures { a <> b -> result > 0 }
+      
+    predicate edge (a b: node) = Fset.mem a nodes /\ Fset.mem b nodes /\ Fset.mem b (successor a)
+    
+    lemma no_self_edges:
+        forall x y: node. Fset.mem x nodes /\ Fset.mem y nodes -> edge x y -> y <> x
+    
+    inductive path node node int =
+    | Path_nil :
+        forall x: node. Fset.mem x nodes -> path x x 0
+    | Path_cons:
+        forall x y z: node. forall d: int.
+        path y z d -> edge x y -> path x z (d + weight y z)
+
+    lemma length_nonneg: forall x y: node. forall d: int. path x y d -> d >= 0
+    
+    lemma path_one_inversion_0:
+        forall x y: node, d :int. path x y d -> 
+        (x = y /\ d = 0) \/ 
+        (exists z: node.
+            edge x z /\ path z y (d - weight x z))
+    
+    lemma path_one_inversion_1:
+        forall x y: node, d :int. path x y d -> 
+        (x = y /\ d = 0) \/ 
+        (exists z: node, d': int.
+            edge x z /\ path z y d' /\ weight x z + d' = d)
+
+    predicate shortest_path (x y: node) (d: int) =
+        path x y d /\ forall d': int. path x y d' -> d <= d'
+    
+    
+end
