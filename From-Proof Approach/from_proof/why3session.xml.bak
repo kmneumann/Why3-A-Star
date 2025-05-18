@@ -152,71 +152,34 @@
  <goal name="optimal_path_to_self_is_empty" proved="true">
  <proof prover="0"><result status="valid" time="0.011571" steps="75687"/></proof>
  </goal>
- <goal name="temp">
- </goal>
- <goal name="optimal_neighbour_is_optimal_path">
- <transf name="introduce_premises" >
-  <goal name="optimal_neighbour_is_optimal_path.0">
-  <transf name="case" arg1="((weight src n + path_weight (Cons n l)) &gt; (weight src ns + path_weight (Cons ns ls)))">
-   <goal name="optimal_neighbour_is_optimal_path.0.0" expl="true case">
-   <proof prover="0" obsolete="true"><result status="timeout" time="5.000000" steps="14317907"/></proof>
-   <proof prover="1" obsolete="true"><result status="timeout" time="5.000000" steps="548280"/></proof>
-   <proof prover="2" obsolete="true"><result status="timeout" time="5.000000" steps="56194"/></proof>
-   </goal>
-   <goal name="optimal_neighbour_is_optimal_path.0.1" expl="false case">
-   <proof prover="0" obsolete="true"><result status="valid" time="0.004585" steps="5690"/></proof>
-   </goal>
-  </transf>
-  <transf name="cut" arg1="(not (optimal_path (Cons ns ls) ns dst) -&gt; false)">
-   <goal name="optimal_neighbour_is_optimal_path.0.0">
-   <proof prover="0" obsolete="true"><result status="timeout" time="5.000000" steps="14425910"/></proof>
-   <proof prover="1" obsolete="true"><result status="timeout" time="5.000000" steps="563312"/></proof>
-   <proof prover="2" obsolete="true"><result status="timeout" time="5.000000" steps="61063"/></proof>
-   </goal>
-   <goal name="optimal_neighbour_is_optimal_path.0.1" expl="asserted formula">
-   <proof prover="0" obsolete="true"><result status="valid" time="0.004491" steps="5637"/></proof>
-   </goal>
-  </transf>
-  </goal>
- </transf>
- </goal>
  <goal name="subpath_of_optimal_is_optimal">
- <transf name="introduce_premises" >
-  <goal name="subpath_of_optimal_is_optimal.0">
-  <proof prover="0" obsolete="true"><result status="timeout" time="5.000000" steps="17587583"/></proof>
-  <proof prover="1" obsolete="true"><result status="timeout" time="5.000000" steps="461437"/></proof>
-  <proof prover="2" obsolete="true"><result status="timeout" time="5.000000" steps="61305"/></proof>
-  </goal>
- </transf>
- </goal>
- <goal name="lemma_1">
- <proof prover="0"><undone/></proof>
- <proof prover="1"><undone/></proof>
- <proof prover="2"><undone/></proof>
+ <proof prover="0"><result status="timeout" time="5.000000" steps="17472021"/></proof>
+ <proof prover="1"><result status="timeout" time="5.000000" steps="436924"/></proof>
+ <proof prover="2"><result status="timeout" time="5.000000" steps="73347"/></proof>
  </goal>
 </theory>
 <theory name="Heuristic">
- <goal name="weaker_consistancy_across_path">
- <transf name="introduce_premises" >
-  <goal name="weaker_consistancy_across_path.0">
-  <transf name="induction_arg_ty_lex" arg1="l">
-   <goal name="weaker_consistancy_across_path.0.0">
-   <proof prover="1" obsolete="true"><result status="valid" time="0.039906" steps="13950"/></proof>
+ <goal name="weaker_consistancy_across_path" proved="true">
+ <transf name="introduce_premises" proved="true" >
+  <goal name="weaker_consistancy_across_path.0" proved="true">
+  <transf name="induction_arg_ty_lex" proved="true" arg1="l">
+   <goal name="weaker_consistancy_across_path.0.0" proved="true">
+   <proof prover="1"><result status="valid" time="0.039906" steps="14163"/></proof>
    </goal>
   </transf>
   </goal>
  </transf>
  </goal>
- <goal name="consistancy_implies_consistancy_across_path">
- <proof prover="1" obsolete="true"><result status="valid" time="0.022875" steps="11863"/></proof>
+ <goal name="consistancy_implies_consistancy_across_path" proved="true">
+ <proof prover="0"><result status="valid" time="0.012584" steps="67195"/></proof>
  </goal>
- <goal name="consistancy_lower_estimate">
- <transf name="induction_pr" >
-  <goal name="consistancy_lower_estimate.0">
-  <proof prover="2" obsolete="true"><result status="valid" time="0.106539" steps="1524"/></proof>
+ <goal name="consistancy_lower_estimate" proved="true">
+ <transf name="induction_pr" proved="true" >
+  <goal name="consistancy_lower_estimate.0" proved="true">
+  <proof prover="0"><result status="valid" time="0.015532" steps="78484"/></proof>
   </goal>
-  <goal name="consistancy_lower_estimate.1">
-  <proof prover="0" obsolete="true"><result status="valid" time="0.015532" steps="77279"/></proof>
+  <goal name="consistancy_lower_estimate.1" proved="true">
+  <proof prover="2"><result status="valid" time="0.106539" steps="1519"/></proof>
   </goal>
  </transf>
  </goal>
@@ -224,57 +187,48 @@
  <proof prover="0" obsolete="true"><result status="timeout" time="5.000000" steps="13790381"/></proof>
  <proof prover="1" obsolete="true"><result status="timeout" time="5.000000" steps="354165"/></proof>
  <proof prover="2" obsolete="true"><result status="timeout" time="5.000000" steps="84333"/></proof>
- <transf name="introduce_premises" >
-  <goal name="consistancy_implies_admissibility.0">
-  <proof prover="0" obsolete="true"><result status="timeout" time="5.000000" steps="13782192"/></proof>
-  <proof prover="1" obsolete="true"><result status="timeout" time="5.000000" steps="354092"/></proof>
-  <proof prover="2" obsolete="true"><result status="timeout" time="5.000000" steps="81992"/></proof>
-  <transf name="unfold" arg1="admissible">
-   <goal name="consistancy_implies_admissibility.0.0">
-   <proof prover="0" obsolete="true"><result status="timeout" time="5.000000" steps="12639437"/></proof>
-   <proof prover="1" obsolete="true"><result status="timeout" time="5.000000" steps="431126"/></proof>
-   <proof prover="2" obsolete="true"><result status="timeout" time="5.000000" steps="86960"/></proof>
-   <transf name="unfold" arg1="monotonic" arg2="in" arg3="H1">
-    <goal name="consistancy_implies_admissibility.0.0.0">
-    <proof prover="0" obsolete="true"><result status="timeout" time="5.000000" steps="13336652"/></proof>
-    <proof prover="1" obsolete="true"><result status="timeout" time="5.000000" steps="430755"/></proof>
-    <proof prover="2" obsolete="true"><result status="timeout" time="5.000000" steps="90835"/></proof>
-    </goal>
-   </transf>
-   </goal>
-  </transf>
-  </goal>
- </transf>
  </goal>
 </theory>
 <theory name="MyProof">
- <goal name="weight&#39;refn&#39;vc" expl="VC for weight&#39;refn">
- <proof prover="0" timelimit="1" obsolete="true"><result status="valid" time="0.006166" steps="4571"/></proof>
+ <goal name="weight&#39;refn&#39;vc" expl="VC for weight&#39;refn" proved="true">
+ <proof prover="1"><result status="valid" time="0.007670" steps="7046"/></proof>
  </goal>
- <goal name="LengthNonneg">
- <transf name="induction_pr" >
-  <goal name="LengthNonneg.0">
-  <proof prover="2" obsolete="true"><result status="valid" time="0.024849" steps="137"/></proof>
+ <goal name="LengthNonneg" proved="true">
+ <transf name="induction_pr" proved="true" >
+  <goal name="LengthNonneg.0" proved="true">
+  <proof prover="2"><result status="valid" time="0.024849" steps="8"/></proof>
   </goal>
-  <goal name="LengthNonneg.1">
-  <proof prover="1" obsolete="true"><result status="valid" time="0.016756" steps="13057"/></proof>
+  <goal name="LengthNonneg.1" proved="true">
+  <proof prover="1"><result status="valid" time="0.016756" steps="10532"/></proof>
   </goal>
  </transf>
  </goal>
- <goal name="NoShorterPathToSelf">
+ <goal name="NoShorterPathToSelf" proved="true">
+ <proof prover="1"><result status="valid" time="0.019283" steps="9283"/></proof>
  </goal>
- <goal name="OptimalPathToSelf">
+ <goal name="OptimalPathToSelf" proved="true">
+ <proof prover="2"><result status="valid" time="0.016450" steps="29"/></proof>
  </goal>
- <goal name="OptimalPathIsShortest">
- <proof prover="0" obsolete="true"><result status="valid" time="0.011554" steps="60363"/></proof>
+ <goal name="OptimalPathIsShortest" proved="true">
+ <proof prover="2"><result status="valid" time="0.016466" steps="20"/></proof>
  </goal>
- <goal name="PathBoundsOptimal">
+ <goal name="PathBoundsOptimal" proved="true">
+ <proof prover="0"><result status="valid" time="0.009772" steps="43959"/></proof>
  </goal>
  <goal name="PathImpliesOptimalExists">
+ <proof prover="0"><result status="timeout" time="5.000000" steps="21254741"/></proof>
+ <proof prover="1"><result status="timeout" time="5.000000" steps="642994"/></proof>
+ <proof prover="2"><result status="timeout" time="5.000000" steps="68776"/></proof>
  </goal>
  <goal name="ConsistancyImpliesAdmissibility">
+ <proof prover="0"><result status="timeout" time="5.000000" steps="21562682"/></proof>
+ <proof prover="1"><result status="timeout" time="5.000000" steps="672734"/></proof>
+ <proof prover="2"><result status="timeout" time="5.000000" steps="56102"/></proof>
  </goal>
  <goal name="a_star_search&#39;vc" expl="VC for a_star_search">
+ <proof prover="0"><result status="timeout" time="5.000000" steps="10324261"/></proof>
+ <proof prover="1"><result status="timeout" time="5.000000" steps="698890"/></proof>
+ <proof prover="2"><result status="timeout" time="5.000000" steps="60937"/></proof>
  </goal>
 </theory>
 </file>

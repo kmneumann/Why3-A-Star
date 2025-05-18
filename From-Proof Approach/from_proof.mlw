@@ -76,11 +76,20 @@ module MyGraph
   lemma no_self_edges:
       forall x y: node. Fset.mem x nodes /\ Fset.mem y nodes -> edge x y -> y <> x
   
+  (*
   inductive path (list node) node node =
   | Path_one:
       forall x: node. Fset.mem x nodes -> path (Cons x Nil) x x
-  | Path_cons:
-      forall x y z: node, l: list node. edge x y /\ not (Mem.mem x l) /\ path l y z -> path (Cons x l) x z
+  | Path_left_cons:
+      forall x y z: node, l: list node. 
+          edge x y /\ not (Mem.mem x l) /\ path l y z -> path (Cons x l) x z*)
+  
+  predicate path (l: list node) (src dst: node) =
+      match l with 
+          | Nil -> false
+          | Cons x Nil -> Fset.mem x nodes /\ x = src /\ x = dst
+          | Cons x ((Cons y _) as t) -> edge x y /\ not (Mem.mem x t) /\ path t y dst
+      end 
   
   predicate is_src (src: node) (l: list node) = match l with
       | Nil -> false
@@ -93,49 +102,20 @@ module MyGraph
       | Cons _ t -> is_dst dst t
   end
   
-  lemma non_mem_lemma:
-      forall x y: node, l: list node. not (Mem.mem x (Cons y l)) -> not (Mem.mem x l)
-    
   lemma path_one_inversion:
-      forall x: node. path (Cons x Nil) x x ->  Fset.mem x nodes 
+      forall a b: node, l: list node. 
+            (path l a b /\ a = b -> Fset.mem a nodes /\ l = (Cons a Nil))
+        
+        
   
-  lemma path_cons_inversion:
-      forall x y: node, l: list node. path l x y -> 
-          (x = y /\ l = Cons x Nil) \/ 
-          (exists z: node, t: list node. l = (Cons x (Cons z t)) /\ 
-              edge x z /\ not (Mem.mem x t) /\ not (Mem.mem z t) /\ path (Cons z t) z y)
-    
-  lemma path_implies_path:
-      forall x y z: node, t: list node. path (Cons x (Cons z t)) x y -> 
-          path (Cons z t) z y /\ (t = Nil -> z = y)
-    
-  lemma path_is_subset:
-      forall x y z: node, t: list node. path (Cons x (Cons z t)) x y -> 
-          not (Mem.mem x t) /\ not (Mem.mem z t) /\ (Mem.mem y t \/ z = y)
-          
-  lemma simple_path:
-      forall  x y: node, l: list node. path l x y -> distinct l /\ Mem.mem x l /\ Mem.mem y l /\ Fset.mem x nodes /\ Fset.mem y nodes
-          /\ (forall n: node. Mem.mem n l -> Fset.mem n nodes)
+  lemma left_extention:
+      forall a b c: node, l: list node.
+          path l b c -> edge a b -> not (Mem.mem a l) -> path (Cons a l) a c
   
-  lemma paths_are_a_subset:
-      forall x y: node, l: list node. path l x y -> subset (elements l) nodes
+  lemma right_extention:
+      forall a b c: node, l: list node.
+          path l a b -> edge b c -> not (Mem.mem c l) -> path (l ++ (Cons c Nil)) a c
   
-  lemma cardinal_of_elements_is_length:
-      forall l: list node. distinct l -> length l = cardinal (elements l)
-  
-  lemma paths_not_longer_than_num_nodes:
-      forall x y: node, l: list node. path l x y -> length l <= cardinal nodes
-      
-  lemma path_imples_edge:
-      forall x y z: node, t: list node. path (Cons x (Cons z t)) x y -> edge x z
-  
-  lemma path_imples_path_before:
-      forall x y z: node, t: list node. path (Cons x (Cons z t)) x y -> path (Cons z t) z y /\ sublist_from (Cons z t) z = (Cons z t)
-  
-  lemma path_suffix_exists:
-      forall x y z: node, l: list node.
-          path (Cons y l) y z -> Mem.mem x l -> let l' = sublist_from l x in path l' x z
- 
 end 
 
 
@@ -177,10 +157,6 @@ module GraphsAndOptimalPaths
   predicate optimal_path (l: list node) (src dst: node) =
       path l src dst /\ 
       (forall l': list node. path l' src dst -> path_weight l' >= path_weight l)
-  
-  predicate smallest_edge (src n: node) = 
-      edge src n /\
-      forall x: node. edge src x -> weight src n <= weight src x
   
   lemma path_existance_implies_optimal_path_existance:
       forall a b: node. exists l : list node. 
