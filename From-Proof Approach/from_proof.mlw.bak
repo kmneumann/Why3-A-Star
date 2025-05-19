@@ -46,22 +46,37 @@ module SubList
       forall x: a, l: list a. Mem.mem x l -> exists y: list a. sublist_from l x = Cons x y
 end
 
+
+module MyList
+  
+  type list 'a = One 'a | Cons 'a (list 'a)
+  
+  function head (l : list 'a): 'a = match l with
+    | One a    -> a
+    | Cons y _ -> y
+    end
+  
+  function (++) (l1 l2: list 'a): list 'a = match l1 with 
+    | One a    -> Cons a l2
+    | Cons a t -> Cons a (t ++ l2)
+    end
+  
+  predicate elem (x: 'a) (l: list 'a) = match l with
+    | One a    -> x = a
+    | Cons y r -> x = y \/ elem x r
+    end
+  
+end
+
+
 module MyGraph
 
-  use export list.List
-  use export list.Mem 
+  use export MyList
   use import set.Fset as Fset
-  use export list.Append
-  use export list.Distinct
-  use export list.HdTlNoOpt
-  use export list.Elements
-  use export list.Length
   use export int.Int
-  
 
   type node 
   
-  clone export SubList with type a = node
   clone ImpmapNoDom with type key = node
   
   constant nodes: fset node 
@@ -76,50 +91,49 @@ module MyGraph
   lemma no_self_edges:
       forall x y: node. Fset.mem x nodes /\ Fset.mem y nodes -> edge x y -> y <> x
   
-  (*
+  
   inductive path (list node) node node =
   | Path_one:
-      forall x: node. Fset.mem x nodes -> path (Cons x Nil) x x
-  | Path_left_cons:
+      forall x: node. Fset.mem x nodes -> path (One x) x x
+  | Path_cons:
       forall x y z: node, l: list node. 
-          edge x y /\ not (Mem.mem x l) /\ path l y z -> path (Cons x l) x z*)
-  
+          edge y z /\ not (elem z l) -> path l x y -> path (l ++ (One z)) x z
+          
+  (*
   predicate path (l: list node) (src dst: node) =
       match l with 
-          | Nil -> false
-          | Cons x Nil -> Fset.mem x nodes /\ x = src /\ x = dst
+          | Ones x -> Fset.mem x nodes /\ dst = src /\ x = src
           | Cons x ((Cons y _) as t) -> edge x y /\ not (Mem.mem x t) /\ path t y dst
-      end 
+      end *)
+            
+  lemma egde_premise_1:
+      forall a b: node. 
+            path (One a) a b -> Fset.mem a nodes /\ a = b
   
-  predicate is_src (src: node) (l: list node) = match l with
-      | Nil -> false
-      | Cons x _ -> if x = src then true else false
-  end
-  
-  predicate is_dst (dst: node) (l: list node) = match l with
-      | Nil -> false
-      | Cons x Nil -> if x = dst then true else false
-      | Cons _ t -> is_dst dst t
-  end
-  
-  lemma path_one_inversion:
-      forall a b: node, l: list node. 
-        (path l a b /\ a = b -> Fset.mem a nodes /\ l = (Cons a Nil))
+  lemma egde_premise_2:
+      forall a b c: node, l: list node. 
+            path (Cons a (Cons b l)) a c -> edge a b /\ not (elem a (Cons b l)) /\ path (Cons b l) b c
         
-        
+  lemma inverse_egde_premise_1:
+      forall a b: node. 
+          Fset.mem a nodes /\ a = b -> path (One a) a b
+  
+  lemma inverse_egde_premise_2:
+      forall a b c: node, l: list node. 
+            edge a b /\ not (elem a (Cons b l)) /\ path (Cons b l) b c -> path (Cons a (Cons b l)) a c
   
   lemma left_extention:
       forall a b c: node, l: list node.
-          path l b c -> edge a b -> not (Mem.mem a l) -> path (Cons a l) a c
+            edge a b -> not (elem a l) -> path l b c -> path (Cons a l) a c
   
   lemma right_extention:
       forall a b c: node, l: list node.
-          path l a b -> edge b c -> not (Mem.mem c l) -> path (l ++ (Cons c Nil)) a c
+          path l a b -> edge b c -> not (elem c l) -> path (l ++ (One c)) a c
   
 end 
 
 
-module PathWeights
+(*module PathWeights
   
   clone export MyGraph
   
@@ -350,3 +364,4 @@ module MyProof
     done;
     !result
 end
+*)

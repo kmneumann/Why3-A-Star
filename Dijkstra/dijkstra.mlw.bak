@@ -189,7 +189,7 @@ module DijkstraShortestPath
     v = src /\ d > 0
     \/
     (exists v': vertex. exists d': int. shortest_path src v' d' /\ mem v (g_succ v') /\ d' + weight v' v < d) 
-    /\ (exists v': vertex. exists d': int. shortest_path v' v d' /\ mem v' (g_succ src) /\ d' + weight src v' < d) (* <- added this *)
+    /\ (exists v': vertex. exists d': int. shortest_path v' v d' /\ mem v' (g_succ src) /\ d' + weight src v' < d)
 
 
   (* Lemmas (requiring induction). *)

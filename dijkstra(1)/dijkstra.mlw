@@ -52,7 +52,7 @@ module DijkstraShortestPath
   val get_succs (x: vertex): set
     ensures { result = g_succ x  }
 
-  val function weight (a b: vertex) : int (* edge weight, if there is an edge *)
+  val function weight vertex vertex : int (* edge weight, if there is an edge *)
     ensures { result >= 0 }
 
   (** Data structures for the algorithm. *)
@@ -137,62 +137,16 @@ module DijkstraShortestPath
   lemma Path_shortest_path:
     forall src v: vertex. forall d: int. path src v d ->
     exists d': int. shortest_path src v d' /\ d' <= d
-    
-    
-  (* My Stuff *)
-              
-  lemma left_extend:
-      forall x y z: vertex. forall d: int.
-          path y z d -> mem y (g_succ x) -> path x z (d + weight x y)
-  
-  lemma right_extend:
-      forall x y z: vertex. forall d: int.
-          path x y d -> mem z (g_succ y) -> path x z (d + weight y z)
-  
-  lemma path_inversion_left:
-    forall src v:vertex. forall d:int. path src v d ->
-    (v = src /\ d = 0) \/
-    (exists v':vertex. path v' v (d - weight src v') /\ mem v' (g_succ src))
-  
-  lemma optimal_substructure:
-      forall a b: vertex, d: int.
-          shortest_path a b d -> 
-              (a = b /\ d = 0) \/
-              (exists c: vertex. mem b (g_succ c) /\ shortest_path a c (d - weight c b)) /\
-              (exists c:vertex. mem c (g_succ a) /\ shortest_path c b (d - weight a c))
-  
-  
-  val function h (n: vertex) : int
-    requires { mem n v }
-    ensures { result >= 0 } 
-    
-  
-  predicate admissible (f: vertex -> int) (dst: vertex) = 
-      forall src: vertex, d: int. path src dst d -> d >= f src
-  
-  predicate consistent (f: vertex -> int) (dst: vertex) = 
-      f dst = 0 /\
-      (forall a b:vertex, d:int.
-        path a b d ->
-        f a - f b <= d)
-  
-  lemma consistent_implies_admissible:
-      forall dst: vertex, f: (vertex -> int). (forall n. f n >= 0) -> consistent f dst -> admissible f dst
-  
-  (* End of My Stuff *)
-  
-  (* Edited Stuff From Dijkstra *)
-  
+
+  (* Lemmas (requiring induction). *)
+
   lemma Main_lemma:
     forall src v: vertex. forall d: int.
     path src v d -> not (shortest_path src v d) ->
     v = src /\ d > 0
     \/
-    (exists v': vertex. exists d': int. shortest_path src v' d' /\ mem v (g_succ v') /\ d' + weight v' v < d) 
-    /\ (exists v': vertex. exists d': int. shortest_path v' v d' /\ mem v' (g_succ src) /\ d' + weight src v' < d) (* <- added this *)
-
-
-  (* Lemmas (requiring induction). *)
+    exists v': vertex. exists d': int.
+      shortest_path src v' d' /\ mem v (g_succ v') /\ d' + weight v' v < d
 
   lemma Completeness_lemma:
     forall s: set.
@@ -274,4 +228,5 @@ module DijkstraShortestPath
         assert { d[v] <= d[u] + weight u v }
       done
     done
-end
+
+  end
