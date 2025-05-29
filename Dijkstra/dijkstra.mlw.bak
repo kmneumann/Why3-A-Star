@@ -313,11 +313,11 @@ module DijkstraShortestPath
   (* Algorithm's code. *)
 
   let shortest_path_code (src dst: vertex)
-    requires { (exists d: int. path src dst d) }
     requires { consistent h dst }
     requires { mem src v /\ mem dst v }
-    ensures  { shortest_path src dst d[dst] }
-    
+    ensures  { ((exists d: int. path src dst d)) -> shortest_path src dst d[dst] }
+    ensures  { (forall d. not path src dst d) -> forall u, d. path src u d -> mem u closed }
+    ensures  { forall a, d, d'. shortest_path src dst d -> shortest_path src a d' -> d' < d -> mem a closed \/ mem a open }
   = init src;
     while not is_empty open do
     
@@ -331,7 +331,7 @@ module DijkstraShortestPath
       variant   { cardinal v - cardinal closed }
       
       let u = q_extract_min () in
-      (*assert { shortest_path src u d[u] };*)
+      assert { shortest_path src u d[u] };
       add u closed;
       if eq u dst then break;
       let su = get_succs u in
@@ -352,6 +352,7 @@ module DijkstraShortestPath
             d[v] <- x
           end
         end else begin
+          assert { not mem v closed };
           add v open;
           d[v] <- x
         end;
