@@ -317,7 +317,7 @@ module DijkstraShortestPath
     requires { mem src v /\ mem dst v }
     ensures  { ((exists d: int. path src dst d)) -> shortest_path src dst d[dst] }
     ensures  { (forall d. not path src dst d) -> forall u, d. path src u d -> mem u closed }
-    ensures  { forall a, d, d'. shortest_path src dst d -> shortest_path src a d' -> d' < d -> mem a closed \/ mem a open }
+    ensures  { forall a, d, d'. shortest_path src dst d -> shortest_path src a d' -> d' + h a < d -> mem a closed \/ mem a open }
   = init src;
     while not is_empty open do
     

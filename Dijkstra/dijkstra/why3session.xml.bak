@@ -302,111 +302,117 @@
   <goal name="shortest_path_code&#39;vc.6" expl="postcondition" proved="true">
   <proof prover="7"><result status="valid" time="0.021323" steps="22059"/></proof>
   </goal>
-  <goal name="shortest_path_code&#39;vc.7" expl="loop invariant init" proved="true">
-  <proof prover="3"><result status="valid" time="0.127217" steps="57183"/></proof>
+  <goal name="shortest_path_code&#39;vc.7" expl="postcondition" proved="true">
+  <proof prover="7" timelimit="5"><result status="valid" time="0.017418" steps="117975"/></proof>
   </goal>
-  <goal name="shortest_path_code&#39;vc.8" expl="loop invariant init" proved="true">
-  <proof prover="3"><result status="valid" time="0.034519" steps="19178"/></proof>
+  <goal name="shortest_path_code&#39;vc.8" expl="postcondition" proved="true">
+  <proof prover="7" timelimit="5"><result status="valid" time="0.108633" steps="596598"/></proof>
   </goal>
   <goal name="shortest_path_code&#39;vc.9" expl="loop invariant init" proved="true">
-  <proof prover="3"><result status="valid" time="0.017096" steps="16108"/></proof>
+  <proof prover="3"><result status="valid" time="0.127217" steps="57183"/></proof>
   </goal>
   <goal name="shortest_path_code&#39;vc.10" expl="loop invariant init" proved="true">
+  <proof prover="3"><result status="valid" time="0.034519" steps="19178"/></proof>
+  </goal>
+  <goal name="shortest_path_code&#39;vc.11" expl="loop invariant init" proved="true">
+  <proof prover="3"><result status="valid" time="0.017096" steps="16108"/></proof>
+  </goal>
+  <goal name="shortest_path_code&#39;vc.12" expl="loop invariant init" proved="true">
   <transf name="unfold" proved="true" arg1="inv">
-   <goal name="shortest_path_code&#39;vc.10.0" expl="VC for shortest_path_code" proved="true">
+   <goal name="shortest_path_code&#39;vc.12.0" expl="VC for shortest_path_code" proved="true">
    <transf name="split_vc" proved="true" >
-    <goal name="shortest_path_code&#39;vc.10.0.0" expl="VC for shortest_path_code" proved="true">
+    <goal name="shortest_path_code&#39;vc.12.0.0" expl="VC for shortest_path_code" proved="true">
     <proof prover="7" timelimit="5"><result status="valid" time="0.018171" steps="129242"/></proof>
     </goal>
-    <goal name="shortest_path_code&#39;vc.10.0.1" expl="VC for shortest_path_code" proved="true">
+    <goal name="shortest_path_code&#39;vc.12.0.1" expl="VC for shortest_path_code" proved="true">
     <proof prover="8"><result status="valid" time="0.013023" steps="45"/></proof>
     </goal>
-    <goal name="shortest_path_code&#39;vc.10.0.2" expl="VC for shortest_path_code" proved="true">
+    <goal name="shortest_path_code&#39;vc.12.0.2" expl="VC for shortest_path_code" proved="true">
     <proof prover="7" timelimit="5"><result status="valid" time="0.016112" steps="130531"/></proof>
     </goal>
-    <goal name="shortest_path_code&#39;vc.10.0.3" expl="VC for shortest_path_code" proved="true">
+    <goal name="shortest_path_code&#39;vc.12.0.3" expl="VC for shortest_path_code" proved="true">
     <proof prover="3"><result status="valid" time="0.026847" steps="18376"/></proof>
     </goal>
-    <goal name="shortest_path_code&#39;vc.10.0.4" expl="VC for shortest_path_code" proved="true">
+    <goal name="shortest_path_code&#39;vc.12.0.4" expl="VC for shortest_path_code" proved="true">
     <proof prover="7" timelimit="5"><result status="valid" time="0.020838" steps="133750"/></proof>
     </goal>
-    <goal name="shortest_path_code&#39;vc.10.0.5" expl="VC for shortest_path_code" proved="true">
+    <goal name="shortest_path_code&#39;vc.12.0.5" expl="VC for shortest_path_code" proved="true">
     <proof prover="7" timelimit="5"><result status="valid" time="0.072565" steps="116044"/></proof>
     </goal>
-    <goal name="shortest_path_code&#39;vc.10.0.6" expl="VC for shortest_path_code" proved="true">
+    <goal name="shortest_path_code&#39;vc.12.0.6" expl="VC for shortest_path_code" proved="true">
     <proof prover="8"><result status="valid" time="0.014208" steps="49"/></proof>
     </goal>
-    <goal name="shortest_path_code&#39;vc.10.0.7" expl="VC for shortest_path_code" proved="true">
+    <goal name="shortest_path_code&#39;vc.12.0.7" expl="VC for shortest_path_code" proved="true">
     <proof prover="7" timelimit="5"><result status="valid" time="0.015640" steps="116073"/></proof>
     </goal>
    </transf>
    </goal>
   </transf>
   </goal>
-  <goal name="shortest_path_code&#39;vc.11" expl="loop invariant init" proved="true">
+  <goal name="shortest_path_code&#39;vc.13" expl="loop invariant init" proved="true">
   <proof prover="3"><result status="valid" time="0.048055" steps="31470"/></proof>
   </goal>
-  <goal name="shortest_path_code&#39;vc.12" expl="precondition" proved="true">
+  <goal name="shortest_path_code&#39;vc.14" expl="precondition" proved="true">
   <proof prover="3"><result status="valid" time="0.012081" steps="16073"/></proof>
   </goal>
-  <goal name="shortest_path_code&#39;vc.13" expl="assertion" proved="true">
+  <goal name="shortest_path_code&#39;vc.15" expl="assertion" proved="true">
   <proof prover="7" timelimit="5"><result status="valid" time="0.040525" steps="235602"/></proof>
   </goal>
-  <goal name="shortest_path_code&#39;vc.14" expl="assertion" proved="true">
+  <goal name="shortest_path_code&#39;vc.16" expl="assertion" proved="true">
   <proof prover="7" timelimit="5"><result status="valid" time="0.037423" steps="241087"/></proof>
   </goal>
-  <goal name="shortest_path_code&#39;vc.15" expl="loop variant decrease" proved="true">
+  <goal name="shortest_path_code&#39;vc.17" expl="loop variant decrease" proved="true">
   <proof prover="3"><result status="valid" time="0.030409" steps="20274"/></proof>
   </goal>
-  <goal name="shortest_path_code&#39;vc.16" expl="loop invariant preservation" proved="true">
+  <goal name="shortest_path_code&#39;vc.18" expl="loop invariant preservation" proved="true">
   <transf name="split_vc" proved="true" >
-   <goal name="shortest_path_code&#39;vc.16.0" expl="loop invariant preservation" proved="true">
+   <goal name="shortest_path_code&#39;vc.18.0" expl="loop invariant preservation" proved="true">
    <proof prover="3" memlimit="2000"><result status="valid" time="4.186673" steps="1274990"/></proof>
    </goal>
-   <goal name="shortest_path_code&#39;vc.16.1" expl="loop invariant preservation" proved="true">
+   <goal name="shortest_path_code&#39;vc.18.1" expl="loop invariant preservation" proved="true">
    <proof prover="3"><result status="valid" time="0.012279" steps="16339"/></proof>
    </goal>
   </transf>
   </goal>
-  <goal name="shortest_path_code&#39;vc.17" expl="loop invariant preservation" proved="true">
+  <goal name="shortest_path_code&#39;vc.19" expl="loop invariant preservation" proved="true">
   <proof prover="3"><result status="valid" time="0.057630" steps="58709"/></proof>
   </goal>
-  <goal name="shortest_path_code&#39;vc.18" expl="loop invariant preservation" proved="true">
+  <goal name="shortest_path_code&#39;vc.20" expl="loop invariant preservation" proved="true">
   <proof prover="7" timelimit="5"><result status="valid" time="0.017232" steps="130639"/></proof>
   </goal>
-  <goal name="shortest_path_code&#39;vc.19" expl="loop invariant preservation" proved="true">
+  <goal name="shortest_path_code&#39;vc.21" expl="loop invariant preservation" proved="true">
   <transf name="unfold" proved="true" arg1="inv">
-   <goal name="shortest_path_code&#39;vc.19.0" expl="VC for shortest_path_code" proved="true">
+   <goal name="shortest_path_code&#39;vc.21.0" expl="VC for shortest_path_code" proved="true">
    <transf name="unfold" proved="true" arg1="inv" arg2="in" arg3="LoopInvariant2">
-    <goal name="shortest_path_code&#39;vc.19.0.0" expl="VC for shortest_path_code" proved="true">
+    <goal name="shortest_path_code&#39;vc.21.0.0" expl="VC for shortest_path_code" proved="true">
     <transf name="split_vc" proved="true" >
-     <goal name="shortest_path_code&#39;vc.19.0.0.0" expl="VC for shortest_path_code" proved="true">
+     <goal name="shortest_path_code&#39;vc.21.0.0.0" expl="VC for shortest_path_code" proved="true">
      <proof prover="7" timelimit="5"><result status="valid" time="0.019210" steps="131310"/></proof>
      </goal>
-     <goal name="shortest_path_code&#39;vc.19.0.0.1" expl="VC for shortest_path_code" proved="true">
+     <goal name="shortest_path_code&#39;vc.21.0.0.1" expl="VC for shortest_path_code" proved="true">
      <proof prover="7" timelimit="5"><result status="valid" time="0.046774" steps="246154"/></proof>
      </goal>
-     <goal name="shortest_path_code&#39;vc.19.0.0.2" expl="VC for shortest_path_code" proved="true">
+     <goal name="shortest_path_code&#39;vc.21.0.0.2" expl="VC for shortest_path_code" proved="true">
      <proof prover="7" timelimit="5"><result status="valid" time="0.015584" steps="121553"/></proof>
      </goal>
-     <goal name="shortest_path_code&#39;vc.19.0.0.3" expl="VC for shortest_path_code" proved="true">
+     <goal name="shortest_path_code&#39;vc.21.0.0.3" expl="VC for shortest_path_code" proved="true">
      <proof prover="3"><result status="valid" time="0.039970" steps="22609"/></proof>
      </goal>
-     <goal name="shortest_path_code&#39;vc.19.0.0.4" expl="VC for shortest_path_code" proved="true">
+     <goal name="shortest_path_code&#39;vc.21.0.0.4" expl="VC for shortest_path_code" proved="true">
      <proof prover="7" timelimit="5"><result status="valid" time="0.032457" steps="133980"/></proof>
      </goal>
-     <goal name="shortest_path_code&#39;vc.19.0.0.5" expl="VC for shortest_path_code" proved="true">
+     <goal name="shortest_path_code&#39;vc.21.0.0.5" expl="VC for shortest_path_code" proved="true">
      <proof prover="7" timelimit="5"><result status="valid" time="0.051393" steps="269082"/></proof>
      </goal>
-     <goal name="shortest_path_code&#39;vc.19.0.0.6" expl="VC for shortest_path_code" proved="true">
+     <goal name="shortest_path_code&#39;vc.21.0.0.6" expl="VC for shortest_path_code" proved="true">
      <proof prover="3"><result status="valid" time="0.018768" steps="17004"/></proof>
      </goal>
-     <goal name="shortest_path_code&#39;vc.19.0.0.7" expl="VC for shortest_path_code" proved="true">
+     <goal name="shortest_path_code&#39;vc.21.0.0.7" expl="VC for shortest_path_code" proved="true">
      <transf name="split_vc" proved="true" >
-      <goal name="shortest_path_code&#39;vc.19.0.0.7.0" expl="VC for shortest_path_code" proved="true">
+      <goal name="shortest_path_code&#39;vc.21.0.0.7.0" expl="VC for shortest_path_code" proved="true">
       <proof prover="3"><result status="valid" time="4.271634" steps="624945"/></proof>
       </goal>
-      <goal name="shortest_path_code&#39;vc.19.0.0.7.1" expl="VC for shortest_path_code" proved="true">
+      <goal name="shortest_path_code&#39;vc.21.0.0.7.1" expl="VC for shortest_path_code" proved="true">
       <proof prover="7" timelimit="5"><result status="valid" time="0.003978" steps="7901"/></proof>
       </goal>
      </transf>
@@ -417,44 +423,44 @@
    </goal>
   </transf>
   </goal>
-  <goal name="shortest_path_code&#39;vc.20" expl="loop invariant preservation" proved="true">
+  <goal name="shortest_path_code&#39;vc.22" expl="loop invariant preservation" proved="true">
   <proof prover="3"><result status="valid" time="0.112745" steps="53418"/></proof>
   </goal>
-  <goal name="shortest_path_code&#39;vc.21" expl="assertion" proved="true">
+  <goal name="shortest_path_code&#39;vc.23" expl="assertion" proved="true">
   <proof prover="8"><result status="valid" time="0.009424" steps="50"/></proof>
   </goal>
-  <goal name="shortest_path_code&#39;vc.22" expl="loop variant decrease" proved="true">
+  <goal name="shortest_path_code&#39;vc.24" expl="loop variant decrease" proved="true">
   <proof prover="7" timelimit="5"><result status="valid" time="0.016720" steps="123281"/></proof>
   </goal>
-  <goal name="shortest_path_code&#39;vc.23" expl="loop invariant preservation" proved="true">
+  <goal name="shortest_path_code&#39;vc.25" expl="loop invariant preservation" proved="true">
   <transf name="split_vc" proved="true" >
-   <goal name="shortest_path_code&#39;vc.23.0" expl="loop invariant preservation" proved="true">
+   <goal name="shortest_path_code&#39;vc.25.0" expl="loop invariant preservation" proved="true">
    <proof prover="3"><result status="valid" time="0.030380" steps="20146"/></proof>
    </goal>
-   <goal name="shortest_path_code&#39;vc.23.1" expl="loop invariant preservation" proved="true">
+   <goal name="shortest_path_code&#39;vc.25.1" expl="loop invariant preservation" proved="true">
    <proof prover="7" timelimit="5"><result status="valid" time="0.004211" steps="126411"/></proof>
    </goal>
   </transf>
   </goal>
-  <goal name="shortest_path_code&#39;vc.24" expl="loop invariant preservation" proved="true">
+  <goal name="shortest_path_code&#39;vc.26" expl="loop invariant preservation" proved="true">
   <proof prover="3"><result status="valid" time="0.018201" steps="16686"/></proof>
   </goal>
-  <goal name="shortest_path_code&#39;vc.25" expl="loop invariant preservation" proved="true">
+  <goal name="shortest_path_code&#39;vc.27" expl="loop invariant preservation" proved="true">
   <proof prover="8"><result status="valid" time="0.014977" steps="72"/></proof>
   </goal>
-  <goal name="shortest_path_code&#39;vc.26" expl="loop invariant preservation" proved="true">
+  <goal name="shortest_path_code&#39;vc.28" expl="loop invariant preservation" proved="true">
   <proof prover="7" timelimit="5"><result status="valid" time="0.004295" steps="7828"/></proof>
   </goal>
-  <goal name="shortest_path_code&#39;vc.27" expl="loop invariant preservation" proved="true">
+  <goal name="shortest_path_code&#39;vc.29" expl="loop invariant preservation" proved="true">
   <transf name="unfold" proved="true" arg1="inv_succ2" arg2="in" arg3="LoopInvariant2">
-   <goal name="shortest_path_code&#39;vc.27.0" expl="loop invariant preservation" proved="true">
+   <goal name="shortest_path_code&#39;vc.29.0" expl="loop invariant preservation" proved="true">
    <transf name="unfold" proved="true" arg1="inv_succ2">
-    <goal name="shortest_path_code&#39;vc.27.0.0" expl="VC for shortest_path_code" proved="true">
+    <goal name="shortest_path_code&#39;vc.29.0.0" expl="VC for shortest_path_code" proved="true">
     <transf name="split_vc" proved="true" >
-     <goal name="shortest_path_code&#39;vc.27.0.0.0" expl="VC for shortest_path_code" proved="true">
+     <goal name="shortest_path_code&#39;vc.29.0.0.0" expl="VC for shortest_path_code" proved="true">
      <proof prover="3"><result status="valid" time="0.186500" steps="46466"/></proof>
      </goal>
-     <goal name="shortest_path_code&#39;vc.27.0.0.1" expl="VC for shortest_path_code" proved="true">
+     <goal name="shortest_path_code&#39;vc.29.0.0.1" expl="VC for shortest_path_code" proved="true">
      <proof prover="3"><result status="valid" time="0.068564" steps="46927"/></proof>
      </goal>
     </transf>
@@ -463,62 +469,62 @@
    </goal>
   </transf>
   </goal>
-  <goal name="shortest_path_code&#39;vc.28" expl="assertion" proved="true">
+  <goal name="shortest_path_code&#39;vc.30" expl="assertion" proved="true">
   <proof prover="7" timelimit="5"><result status="valid" time="0.044199" steps="11167"/></proof>
   </goal>
-  <goal name="shortest_path_code&#39;vc.29" expl="assertion" proved="true">
+  <goal name="shortest_path_code&#39;vc.31" expl="assertion" proved="true">
   <proof prover="8"><result status="valid" time="0.032409" steps="420"/></proof>
   </goal>
-  <goal name="shortest_path_code&#39;vc.30" expl="loop variant decrease" proved="true">
+  <goal name="shortest_path_code&#39;vc.32" expl="loop variant decrease" proved="true">
   <proof prover="3"><result status="valid" time="0.029206" steps="20120"/></proof>
   </goal>
-  <goal name="shortest_path_code&#39;vc.31" expl="loop invariant preservation" proved="true">
+  <goal name="shortest_path_code&#39;vc.33" expl="loop invariant preservation" proved="true">
   <transf name="split_vc" proved="true" >
-   <goal name="shortest_path_code&#39;vc.31.0" expl="loop invariant preservation" proved="true">
+   <goal name="shortest_path_code&#39;vc.33.0" expl="loop invariant preservation" proved="true">
    <proof prover="7" timelimit="5"><result status="valid" time="0.017358" steps="3962"/></proof>
    </goal>
-   <goal name="shortest_path_code&#39;vc.31.1" expl="loop invariant preservation" proved="true">
+   <goal name="shortest_path_code&#39;vc.33.1" expl="loop invariant preservation" proved="true">
    <proof prover="3"><result status="valid" time="0.658937" steps="202919"/></proof>
    </goal>
   </transf>
   </goal>
-  <goal name="shortest_path_code&#39;vc.32" expl="loop invariant preservation" proved="true">
+  <goal name="shortest_path_code&#39;vc.34" expl="loop invariant preservation" proved="true">
   <proof prover="3"><result status="valid" time="0.101432" steps="45993"/></proof>
   </goal>
-  <goal name="shortest_path_code&#39;vc.33" expl="loop invariant preservation" proved="true">
+  <goal name="shortest_path_code&#39;vc.35" expl="loop invariant preservation" proved="true">
   <proof prover="3"><result status="valid" time="0.030990" steps="20835"/></proof>
   </goal>
-  <goal name="shortest_path_code&#39;vc.34" expl="loop invariant preservation" proved="true">
+  <goal name="shortest_path_code&#39;vc.36" expl="loop invariant preservation" proved="true">
   <transf name="unfold" proved="true" arg1="inv">
-   <goal name="shortest_path_code&#39;vc.34.0" expl="VC for shortest_path_code" proved="true">
+   <goal name="shortest_path_code&#39;vc.36.0" expl="VC for shortest_path_code" proved="true">
    <transf name="split_vc" proved="true" >
-    <goal name="shortest_path_code&#39;vc.34.0.0" expl="VC for shortest_path_code" proved="true">
+    <goal name="shortest_path_code&#39;vc.36.0.0" expl="VC for shortest_path_code" proved="true">
     <proof prover="8"><result status="valid" time="0.034507" steps="398"/></proof>
     </goal>
-    <goal name="shortest_path_code&#39;vc.34.0.1" expl="VC for shortest_path_code" proved="true">
+    <goal name="shortest_path_code&#39;vc.36.0.1" expl="VC for shortest_path_code" proved="true">
     <proof prover="7" timelimit="5"><result status="valid" time="0.045955" steps="241835"/></proof>
     </goal>
-    <goal name="shortest_path_code&#39;vc.34.0.2" expl="VC for shortest_path_code" proved="true">
+    <goal name="shortest_path_code&#39;vc.36.0.2" expl="VC for shortest_path_code" proved="true">
     <proof prover="7" timelimit="5"><result status="valid" time="0.015926" steps="121096"/></proof>
     </goal>
-    <goal name="shortest_path_code&#39;vc.34.0.3" expl="VC for shortest_path_code" proved="true">
+    <goal name="shortest_path_code&#39;vc.36.0.3" expl="VC for shortest_path_code" proved="true">
     <proof prover="7" timelimit="5"><result status="valid" time="0.023410" steps="159978"/></proof>
     </goal>
-    <goal name="shortest_path_code&#39;vc.34.0.4" expl="VC for shortest_path_code" proved="true">
+    <goal name="shortest_path_code&#39;vc.36.0.4" expl="VC for shortest_path_code" proved="true">
     <proof prover="7" timelimit="5"><result status="valid" time="0.017088" steps="132368"/></proof>
     </goal>
-    <goal name="shortest_path_code&#39;vc.34.0.5" expl="VC for shortest_path_code" proved="true">
+    <goal name="shortest_path_code&#39;vc.36.0.5" expl="VC for shortest_path_code" proved="true">
     <proof prover="3"><result status="valid" time="0.045518" steps="24893"/></proof>
     </goal>
-    <goal name="shortest_path_code&#39;vc.34.0.6" expl="VC for shortest_path_code" proved="true">
+    <goal name="shortest_path_code&#39;vc.36.0.6" expl="VC for shortest_path_code" proved="true">
     <proof prover="3"><result status="valid" time="0.018323" steps="17036"/></proof>
     </goal>
-    <goal name="shortest_path_code&#39;vc.34.0.7" expl="VC for shortest_path_code" proved="true">
+    <goal name="shortest_path_code&#39;vc.36.0.7" expl="VC for shortest_path_code" proved="true">
     <transf name="split_vc" proved="true" >
-     <goal name="shortest_path_code&#39;vc.34.0.7.0" expl="VC for shortest_path_code" proved="true">
+     <goal name="shortest_path_code&#39;vc.36.0.7.0" expl="VC for shortest_path_code" proved="true">
      <proof prover="7" timelimit="5"><result status="valid" time="0.004358" steps="3965"/></proof>
      </goal>
-     <goal name="shortest_path_code&#39;vc.34.0.7.1" expl="VC for shortest_path_code" proved="true">
+     <goal name="shortest_path_code&#39;vc.36.0.7.1" expl="VC for shortest_path_code" proved="true">
      <proof prover="3"><result status="valid" time="0.098058" steps="47279"/></proof>
      </goal>
     </transf>
@@ -527,86 +533,86 @@
    </goal>
   </transf>
   </goal>
-  <goal name="shortest_path_code&#39;vc.35" expl="loop invariant preservation" proved="true">
+  <goal name="shortest_path_code&#39;vc.37" expl="loop invariant preservation" proved="true">
   <proof prover="3" timelimit="1" obsolete="true"><result status="timeout" time="1.220888" steps="274909"/></proof>
   <proof prover="7" obsolete="true"><result status="timeout" time="1.000000" steps="4108647"/></proof>
   <proof prover="8" timelimit="1" obsolete="true"><result status="timeout" time="1.000000" steps="8718"/></proof>
   <transf name="split_vc" proved="true" >
-   <goal name="shortest_path_code&#39;vc.35.0" expl="loop invariant preservation" proved="true">
+   <goal name="shortest_path_code&#39;vc.37.0" expl="loop invariant preservation" proved="true">
    <proof prover="7" timelimit="5"><result status="valid" time="0.004263" steps="3965"/></proof>
    </goal>
-   <goal name="shortest_path_code&#39;vc.35.1" expl="loop invariant preservation" proved="true">
+   <goal name="shortest_path_code&#39;vc.37.1" expl="loop invariant preservation" proved="true">
    <proof prover="3"><result status="valid" time="0.389872" steps="149003"/></proof>
    </goal>
   </transf>
   </goal>
-  <goal name="shortest_path_code&#39;vc.36" expl="loop variant decrease" proved="true">
+  <goal name="shortest_path_code&#39;vc.38" expl="loop variant decrease" proved="true">
   <proof prover="7" timelimit="5"><result status="valid" time="0.015733" steps="118987"/></proof>
   </goal>
-  <goal name="shortest_path_code&#39;vc.37" expl="loop invariant preservation" proved="true">
+  <goal name="shortest_path_code&#39;vc.39" expl="loop invariant preservation" proved="true">
   <transf name="unfold" proved="true" arg1="inv">
-   <goal name="shortest_path_code&#39;vc.37.0" expl="VC for shortest_path_code" proved="true">
+   <goal name="shortest_path_code&#39;vc.39.0" expl="VC for shortest_path_code" proved="true">
    <transf name="split_vc" proved="true" >
-    <goal name="shortest_path_code&#39;vc.37.0.0" expl="VC for shortest_path_code" proved="true">
+    <goal name="shortest_path_code&#39;vc.39.0.0" expl="VC for shortest_path_code" proved="true">
     <proof prover="8"><result status="valid" time="0.013188" steps="49"/></proof>
     </goal>
-    <goal name="shortest_path_code&#39;vc.37.0.1" expl="VC for shortest_path_code" proved="true">
+    <goal name="shortest_path_code&#39;vc.39.0.1" expl="VC for shortest_path_code" proved="true">
     <proof prover="8"><result status="valid" time="0.013488" steps="50"/></proof>
     </goal>
-    <goal name="shortest_path_code&#39;vc.37.0.2" expl="VC for shortest_path_code" proved="true">
+    <goal name="shortest_path_code&#39;vc.39.0.2" expl="VC for shortest_path_code" proved="true">
     <proof prover="7" timelimit="5"><result status="valid" time="0.014679" steps="112812"/></proof>
     </goal>
-    <goal name="shortest_path_code&#39;vc.37.0.3" expl="VC for shortest_path_code" proved="true">
+    <goal name="shortest_path_code&#39;vc.39.0.3" expl="VC for shortest_path_code" proved="true">
     <proof prover="8"><result status="valid" time="0.013863" steps="50"/></proof>
     </goal>
-    <goal name="shortest_path_code&#39;vc.37.0.4" expl="VC for shortest_path_code" proved="true">
+    <goal name="shortest_path_code&#39;vc.39.0.4" expl="VC for shortest_path_code" proved="true">
     <proof prover="3"><result status="valid" time="0.031375" steps="19961"/></proof>
     </goal>
-    <goal name="shortest_path_code&#39;vc.37.0.5" expl="VC for shortest_path_code" proved="true">
+    <goal name="shortest_path_code&#39;vc.39.0.5" expl="VC for shortest_path_code" proved="true">
     <proof prover="7" timelimit="5"><result status="valid" time="0.015827" steps="120816"/></proof>
     </goal>
-    <goal name="shortest_path_code&#39;vc.37.0.6" expl="VC for shortest_path_code" proved="true">
+    <goal name="shortest_path_code&#39;vc.39.0.6" expl="VC for shortest_path_code" proved="true">
     <proof prover="8"><result status="valid" time="0.014023" steps="53"/></proof>
     </goal>
-    <goal name="shortest_path_code&#39;vc.37.0.7" expl="VC for shortest_path_code" proved="true">
+    <goal name="shortest_path_code&#39;vc.39.0.7" expl="VC for shortest_path_code" proved="true">
     <proof prover="7" timelimit="5"><result status="valid" time="0.017614" steps="121221"/></proof>
     </goal>
    </transf>
    </goal>
   </transf>
   </goal>
-  <goal name="shortest_path_code&#39;vc.38" expl="loop invariant preservation" proved="true">
+  <goal name="shortest_path_code&#39;vc.40" expl="loop invariant preservation" proved="true">
   <proof prover="3"><result status="valid" time="0.045481" steps="27255"/></proof>
   </goal>
-  <goal name="shortest_path_code&#39;vc.39" expl="loop invariant preservation" proved="true">
+  <goal name="shortest_path_code&#39;vc.41" expl="loop invariant preservation" proved="true">
   <proof prover="3"><result status="valid" time="0.083651" steps="19284"/></proof>
   </goal>
-  <goal name="shortest_path_code&#39;vc.40" expl="loop invariant preservation" proved="true">
+  <goal name="shortest_path_code&#39;vc.42" expl="loop invariant preservation" proved="true">
   <transf name="instantiate" proved="true" arg1="inside_or_exit" arg2="(closed.to_fset), src, n, dist">
-   <goal name="shortest_path_code&#39;vc.40.0" expl="loop invariant preservation" proved="true">
+   <goal name="shortest_path_code&#39;vc.42.0" expl="loop invariant preservation" proved="true">
    <transf name="case" proved="true" arg1="(mem src open)">
-    <goal name="shortest_path_code&#39;vc.40.0.0" expl="true case (loop invariant preservation)" proved="true">
+    <goal name="shortest_path_code&#39;vc.42.0.0" expl="true case (loop invariant preservation)" proved="true">
     <proof prover="8"><result status="valid" time="0.033397" steps="321"/></proof>
     </goal>
-    <goal name="shortest_path_code&#39;vc.40.0.1" expl="false case (loop invariant preservation)" proved="true">
+    <goal name="shortest_path_code&#39;vc.42.0.1" expl="false case (loop invariant preservation)" proved="true">
     <transf name="destruct_rec" proved="true" arg1="Hinst">
-     <goal name="shortest_path_code&#39;vc.40.0.1.0" expl="destruct premise" proved="true">
+     <goal name="shortest_path_code&#39;vc.42.0.1.0" expl="destruct premise" proved="true">
      <proof prover="8"><result status="valid" time="0.014452" steps="61"/></proof>
      </goal>
-     <goal name="shortest_path_code&#39;vc.40.0.1.1" expl="destruct premise" proved="true">
+     <goal name="shortest_path_code&#39;vc.42.0.1.1" expl="destruct premise" proved="true">
      <proof prover="7" timelimit="5"><result status="valid" time="0.004461" steps="7743"/></proof>
      </goal>
-     <goal name="shortest_path_code&#39;vc.40.0.1.2" expl="destruct premise" proved="true">
+     <goal name="shortest_path_code&#39;vc.42.0.1.2" expl="destruct premise" proved="true">
      <proof prover="7" timelimit="5"><result status="valid" time="0.004590" steps="7745"/></proof>
      </goal>
-     <goal name="shortest_path_code&#39;vc.40.0.1.3" expl="false case (loop invariant preservation)" proved="true">
+     <goal name="shortest_path_code&#39;vc.42.0.1.3" expl="false case (loop invariant preservation)" proved="true">
      <transf name="assert" proved="true" arg1="(shortest_path src z d[z])">
-      <goal name="shortest_path_code&#39;vc.40.0.1.3.0" expl="asserted formula" proved="true">
+      <goal name="shortest_path_code&#39;vc.42.0.1.3.0" expl="asserted formula" proved="true">
       <proof prover="3"><result status="valid" time="0.411013" steps="244613"/></proof>
       </goal>
-      <goal name="shortest_path_code&#39;vc.40.0.1.3.1" expl="false case (loop invariant preservation)" proved="true">
+      <goal name="shortest_path_code&#39;vc.42.0.1.3.1" expl="false case (loop invariant preservation)" proved="true">
       <transf name="exists" proved="true" arg1="z">
-       <goal name="shortest_path_code&#39;vc.40.0.1.3.1.0" proved="true">
+       <goal name="shortest_path_code&#39;vc.42.0.1.3.1.0" proved="true">
        <proof prover="7" timelimit="5"><result status="valid" time="0.057918" steps="329021"/></proof>
        </goal>
       </transf>
@@ -619,8 +625,14 @@
    </goal>
   </transf>
   </goal>
-  <goal name="shortest_path_code&#39;vc.41" expl="postcondition" proved="true">
+  <goal name="shortest_path_code&#39;vc.43" expl="postcondition" proved="true">
   <proof prover="7"><result status="valid" time="0.058108" steps="137903"/></proof>
+  </goal>
+  <goal name="shortest_path_code&#39;vc.44" expl="postcondition" proved="true">
+  <proof prover="3"><result status="valid" time="0.058006" steps="41645"/></proof>
+  </goal>
+  <goal name="shortest_path_code&#39;vc.45" expl="postcondition" proved="true">
+  <proof prover="7" timelimit="5"><result status="valid" time="0.018294" steps="120400"/></proof>
   </goal>
  </transf>
  </goal>

@@ -248,7 +248,9 @@ module DijkstraShortestPath
     (forall v: vertex. mem v s -> shortest_path src v d[v]) /\
     (* there are paths for vertices in Q *)
     (forall v: vertex. mem v q -> path src v d[v]) /\
-    (forall x: vertex, dx: int. shortest_path src x dx -> d[x] >= dx)
+    (forall x: vertex, dx: int. shortest_path src x dx -> d[x] >= dx) /\
+    (forall n. mem n q \/ mem n s -> path src n d[n]) /\
+    (forall n. mem n q -> (exists u. mem n (g_succ u) /\ mem u s /\ d[u] + weight u n = d[n]) \/ n = src)
 
   predicate inv_succ (_src: vertex) (s q: set) (d: t int) =
     (* successors of vertices in S are either in S or in Q *)
@@ -323,7 +325,6 @@ module DijkstraShortestPath
     
       invariant { inv src closed open d }
       invariant { inv_succ src closed open d }
-      invariant { forall n. mem n open -> (exists u. mem n (g_succ u) /\ mem u closed /\ d[u] + weight u n = d[n]) \/ n = src }
       invariant { 
           forall n, dist. shortest_path src n dist -> not (mem n closed) -> 
             (exists u. mem u open /\ shortest_path src u d[u] /\ path u n (dist - d[u]))
@@ -336,8 +337,6 @@ module DijkstraShortestPath
       if eq u dst then break;
       let su = get_succs u in
       while not is_empty su do
-        invariant { forall n. mem n open -> (exists u. mem n (g_succ u) /\ mem u closed /\ d[u] + weight u n = d[n]) \/ n = src }
-        invariant { forall n. mem n open \/ mem n closed -> path src n d[n]}
         invariant { subset su (g_succ u) }
         invariant { inv src closed open d  }
         invariant { inv_succ2 src closed open d u su }
