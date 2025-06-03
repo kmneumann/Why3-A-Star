@@ -1,0 +1,327 @@
+
+(* Dijkstra's shortest path algorithm.
+
+   This proof follows Cormen et al's "Algorithms".
+
+   Author: Jean-Christophe Filliâtre (CNRS) *)
+
+module ImpmapNoDom
+
+  use map.Map
+  use map.Const
+
+  type key
+
+  type t 'a = abstract { mutable contents: map key 'a }
+
+  val function create (x: 'a): t 'a
+    ensures { result.contents = const x }
+
+  val function ([]) (m: t 'a) (k: key): 'a
+    ensures { result = m.contents[k] }
+
+  val ghost function ([<-]) (m: t 'a) (k: key) (v: 'a): t 'a
+    ensures { result.contents = m.contents[k <- v] }
+
+  val ([]<-) (m: t 'a) (k: key) (v: 'a): unit
+    writes { m }
+    ensures { m = (old m)[k <- v] }
+
+end
+
+
+module DijkstraShortestPath
+
+  use export int.Int
+  use export option.Option
+
+  (** The graph is introduced as a set v of vertices and a function g_succ
+     returning the successors of a given vertex.
+     The weight of an edge is defined independently, using function weight.
+     The weight is an integer. *)
+
+  type vertex
+
+  clone set.SetImp with type elt = vertex
+  clone ImpmapNoDom with type key = vertex
+
+  constant v: fset vertex 
+    
+  val ghost function g_succ (_x: vertex) : fset vertex
+    ensures { subset result v }
+
+  val get_succs (x: vertex): set
+    ensures { result = g_succ x  }
+
+  val function weight vertex vertex : int (* edge weight, if there is an edge *)
+    ensures { result > 0 }
+
+  (** Data structures for the algorithm. *)
+  
+    (* Paths and shortest paths.
+
+     path x y d =
+        there is a path from x to y of length d
+
+     shortest_path x y d =
+        there is a path from x to y of length d, and no shorter path *)
+
+  inductive path vertex vertex int =
+    | Path_nil :
+        forall x: vertex. path x x 0
+    | Path_cons: 
+        forall x y a b: vertex. forall d1 d2: int.
+        path x y d1 -> mem a (g_succ y) -> path x a (d1 + weight y a)
+
+  predicate shortest_path (x y: vertex) (d: int) =
+    path x y d /\ 
+    forall d': int. path x y d' -> d <= d'
+    
+  lemma Length_nonneg: forall x y: vertex. forall d: int. path x y d -> d >= 0
+  
+  lemma Shortest_length_nonneg: forall x y: vertex. forall d: int. shortest_path x y d -> d >= 0
+  
+  lemma shortest_path_to_self:
+    forall v, d:int. shortest_path v v d -> d = 0
+  
+  lemma Path_one_step:
+    forall a, b. mem b (g_succ a) -> path a b (weight a b)
+  
+  lemma Path_append:
+    forall src, u, v, d. path src v d -> mem u (g_succ v) -> path src u (d + weight v u)
+
+  lemma Path_inversion:
+    forall src v:vertex. forall d:int. path src v d ->
+    (v = src /\ d = 0) \/
+    (exists v':vertex. path src v' (d - weight v' v) /\ mem v (g_succ v'))
+
+  lemma Path_shortest_path:
+    forall src v: vertex. forall d: int. path src v d ->
+    exists d': int. shortest_path src v d' /\ d' <= d
+    
+    
+  (* My Stuff *)
+              
+  lemma left_extend:
+      forall x y z: vertex. forall d: int.
+          path y z d -> mem y (g_succ x) -> path x z (d + weight x y)
+  
+  lemma right_extend:
+      forall x y z: vertex. forall d: int.
+          path x y d -> mem z (g_succ y) -> path x z (d + weight y z)
+  
+  lemma path_inversion_left:
+    forall src v:vertex. forall d:int. path src v d ->
+    (v = src /\ d = 0) \/
+    (exists v':vertex. path v' v (d - weight src v') /\ mem v' (g_succ src))
+  
+  lemma optimal_substructure:
+      forall a b: vertex, d: int.
+          shortest_path a b d -> 
+              (a = b /\ d = 0) \/
+              (exists c: vertex. mem b (g_succ c) /\ shortest_path a c (d - weight c b)) /\
+              (exists c:vertex. mem c (g_succ a) /\ shortest_path c b (d - weight a c))
+  
+  lemma path_splitting:
+      forall a b: vertex, d: int.
+          shortest_path a b d ->
+              (exists c: vertex, d': int. shortest_path a c d' /\ shortest_path c b (d - d'))
+  
+  lemma path_splitting_noneq:
+      forall a b: vertex, d: int.
+          shortest_path a b d -> a <> b ->
+              (exists x y: vertex, d': int. mem y (g_succ x) /\ shortest_path a x d' /\ shortest_path y b (d - d' - weight x y))
+  
+  lemma path_merging:
+    forall a, b, c, d1, d2. 
+        path a b d1 -> path b c d2 -> path a c (d2 + d1)
+  
+  lemma subpath_optimality_constraint:
+      forall a, b, c, d, d'.
+         shortest_path a c d -> path a b d' -> path b c (d - d') -> shortest_path a b d' /\ shortest_path b c (d - d')
+  
+  predicate positive (f: vertex -> int) =
+      (forall n. f n >= 0) 
+  
+  type heuristic = { h: vertex -> int; dst: vertex }
+    invariant { forall n. h n >= 0 }
+    by { h = (fun x -> 0); dst = any vertex }
+  
+  predicate admissible (f: heuristic) = 
+    forall src: vertex, d: int. path src f.dst d -> d >= f.h src
+  
+  predicate consistent (f: heuristic) = 
+      f.h f.dst = 0 /\
+      (forall a b:vertex.
+        mem b (g_succ a) ->
+        f.h a <= weight a b + f.h b )
+  
+  predicate path_consistent (f: heuristic) = 
+      f.h f.dst = 0 /\
+      (forall a, b, d.
+        path a b d ->
+        f.h a <= d + f.h b )
+  
+  lemma consistent_implies_path_consistent: 
+      forall f: heuristic. consistent f -> path_consistent f
+  
+  lemma consistent_implies_admissible :
+      forall f: heuristic. consistent f -> admissible f
+
+  (* The set of already visited vertices. *)
+  
+  val d: t int
+
+  val closed: set
+
+  val open: set
+
+  predicate min (m: vertex) (q: set) (d: t int) (h: vertex -> int) =
+    mem m q /\
+    (forall x: vertex. mem x q -> d[m] + h m <= d[x] + h x)
+
+  val q_extract_min (h: vertex -> int) : vertex 
+    writes   { open }
+    requires { not is_empty open }
+    ensures  { min result (old open) d h }
+    ensures  { open = remove result (old open) }
+    
+  
+
+  (* Initialisation of visited, q, and d. *)
+
+  val init (src: vertex) : unit 
+    writes  { closed, open, d }
+    ensures { is_empty closed }
+    ensures { open = singleton src }
+    ensures { d = (old d)[src <- 0] }
+    
+  
+  (* End of My Stuff *)
+  
+  (* Edited Stuff From Dijkstra *)
+  
+  lemma Main_lemma:
+    forall src v: vertex. forall d: int.
+    path src v d -> not (shortest_path src v d) ->
+    v = src /\ d > 0
+    \/
+    (exists v': vertex. exists d': int. shortest_path src v' d' /\ mem v (g_succ v') /\ d' + weight v' v < d) 
+    /\ (exists v': vertex. exists d': int. shortest_path v' v d' /\ mem v' (g_succ src) /\ d' + weight src v' < d) (* <- added this *)
+
+
+  (* Lemmas (requiring induction). *)
+
+  lemma Completeness_lemma:
+    forall s: set.
+    (* if s is closed under g_succ *)
+    (forall v: vertex.
+       mem v s -> forall w: vertex. mem w (g_succ v) -> mem w s) ->
+    (* and if s contains src *)
+    forall src: vertex. mem src s ->
+    (* then any vertex reachable from s is also in s *)
+    forall dst: vertex. forall d: int.
+    path src dst d -> mem dst s
+
+  (* Definitions used in loop invariants. *)
+
+  predicate inv_src (src: vertex) (s q: set) =
+    mem src s \/ mem src q
+
+  predicate inv (src: vertex) (s q: set) (d: t int) =
+    inv_src src s q /\ d[src] = 0 /\
+    (* S and Q are contained in V *)
+    subset s v /\ subset q v /\
+    (* S and Q are disjoint *)
+    disjoint s q /\
+    (* we already found the shortest paths for vertices in S *)
+    (forall v: vertex. mem v s -> shortest_path src v d[v]) /\
+    (* there are paths for vertices in Q *)
+    (forall v: vertex. mem v q -> path src v d[v]) /\
+    (forall x: vertex, dx: int. shortest_path src x dx -> d[x] >= dx) /\
+    (forall n. mem n q \/ mem n s -> path src n d[n]) /\
+    (forall n. mem n q -> (exists u. mem n (g_succ u) /\ mem u s /\ d[u] + weight u n = d[n]) \/ n = src) /\
+    (forall n. not (mem n q /\ mem n s))
+
+  predicate inv_succ (_src: vertex) (s q: set) (d: t int) =
+    (* successors of vertices in S are either in S or in Q *)
+    forall x: vertex. mem x s ->
+    forall y: vertex. mem y (g_succ x) ->
+    (mem y s \/ mem y q) /\ d[y] <= d[x] + weight x y 
+
+  predicate inv_succ2 (_src: vertex) (s q: set) (d: t int) (u: vertex) (su: set) (h: vertex -> int) =
+    (* successors of vertices in S are either in S or in Q,
+       unless they are successors of u still in su *)
+    forall x: vertex. mem x s ->
+    forall y: vertex. mem y (g_succ x) ->
+    (x<>u \/ (x=u /\ not (mem y su))) ->
+    (mem y s \/ mem y q) /\ d[y] + h y <= d[x] + weight x y + h y
+
+  lemma inside_or_exit_1:
+    forall s, src, v, d. mem src s -> path src v d -> not (mem v s) ->
+      exists y. exists z. exists dy.
+        mem y s /\ not (mem z s) /\ mem z (g_succ y) /\
+        path src y dy /\ path src z (dy + weight y z) /\ path z v (d - (dy + weight y z))
+  
+  lemma inside_or_exit_2:
+    forall s, src, v, d. mem src s -> path src v d -> not (mem v s) ->
+      exists y. exists z. exists dz.
+        mem y s /\ not (mem z s) /\ mem z (g_succ y) /\
+        path src y (dz - weight y z) /\ path src z dz /\ path z v (d - dz)
+  
+  lemma inside_or_exit:
+    forall s, src, v, d. mem src s -> shortest_path src v d -> not (mem v s) ->
+      (exists y, z, dz.
+        mem y s /\ not (mem z s) /\ mem z (g_succ y) /\
+        shortest_path src y (dz - weight y z) /\ shortest_path src z dz /\ shortest_path z v (d - dz))
+  
+  predicate post_cond (o: option int) (src dst : vertex) = 
+      (o = None /\ (forall d. not (shortest_path src dst d))) \/
+      (forall x. o = Some x -> shortest_path src dst x)
+      
+
+  (* Algorithm's code. *)
+
+  let shortest_path_code (src dst: vertex) (h: vertex -> int): option int
+    (*requires { not (admissible h dst) }*)
+    requires { mem src v /\ mem dst v }
+    ensures  { (forall d. not path src dst d) -> forall u, d. path src u d -> mem u closed }
+    ensures  { forall a, d, d'. shortest_path src dst d -> shortest_path src a d' -> d' + h a < d -> mem a closed \/ mem a open }
+    returns  { o -> post_cond o src dst }
+  = init src;
+    while not is_empty open do
+      invariant { inv src closed open d }
+      invariant { inv_succ src closed open d }
+      invariant { 
+          forall n, dist. shortest_path src n dist -> not (mem n closed) -> 
+            (exists u. mem u open /\ shortest_path src u d[u] /\ path u n (dist - d[u]))
+        }
+      variant   { cardinal v - cardinal closed }
+      let u = q_extract_min h in
+      add u closed;
+      if eq u dst then return Some d[u];
+      let su = get_succs u in
+      let temp = cardinal closed in
+      label SndLoop in 
+      while not is_empty su do
+        invariant { subset su (g_succ u) }
+        invariant { inv src closed open d  }
+        invariant { inv_succ2 src closed open d u su h }
+        invariant { forall n. mem n (closed at SndLoop) -> not mem n open }
+        invariant { temp = cardinal closed  }
+        variant   { cardinal su }
+        
+        let y = choose_and_remove su in
+        let x = d[u] + weight u y in
+        if x < d[y] then begin 
+          remove y closed;
+          add y open;
+          d[y] <- x
+        end;
+        ghost assert { d[y] <= d[u] + weight u y }
+      done
+    done;
+    assert { forall n, ds. path src n ds -> mem n closed };
+    None
+  
+end
