@@ -3,90 +3,93 @@
 "https://www.why3.org/why3session.dtd">
 <why3session shape_version="6">
 <prover id="0" name="Eprover" version="2.0" alternative="alt" timelimit="20" steplimit="0" memlimit="1000"/>
+<prover id="1" name="Eprover" version="2.0" timelimit="20" steplimit="0" memlimit="1000"/>
+<prover id="2" name="CVC5" version="1.1.0" alternative="strings" timelimit="20" steplimit="0" memlimit="1000"/>
 <prover id="3" name="CVC5" version="1.1.0" timelimit="5" steplimit="0" memlimit="1000"/>
 <prover id="7" name="Z3" version="4.15.0" timelimit="5" steplimit="0" memlimit="1000"/>
 <prover id="8" name="Alt-Ergo" version="2.4.0" timelimit="5" steplimit="0" memlimit="1000"/>
-<file format="whyml">
+<file format="whyml" proved="true">
 <path name=".."/><path name="dijkstra.mlw"/>
-<theory name="GraphDef">
+<theory name="GraphDef" proved="true">
  <goal name="path_nonneg" proved="true">
  <transf name="induction_pr" proved="true" >
   <goal name="path_nonneg.0" proved="true">
-  <proof prover="8"><result status="valid" time="0.007520" steps="14"/></proof>
+  <proof prover="3"><result status="valid" time="0.010807" steps="8788"/></proof>
   </goal>
   <goal name="path_nonneg.1" proved="true">
-  <proof prover="3"><result status="valid" time="0.018159" steps="10036"/></proof>
+  <proof prover="8"><result status="valid" time="0.016730" steps="204"/></proof>
   </goal>
  </transf>
  </goal>
  <goal name="shortest_path_nonneg" proved="true">
- <proof prover="8"><result status="valid" time="0.006486" steps="8"/></proof>
+ <proof prover="7"><result status="valid" time="0.007807" steps="42077"/></proof>
  </goal>
  <goal name="shortest_path_decomposition" proved="true">
- <transf name="split_vc" proved="true" >
+ <transf name="unfold" proved="true" arg1="shortest_path">
   <goal name="shortest_path_decomposition.0" proved="true">
-  <proof prover="3"><result status="valid" time="4.225428" steps="483884"/></proof>
-  </goal>
-  <goal name="shortest_path_decomposition.1" proved="true">
-  <transf name="unfold" proved="true" arg1="shortest_path">
-   <goal name="shortest_path_decomposition.1.0" proved="true">
-   <transf name="split_vc" proved="true" >
-    <goal name="shortest_path_decomposition.1.0.0" proved="true">
-    <proof prover="3"><result status="valid" time="0.014936" steps="9076"/></proof>
-    </goal>
-    <goal name="shortest_path_decomposition.1.0.1" proved="true">
-    <proof prover="3"><result status="valid" time="3.750393" steps="447008"/></proof>
-    </goal>
-   </transf>
+  <transf name="split_vc" proved="true" >
+   <goal name="shortest_path_decomposition.0.0" proved="true">
+   <proof prover="7"><result status="valid" time="0.008774" steps="44011"/></proof>
+   </goal>
+   <goal name="shortest_path_decomposition.0.1" proved="true">
+   <proof prover="3"><result status="valid" time="0.574289" steps="160833"/></proof>
+   <proof prover="7"><result status="timeout" time="5.000000" steps="9782425"/></proof>
+   <proof prover="8"><result status="timeout" time="5.000000" steps="71585"/></proof>
+   </goal>
+   <goal name="shortest_path_decomposition.0.2" proved="true">
+   <proof prover="3"><result status="valid" time="0.015176" steps="8891"/></proof>
+   </goal>
+   <goal name="shortest_path_decomposition.0.3" proved="true">
+   <proof prover="3"><result status="valid" time="0.140469" steps="47938"/></proof>
    </goal>
   </transf>
   </goal>
  </transf>
  </goal>
  <goal name="shortest_path_negation" proved="true">
- <proof prover="7"><result status="valid" time="0.008327" steps="42806"/></proof>
+ <proof prover="3"><result status="valid" time="0.014684" steps="9070"/></proof>
  </goal>
  <goal name="path_weight_sub_path" proved="true">
- <proof prover="7"><result status="valid" time="0.008852" steps="47831"/></proof>
+ <proof prover="8"><result status="valid" time="0.009408" steps="48"/></proof>
  </goal>
  <goal name="optimal_substructure_property" proved="true">
  <transf name="introduce_premises" proved="true" >
   <goal name="optimal_substructure_property.0" proved="true">
   <transf name="assert" proved="true" arg1="(shortest_path s (l1 ++ Cons a l_ab) b /\ shortest_path b (Cons b l2) t)">
    <goal name="optimal_substructure_property.0.0" expl="asserted formula" proved="true">
-   <proof prover="7"><result status="valid" time="0.008505" steps="44292"/></proof>
+   <proof prover="8"><result status="valid" time="0.006795" steps="12"/></proof>
    </goal>
    <goal name="optimal_substructure_property.0.1" proved="true">
-   <proof prover="7"><result status="valid" time="0.008528" steps="44673"/></proof>
+   <proof prover="3"><result status="valid" time="0.011306" steps="9193"/></proof>
    </goal>
   </transf>
   </goal>
  </transf>
  </goal>
  <goal name="sub_path" proved="true">
- <proof prover="3"><result status="valid" time="0.019129" steps="16241"/></proof>
+ <proof prover="3"><result status="valid" time="0.030837" steps="15998"/></proof>
  </goal>
  <goal name="sub_path_inversion" proved="true">
- <proof prover="7"><result status="valid" time="0.009441" steps="50222"/></proof>
+ <proof prover="7"><result status="valid" time="0.009441" steps="51703"/></proof>
  </goal>
  <goal name="inside_or_exit_path" proved="true">
  <transf name="induction_pr" proved="true" >
   <goal name="inside_or_exit_path.0" proved="true">
-  <proof prover="7"><result status="valid" time="0.003977" steps="5418"/></proof>
+  <proof prover="3"><result status="valid" time="0.010050" steps="11208"/></proof>
   </goal>
   <goal name="inside_or_exit_path.1" proved="true">
   <transf name="introduce_premises" proved="true" >
    <goal name="inside_or_exit_path.1.0" proved="true">
    <transf name="case" proved="true" arg1="(mem y s)">
     <goal name="inside_or_exit_path.1.0.0" expl="true case" proved="true">
-    <proof prover="8"><result status="valid" time="0.038684" steps="412"/></proof>
+    <proof prover="8"><result status="valid" time="0.042078" steps="485"/></proof>
     </goal>
     <goal name="inside_or_exit_path.1.0.1" expl="false case" proved="true">
     <transf name="exists" proved="true" arg1="src">
      <goal name="inside_or_exit_path.1.0.1.0" proved="true">
      <transf name="exists" proved="true" arg1="y">
       <goal name="inside_or_exit_path.1.0.1.0.0" proved="true">
-      <proof prover="3"><result status="valid" time="1.906783" steps="345527"/></proof>
+      <proof prover="3"><result status="valid" time="3.528705" steps="507469"/></proof>
       </goal>
      </transf>
      </goal>
@@ -105,20 +108,20 @@
    <goal name="inside_or_exit_shortest_path.0.0" proved="true">
    <transf name="destruct_rec" proved="true" arg1="Hinst">
     <goal name="inside_or_exit_shortest_path.0.0.0" expl="destruct premise" proved="true">
-    <proof prover="3"><result status="valid" time="0.008460" steps="10651"/></proof>
+    <proof prover="8"><result status="valid" time="0.005875" steps="6"/></proof>
     </goal>
     <goal name="inside_or_exit_shortest_path.0.0.1" expl="destruct premise" proved="true">
-    <proof prover="3"><result status="valid" time="0.018239" steps="11389"/></proof>
+    <proof prover="7"><result status="valid" time="0.009421" steps="63717"/></proof>
     </goal>
     <goal name="inside_or_exit_shortest_path.0.0.2" expl="destruct premise" proved="true">
-    <proof prover="8"><result status="valid" time="0.006326" steps="6"/></proof>
+    <proof prover="7"><result status="valid" time="0.003481" steps="5151"/></proof>
     </goal>
     <goal name="inside_or_exit_shortest_path.0.0.3" proved="true">
     <transf name="instantiate" proved="true" arg1="shortest_path_decomposition" arg2="src, y, v, l1, l2">
      <goal name="inside_or_exit_shortest_path.0.0.3.0" proved="true">
      <transf name="destruct_rec" proved="true" arg1="Hinst">
       <goal name="inside_or_exit_shortest_path.0.0.3.0.0" expl="destruct premise" proved="true">
-      <proof prover="7"><result status="valid" time="0.004649" steps="15831"/></proof>
+      <proof prover="8"><result status="valid" time="0.006344" steps="18"/></proof>
       </goal>
       <goal name="inside_or_exit_shortest_path.0.0.3.0.1" proved="true">
       <transf name="exists" proved="true" arg1="y">
@@ -131,39 +134,41 @@
           <goal name="inside_or_exit_shortest_path.0.0.3.0.1.0.0.0.0" proved="true">
           <transf name="split_vc" proved="true" >
            <goal name="inside_or_exit_shortest_path.0.0.3.0.1.0.0.0.0.0" proved="true">
-           <proof prover="8"><result status="valid" time="0.006539" steps="22"/></proof>
+           <proof prover="7"><result status="valid" time="0.003787" steps="5227"/></proof>
            </goal>
            <goal name="inside_or_exit_shortest_path.0.0.3.0.1.0.0.0.0.1" proved="true">
-           <proof prover="3"><result status="valid" time="0.008646" steps="10729"/></proof>
+           <proof prover="7"><result status="valid" time="0.003429" steps="5229"/></proof>
            </goal>
            <goal name="inside_or_exit_shortest_path.0.0.3.0.1.0.0.0.0.2" proved="true">
-           <proof prover="3"><result status="valid" time="0.008932" steps="10731"/></proof>
+           <proof prover="8"><result status="valid" time="0.006433" steps="22"/></proof>
            </goal>
            <goal name="inside_or_exit_shortest_path.0.0.3.0.1.0.0.0.0.3" proved="true">
-           <proof prover="7"><result status="valid" time="0.003565" steps="5181"/></proof>
+           <proof prover="7"><result status="valid" time="0.003676" steps="5227"/></proof>
            </goal>
            <goal name="inside_or_exit_shortest_path.0.0.3.0.1.0.0.0.0.4" proved="true">
            <transf name="case" proved="true" arg1="(shortest_path z l2 v)">
             <goal name="inside_or_exit_shortest_path.0.0.3.0.1.0.0.0.0.4.0" expl="true case" proved="true">
-            <proof prover="7"><result status="valid" time="0.003636" steps="5186"/></proof>
+            <proof prover="8"><result status="valid" time="0.006554" steps="24"/></proof>
             </goal>
             <goal name="inside_or_exit_shortest_path.0.0.3.0.1.0.0.0.0.4.1" expl="false case" proved="true">
             <transf name="instantiate" proved="true" arg1="shortest_path_negation" arg2="z,v,l2">
              <goal name="inside_or_exit_shortest_path.0.0.3.0.1.0.0.0.0.4.1.0" expl="false case" proved="true">
              <transf name="destruct_rec" proved="true" arg1="Hinst">
               <goal name="inside_or_exit_shortest_path.0.0.3.0.1.0.0.0.0.4.1.0.0" expl="destruct premise" proved="true">
-              <proof prover="7"><result status="valid" time="0.003810" steps="5192"/></proof>
+              <proof prover="7"><result status="valid" time="0.003565" steps="5238"/></proof>
               </goal>
               <goal name="inside_or_exit_shortest_path.0.0.3.0.1.0.0.0.0.4.1.0.1" expl="false case" proved="true">
-              <proof prover="7"><result status="valid" time="0.006129" steps="5199"/></proof>
+              <proof prover="8"><result status="valid" time="0.008223" steps="24"/></proof>
               </goal>
               <goal name="inside_or_exit_shortest_path.0.0.3.0.1.0.0.0.0.4.1.0.2" expl="false case" proved="true">
               <transf name="assert" proved="true" arg1="(shortest_path y (Cons y l&#39;) v)">
                <goal name="inside_or_exit_shortest_path.0.0.3.0.1.0.0.0.0.4.1.0.2.0" expl="asserted formula" proved="true">
-               <proof prover="8"><result status="valid" time="0.056076" steps="662"/></proof>
+               <proof prover="3"><result status="valid" time="0.381463" steps="124221"/></proof>
+               <proof prover="8"><result status="valid" time="0.071373" steps="848"/></proof>
                </goal>
                <goal name="inside_or_exit_shortest_path.0.0.3.0.1.0.0.0.0.4.1.0.2.1" expl="false case" proved="true">
-               <proof prover="3"><result status="valid" time="0.096360" steps="37410"/></proof>
+               <proof prover="3"><result status="valid" time="0.096283" steps="37367"/></proof>
+               <proof prover="8"><result status="valid" time="0.092211" steps="1067"/></proof>
                </goal>
               </transf>
               </goal>
@@ -174,7 +179,7 @@
            </transf>
            </goal>
            <goal name="inside_or_exit_shortest_path.0.0.3.0.1.0.0.0.0.5" proved="true">
-           <proof prover="3"><result status="valid" time="0.008781" steps="11490"/></proof>
+           <proof prover="8"><result status="valid" time="0.006074" steps="22"/></proof>
            </goal>
           </transf>
           </goal>
@@ -201,7 +206,7 @@
   <goal name="path_imples_exists_shortest_path.0" proved="true">
   <transf name="assert" proved="true" arg1="(path_existance a b)">
    <goal name="path_imples_exists_shortest_path.0.0" expl="asserted formula" proved="true">
-   <proof prover="8"><result status="valid" time="0.008658" steps="13"/></proof>
+   <proof prover="3"><result status="valid" time="0.010249" steps="9163"/></proof>
    </goal>
    <goal name="path_imples_exists_shortest_path.0.1" proved="true">
    <transf name="unfold" proved="true" arg1="path_existance" arg2="in" arg3="h">
@@ -210,10 +215,10 @@
      <goal name="path_imples_exists_shortest_path.0.1.0.0" proved="true">
      <transf name="induction" proved="true" arg1="d">
       <goal name="path_imples_exists_shortest_path.0.1.0.0.0" expl="base case" proved="true">
-      <proof prover="3"><result status="valid" time="0.020133" steps="12504"/></proof>
+      <proof prover="8"><result status="valid" time="0.017643" steps="118"/></proof>
       </goal>
       <goal name="path_imples_exists_shortest_path.0.1.0.0.1" expl="recursive case" proved="true">
-      <proof prover="3"><result status="valid" time="0.024273" steps="17067"/></proof>
+      <proof prover="3"><result status="valid" time="0.024273" steps="17247"/></proof>
       </goal>
      </transf>
      </goal>
@@ -226,20 +231,29 @@
  </transf>
  </goal>
  <goal name="path_zero" proved="true">
- <proof prover="3"><result status="valid" time="0.026839" steps="16034"/></proof>
+ <proof prover="8"><result status="valid" time="0.021131" steps="184"/></proof>
  </goal>
  <goal name="main_lemma" proved="true">
  <transf name="induction_pr" proved="true" >
   <goal name="main_lemma.0" proved="true">
-  <proof prover="3"><result status="valid" time="0.020195" steps="11815"/></proof>
+  <proof prover="8"><result status="valid" time="0.011488" steps="44"/></proof>
   </goal>
   <goal name="main_lemma.1" proved="true">
-  <proof prover="3"><result status="valid" time="3.356723" steps="631039"/></proof>
+  <proof prover="1" timelimit="1"><result status="highfailure" time="0.000049"/></proof>
+  <proof prover="2"><result status="timeout" time="20.000000" steps="1980166"/></proof>
+  <proof prover="3" timelimit="1"><result status="timeout" time="1.000000" steps="252979"/></proof>
+  <proof prover="7" timelimit="1"><result status="timeout" time="1.000000" steps="3818430"/></proof>
+  <proof prover="8" timelimit="1"><result status="timeout" time="1.000000" steps="9718"/></proof>
+  <transf name="split_vc" proved="true" >
+   <goal name="main_lemma.1.0" proved="true">
+   <proof prover="3" timelimit="10" memlimit="4000"><result status="valid" time="5.410049" steps="940810"/></proof>
+   </goal>
+  </transf>
   </goal>
  </transf>
  </goal>
  <goal name="completeness_lemma" proved="true">
- <proof prover="3"><result status="valid" time="0.022271" steps="13455"/></proof>
+ <proof prover="7"><result status="valid" time="0.012695" steps="78557"/></proof>
  </goal>
  <goal name="consistent_implies_admissible" proved="true">
  <transf name="unfold" proved="true" arg1="consistent">
@@ -252,15 +266,15 @@
      <goal name="consistent_implies_admissible.0.0.0.0" expl="asserted formula" proved="true">
      <transf name="induction_pr" proved="true" >
       <goal name="consistent_implies_admissible.0.0.0.0.0" expl="asserted formula" proved="true">
-      <proof prover="3"><result status="valid" time="0.014066" steps="11281"/></proof>
+      <proof prover="3"><result status="valid" time="0.014247" steps="11341"/></proof>
       </goal>
       <goal name="consistent_implies_admissible.0.0.0.0.1" expl="asserted formula" proved="true">
-      <proof prover="3"><result status="valid" time="0.021754" steps="14291"/></proof>
+      <proof prover="3"><result status="valid" time="0.023131" steps="14389"/></proof>
       </goal>
      </transf>
      </goal>
      <goal name="consistent_implies_admissible.0.0.0.1" proved="true">
-     <proof prover="8"><result status="valid" time="0.008456" steps="9"/></proof>
+     <proof prover="7"><result status="valid" time="0.009836" steps="59263"/></proof>
      </goal>
     </transf>
     </goal>
@@ -277,22 +291,22 @@
    <goal name="consistent_implies_path_consistent.0.0" proved="true">
    <transf name="split_vc" proved="true" >
     <goal name="consistent_implies_path_consistent.0.0.0" proved="true">
-    <proof prover="8"><result status="valid" time="0.007934" steps="4"/></proof>
+    <proof prover="7"><result status="valid" time="0.003711" steps="4836"/></proof>
     </goal>
     <goal name="consistent_implies_path_consistent.0.0.1" proved="true">
     <transf name="assert" proved="true" arg1="(forall a, b, l. path a l b -&gt; f a &lt;= path_weight l b + f b)">
      <goal name="consistent_implies_path_consistent.0.0.1.0" expl="asserted formula" proved="true">
      <transf name="induction_pr" proved="true" >
       <goal name="consistent_implies_path_consistent.0.0.1.0.0" expl="asserted formula" proved="true">
-      <proof prover="3"><result status="valid" time="0.016904" steps="11521"/></proof>
+      <proof prover="8"><result status="valid" time="0.009136" steps="27"/></proof>
       </goal>
       <goal name="consistent_implies_path_consistent.0.0.1.0.1" expl="asserted formula" proved="true">
-      <proof prover="3"><result status="valid" time="0.024106" steps="14568"/></proof>
+      <proof prover="3"><result status="valid" time="0.021235" steps="14629"/></proof>
       </goal>
      </transf>
      </goal>
      <goal name="consistent_implies_path_consistent.0.0.1.1" proved="true">
-     <proof prover="8"><result status="valid" time="0.012766" steps="9"/></proof>
+     <proof prover="7"><result status="valid" time="0.010020" steps="61947"/></proof>
      </goal>
     </transf>
     </goal>
@@ -302,133 +316,66 @@
   </goal>
  </transf>
  </goal>
- <goal name="shortest_path_code&#39;vc" expl="VC for shortest_path_code">
- <transf name="split_vc" >
+ <goal name="shortest_path_code&#39;vc" expl="VC for shortest_path_code" proved="true">
+ <transf name="split_vc" proved="true" >
   <goal name="shortest_path_code&#39;vc.0" expl="loop invariant init" proved="true">
   <transf name="unfold" proved="true" arg1="inv">
    <goal name="shortest_path_code&#39;vc.0.0" expl="VC for shortest_path_code" proved="true">
    <transf name="split_vc" proved="true" >
     <goal name="shortest_path_code&#39;vc.0.0.0" expl="VC for shortest_path_code" proved="true">
-    <proof prover="7"><result status="valid" time="0.013257" steps="87024"/></proof>
+    <proof prover="8"><result status="valid" time="0.010160" steps="47"/></proof>
     </goal>
     <goal name="shortest_path_code&#39;vc.0.0.1" expl="VC for shortest_path_code" proved="true">
-    <proof prover="7"><result status="valid" time="0.013960" steps="93499"/></proof>
+    <proof prover="8"><result status="valid" time="0.009817" steps="54"/></proof>
     </goal>
     <goal name="shortest_path_code&#39;vc.0.0.2" expl="VC for shortest_path_code" proved="true">
-    <proof prover="7"><result status="valid" time="0.013793" steps="95968"/></proof>
+    <proof prover="3"><result status="valid" time="0.015562" steps="12845"/></proof>
     </goal>
     <goal name="shortest_path_code&#39;vc.0.0.3" expl="VC for shortest_path_code" proved="true">
-    <proof prover="8"><result status="valid" time="0.010043" steps="45"/></proof>
+    <proof prover="8"><result status="valid" time="0.009838" steps="48"/></proof>
     </goal>
     <goal name="shortest_path_code&#39;vc.0.0.4" expl="VC for shortest_path_code" proved="true">
-    <proof prover="8"><result status="valid" time="0.010102" steps="52"/></proof>
+    <proof prover="7"><result status="valid" time="0.014148" steps="100676"/></proof>
     </goal>
     <goal name="shortest_path_code&#39;vc.0.0.5" expl="VC for shortest_path_code" proved="true">
-    <proof prover="7"><result status="valid" time="0.014654" steps="97454"/></proof>
+    <proof prover="8"><result status="valid" time="0.009713" steps="54"/></proof>
     </goal>
     <goal name="shortest_path_code&#39;vc.0.0.6" expl="VC for shortest_path_code" proved="true">
-    <transf name="destruct_rec" proved="true" arg1="H">
-     <goal name="shortest_path_code&#39;vc.0.0.6.0" expl="VC for shortest_path_code" proved="true">
-     <transf name="case" proved="true" arg1="(n = src)">
-      <goal name="shortest_path_code&#39;vc.0.0.6.0.0" expl="true case" proved="true">
-      <transf name="replace" proved="true" arg1="n" arg2="src">
-       <goal name="shortest_path_code&#39;vc.0.0.6.0.0.0" expl="true case" proved="true">
-       <transf name="assert" proved="true" arg1="(d[src] = 0)">
-        <goal name="shortest_path_code&#39;vc.0.0.6.0.0.0.0" expl="asserted formula" proved="true">
-        <proof prover="8"><result status="valid" time="0.009936" steps="56"/></proof>
-        </goal>
-        <goal name="shortest_path_code&#39;vc.0.0.6.0.0.0.1" expl="true case" proved="true">
-        <transf name="replace" proved="true" arg1="(d[src])" arg2="0">
-         <goal name="shortest_path_code&#39;vc.0.0.6.0.0.0.1.0" expl="true case" proved="true">
-         <transf name="unfold" proved="true" arg1="path_with_len">
-          <goal name="shortest_path_code&#39;vc.0.0.6.0.0.0.1.0.0" expl="VC for shortest_path_code" proved="true">
-          <transf name="assert" proved="true" arg1="(path src Nil src)">
-           <goal name="shortest_path_code&#39;vc.0.0.6.0.0.0.1.0.0.0" expl="asserted formula" proved="true">
-           <proof prover="8"><result status="valid" time="0.009511" steps="23"/></proof>
-           </goal>
-           <goal name="shortest_path_code&#39;vc.0.0.6.0.0.0.1.0.0.1" expl="VC for shortest_path_code" proved="true">
-           <proof prover="8"><result status="valid" time="0.011658" steps="68"/></proof>
-           </goal>
-          </transf>
-          </goal>
-         </transf>
-         </goal>
-         <goal name="shortest_path_code&#39;vc.0.0.6.0.0.0.1.1" expl="equality hypothesis" proved="true">
-         <proof prover="3"><result status="valid" time="0.009865" steps="12591"/></proof>
-         </goal>
-        </transf>
-        </goal>
-       </transf>
-       </goal>
-       <goal name="shortest_path_code&#39;vc.0.0.6.0.0.1" expl="equality hypothesis" proved="true">
-       <proof prover="3"><result status="valid" time="0.009788" steps="12466"/></proof>
-       </goal>
-      </transf>
-      </goal>
-      <goal name="shortest_path_code&#39;vc.0.0.6.0.1" expl="false case" proved="true">
-      <proof prover="3"><result status="valid" time="0.018281" steps="13052"/></proof>
-      </goal>
-     </transf>
-     </goal>
-     <goal name="shortest_path_code&#39;vc.0.0.6.1" expl="VC for shortest_path_code" proved="true">
-     <proof prover="3" obsolete="true"><result status="timeout" time="5.000000" steps="491446"/></proof>
-     <proof prover="7" obsolete="true"><result status="timeout" time="5.000000" steps="17431991"/></proof>
-     <proof prover="8" obsolete="true"><result status="timeout" time="5.000000" steps="125196"/></proof>
-     <transf name="assert" proved="true" arg1="(n = src)">
-      <goal name="shortest_path_code&#39;vc.0.0.6.1.0" expl="asserted formula" proved="true">
-      <proof prover="3"><result status="valid" time="0.015123" steps="12854"/></proof>
-      </goal>
-      <goal name="shortest_path_code&#39;vc.0.0.6.1.1" expl="VC for shortest_path_code" proved="true">
-      <transf name="unfold" proved="true" arg1="path_with_len">
-       <goal name="shortest_path_code&#39;vc.0.0.6.1.1.0" expl="VC for shortest_path_code" proved="true">
-       <transf name="assert" proved="true" arg1="(path src Nil n)">
-        <goal name="shortest_path_code&#39;vc.0.0.6.1.1.0.0" expl="asserted formula" proved="true">
-        <proof prover="7"><result status="valid" time="0.011649" steps="83973"/></proof>
-        </goal>
-        <goal name="shortest_path_code&#39;vc.0.0.6.1.1.0.1" expl="VC for shortest_path_code" proved="true">
-        <transf name="assert" proved="true" arg1="(d[src] = 0)">
-         <goal name="shortest_path_code&#39;vc.0.0.6.1.1.0.1.0" expl="asserted formula" proved="true">
-         <proof prover="7"><result status="valid" time="0.014254" steps="95655"/></proof>
-         </goal>
-         <goal name="shortest_path_code&#39;vc.0.0.6.1.1.0.1.1" expl="VC for shortest_path_code" proved="true">
-         <proof prover="7"><result status="valid" time="0.014491" steps="99137"/></proof>
-         </goal>
-        </transf>
-        </goal>
-       </transf>
-       </goal>
-      </transf>
-      </goal>
-     </transf>
-     </goal>
-    </transf>
+    <proof prover="3"><result status="valid" time="0.014563" steps="13078"/></proof>
     </goal>
     <goal name="shortest_path_code&#39;vc.0.0.7" expl="VC for shortest_path_code" proved="true">
-    <proof prover="3"><result status="valid" time="0.015255" steps="13154"/></proof>
+    <proof prover="1"><result status="valid" time="0.270910"/></proof>
+    <proof prover="3"><result status="timeout" time="5.000000" steps="527557"/></proof>
+    <proof prover="7"><result status="timeout" time="5.000000" steps="16059718"/></proof>
+    <proof prover="8"><result status="timeout" time="5.000000" steps="116323"/></proof>
     </goal>
     <goal name="shortest_path_code&#39;vc.0.0.8" expl="VC for shortest_path_code" proved="true">
-    <proof prover="8"><result status="valid" time="0.009892" steps="44"/></proof>
+    <proof prover="7"><result status="valid" time="0.012263" steps="89342"/></proof>
+    </goal>
+    <goal name="shortest_path_code&#39;vc.0.0.9" expl="VC for shortest_path_code" proved="true">
+    <proof prover="3"><result status="valid" time="0.015297" steps="12879"/></proof>
     </goal>
    </transf>
    </goal>
   </transf>
   </goal>
   <goal name="shortest_path_code&#39;vc.1" expl="loop invariant init" proved="true">
-  <proof prover="8"><result status="valid" time="0.013077" steps="68"/></proof>
+  <proof prover="7"><result status="valid" time="0.015581" steps="107783"/></proof>
   </goal>
   <goal name="shortest_path_code&#39;vc.2" expl="loop invariant init" proved="true">
-  <proof prover="8"><result status="valid" time="0.303058" steps="5318"/></proof>
+  <proof prover="3"><result status="valid" time="0.111951" steps="38709"/></proof>
   </goal>
   <goal name="shortest_path_code&#39;vc.3" expl="precondition" proved="true">
-  <proof prover="3"><result status="valid" time="0.010715" steps="13565"/></proof>
+  <proof prover="7"><result status="valid" time="0.004068" steps="6899"/></proof>
   </goal>
-  <goal name="shortest_path_code&#39;vc.4" expl="assertion">
-  <transf name="assert" arg1="(exists k. shortest_path_with_len src u k)">
-   <goal name="shortest_path_code&#39;vc.4.0" expl="asserted formula">
+  <goal name="shortest_path_code&#39;vc.4" expl="assertion" proved="true">
+  <transf name="assert" proved="true" arg1="(exists k. shortest_path_with_len src u k)">
+   <goal name="shortest_path_code&#39;vc.4.0" expl="asserted formula" proved="true">
    <proof prover="0" obsolete="true"><result status="valid" time="0.434749"/></proof>
-   <proof prover="3"><result status="timeout" time="5.000000" steps="422277"/></proof>
-   <proof prover="7"><result status="timeout" time="5.000000" steps="17918807"/></proof>
-   <proof prover="8"><result status="timeout" time="5.000000" steps="54126"/></proof>
+   <proof prover="1"><result status="valid" time="0.711598"/></proof>
+   <proof prover="3"><result status="timeout" time="5.000000" steps="295196"/></proof>
+   <proof prover="7"><result status="timeout" time="5.000000" steps="16890000"/></proof>
+   <proof prover="8"><result status="timeout" time="5.000000" steps="56746"/></proof>
    </goal>
    <goal name="shortest_path_code&#39;vc.4.1" expl="assertion" proved="true">
    <transf name="destruct_rec" proved="true" arg1="h">
@@ -437,58 +384,73 @@
      <goal name="shortest_path_code&#39;vc.4.1.0.0" expl="true case (assertion)" proved="true">
      <transf name="assert" proved="true" arg1="(not shortest_path_with_len src u d[u])">
       <goal name="shortest_path_code&#39;vc.4.1.0.0.0" expl="asserted formula" proved="true">
-      <proof prover="7"><result status="valid" time="0.043220" steps="215075"/></proof>
+      <proof prover="7"><result status="valid" time="1.146727" steps="3761010"/></proof>
       </goal>
       <goal name="shortest_path_code&#39;vc.4.1.0.0.1" expl="true case (assertion)" proved="true">
-      <transf name="inst_rem" proved="true" arg1="LoopInvariant" arg2="u, k">
+      <transf name="unfold" proved="true" arg1="shortest_path_with_len" arg2="in" arg3="h2">
        <goal name="shortest_path_code&#39;vc.4.1.0.0.1.0" expl="true case (assertion)" proved="true">
-       <transf name="destruct_rec" proved="true" arg1="Hinst">
-        <goal name="shortest_path_code&#39;vc.4.1.0.0.1.0.0" expl="destruct premise" proved="true">
-        <proof prover="3"><result status="valid" time="0.011236" steps="13682"/></proof>
-        </goal>
-        <goal name="shortest_path_code&#39;vc.4.1.0.0.1.0.1" expl="destruct premise" proved="true">
-        <proof prover="3"><result status="valid" time="0.025565" steps="15927"/></proof>
-        </goal>
-        <goal name="shortest_path_code&#39;vc.4.1.0.0.1.0.2" expl="true case (assertion)" proved="true">
-        <transf name="case" proved="true" arg1="(u = u1)">
-         <goal name="shortest_path_code&#39;vc.4.1.0.0.1.0.2.0" expl="true case (assertion)" proved="true">
-         <proof prover="8"><result status="valid" time="0.008887" steps="36"/></proof>
-         </goal>
-         <goal name="shortest_path_code&#39;vc.4.1.0.0.1.0.2.1" expl="false case (true case. assertion)" proved="true">
-         <transf name="assert" proved="true" arg1="(d[u1] + h4 u1 &gt; d[u] + h4 u)">
-          <goal name="shortest_path_code&#39;vc.4.1.0.0.1.0.2.1.0" expl="asserted formula" proved="true">
-          <transf name="assert" proved="true" arg1="(d[u1] &gt; d[u] + (k - d[u]))">
-           <goal name="shortest_path_code&#39;vc.4.1.0.0.1.0.2.1.0.0" expl="asserted formula" proved="true">
-           <proof prover="8"><result status="valid" time="0.008402" steps="38"/></proof>
+       <transf name="destruct_rec" proved="true" arg1="h2">
+        <goal name="shortest_path_code&#39;vc.4.1.0.0.1.0.0" expl="true case (assertion)" proved="true">
+        <transf name="inst_rem" proved="true" arg1="LoopInvariant" arg2="u, l">
+         <goal name="shortest_path_code&#39;vc.4.1.0.0.1.0.0.0" expl="true case (assertion)" proved="true">
+         <transf name="destruct_rec" proved="true" arg1="Hinst">
+          <goal name="shortest_path_code&#39;vc.4.1.0.0.1.0.0.0.0" expl="destruct premise" proved="true">
+          <proof prover="7"><result status="valid" time="0.004029" steps="6822"/></proof>
+          </goal>
+          <goal name="shortest_path_code&#39;vc.4.1.0.0.1.0.0.0.1" expl="destruct premise" proved="true">
+          <proof prover="7"><result status="valid" time="0.022136" steps="134282"/></proof>
+          </goal>
+          <goal name="shortest_path_code&#39;vc.4.1.0.0.1.0.0.0.2" expl="true case (assertion)" proved="true">
+          <transf name="case" proved="true" arg1="(u = u1)">
+           <goal name="shortest_path_code&#39;vc.4.1.0.0.1.0.0.0.2.0" expl="true case (assertion)" proved="true">
+           <proof prover="3"><result status="valid" time="0.017549" steps="14214"/></proof>
            </goal>
-           <goal name="shortest_path_code&#39;vc.4.1.0.0.1.0.2.1.0.1" expl="asserted formula" proved="true">
-           <transf name="assert" proved="true" arg1="(d[u1] + h6 u1 &gt; d[u] + (k - d[u]) + h6 u1)">
-            <goal name="shortest_path_code&#39;vc.4.1.0.0.1.0.2.1.0.1.0" expl="asserted formula" proved="true">
-            <proof prover="7"><result status="valid" time="0.004016" steps="6774"/></proof>
-            </goal>
-            <goal name="shortest_path_code&#39;vc.4.1.0.0.1.0.2.1.0.1.1" expl="asserted formula" proved="true">
-            <transf name="assert" proved="true" arg1="(h7 u &lt;= (k - d[u]) + h7 u1)">
-             <goal name="shortest_path_code&#39;vc.4.1.0.0.1.0.2.1.0.1.1.0" expl="asserted formula" proved="true">
-             <transf name="assert" proved="true" arg1="(path_consistent h7 dst)">
-              <goal name="shortest_path_code&#39;vc.4.1.0.0.1.0.2.1.0.1.1.0.0" expl="asserted formula" proved="true">
-              <proof prover="7"><result status="valid" time="0.012748" steps="100542"/></proof>
+           <goal name="shortest_path_code&#39;vc.4.1.0.0.1.0.0.0.2.1" expl="false case (true case. assertion)" proved="true">
+           <transf name="assert" proved="true" arg1="(d[u1] + h5 u1 &gt; d[u] + h5 u)">
+            <goal name="shortest_path_code&#39;vc.4.1.0.0.1.0.0.0.2.1.0" expl="asserted formula" proved="true">
+            <transf name="assert" proved="true" arg1="(d[u1] &gt; d[u] + (k - d[u]))">
+             <goal name="shortest_path_code&#39;vc.4.1.0.0.1.0.0.0.2.1.0.0" expl="asserted formula" proved="true">
+             <proof prover="7"><result status="valid" time="0.004093" steps="6822"/></proof>
+             </goal>
+             <goal name="shortest_path_code&#39;vc.4.1.0.0.1.0.0.0.2.1.0.1" expl="asserted formula" proved="true">
+             <transf name="assert" proved="true" arg1="(d[u1] + h7 u1 &gt; d[u] + (k - d[u]) + h7 u1)">
+              <goal name="shortest_path_code&#39;vc.4.1.0.0.1.0.0.0.2.1.0.1.0" expl="asserted formula" proved="true">
+              <proof prover="7"><result status="valid" time="0.004156" steps="6851"/></proof>
               </goal>
-              <goal name="shortest_path_code&#39;vc.4.1.0.0.1.0.2.1.0.1.1.0.1" expl="asserted formula" proved="true">
-              <proof prover="7"><result status="valid" time="0.046485" steps="249316"/></proof>
+              <goal name="shortest_path_code&#39;vc.4.1.0.0.1.0.0.0.2.1.0.1.1" expl="asserted formula" proved="true">
+              <transf name="assert" proved="true" arg1="(h8 u &lt;= (k - d[u]) + h8 u1)">
+               <goal name="shortest_path_code&#39;vc.4.1.0.0.1.0.0.0.2.1.0.1.1.0" expl="asserted formula" proved="true">
+               <transf name="assert" proved="true" arg1="(path_consistent h8 dst)">
+                <goal name="shortest_path_code&#39;vc.4.1.0.0.1.0.0.0.2.1.0.1.1.0.0" expl="asserted formula" proved="true">
+                <proof prover="3"><result status="valid" time="0.016444" steps="14261"/></proof>
+                </goal>
+                <goal name="shortest_path_code&#39;vc.4.1.0.0.1.0.0.0.2.1.0.1.1.0.1" expl="asserted formula" proved="true">
+                <transf name="assert" proved="true" arg1="(k - d[u] = path_weight l2 u1)">
+                 <goal name="shortest_path_code&#39;vc.4.1.0.0.1.0.0.0.2.1.0.1.1.0.1.0" expl="asserted formula" proved="true">
+                 <proof prover="3"><result status="valid" time="0.110567" steps="53589"/></proof>
+                 </goal>
+                 <goal name="shortest_path_code&#39;vc.4.1.0.0.1.0.0.0.2.1.0.1.1.0.1.1" expl="asserted formula" proved="true">
+                 <proof prover="8"><result status="valid" time="0.022523" steps="187"/></proof>
+                 </goal>
+                </transf>
+                </goal>
+               </transf>
+               </goal>
+               <goal name="shortest_path_code&#39;vc.4.1.0.0.1.0.0.0.2.1.0.1.1.1" expl="asserted formula" proved="true">
+               <proof prover="7"><result status="valid" time="0.012681" steps="101458"/></proof>
+               </goal>
+              </transf>
               </goal>
              </transf>
              </goal>
-             <goal name="shortest_path_code&#39;vc.4.1.0.0.1.0.2.1.0.1.1.1" expl="asserted formula" proved="true">
-             <proof prover="7"><result status="valid" time="0.012804" steps="97035"/></proof>
-             </goal>
             </transf>
+            </goal>
+            <goal name="shortest_path_code&#39;vc.4.1.0.0.1.0.0.0.2.1.1" expl="false case (true case. assertion)" proved="true">
+            <proof prover="8"><result status="valid" time="0.021643" steps="182"/></proof>
             </goal>
            </transf>
            </goal>
           </transf>
-          </goal>
-          <goal name="shortest_path_code&#39;vc.4.1.0.0.1.0.2.1.1" expl="false case (true case. assertion)" proved="true">
-          <proof prover="7"><result status="valid" time="0.022797" steps="133266"/></proof>
           </goal>
          </transf>
          </goal>
@@ -501,7 +463,7 @@
      </transf>
      </goal>
      <goal name="shortest_path_code&#39;vc.4.1.0.1" expl="false case (assertion)" proved="true">
-     <proof prover="3"><result status="valid" time="0.223142" steps="78615"/></proof>
+     <proof prover="8"><result status="valid" time="0.135485" steps="1681"/></proof>
      </goal>
     </transf>
     </goal>
@@ -510,143 +472,285 @@
   </transf>
   </goal>
   <goal name="shortest_path_code&#39;vc.5" expl="postcondition" proved="true">
-  <proof prover="8"><result status="valid" time="0.008578" steps="32"/></proof>
+  <proof prover="3"><result status="valid" time="0.015734" steps="14262"/></proof>
   </goal>
   <goal name="shortest_path_code&#39;vc.6" expl="loop invariant init" proved="true">
-  <proof prover="3"><result status="valid" time="0.016455" steps="14895"/></proof>
+  <proof prover="7"><result status="valid" time="0.014651" steps="113535"/></proof>
   </goal>
   <goal name="shortest_path_code&#39;vc.7" expl="loop invariant init" proved="true">
   <transf name="unfold" proved="true" arg1="inv">
    <goal name="shortest_path_code&#39;vc.7.0" expl="VC for shortest_path_code" proved="true">
    <transf name="split_vc" proved="true" >
     <goal name="shortest_path_code&#39;vc.7.0.0" expl="VC for shortest_path_code" proved="true">
-    <proof prover="3"><result status="valid" time="0.040359" steps="22114"/></proof>
+    <proof prover="8"><result status="valid" time="0.020676" steps="209"/></proof>
     </goal>
     <goal name="shortest_path_code&#39;vc.7.0.1" expl="VC for shortest_path_code" proved="true">
-    <proof prover="8"><result status="valid" time="0.011660" steps="43"/></proof>
+    <proof prover="7"><result status="valid" time="0.014351" steps="113538"/></proof>
     </goal>
     <goal name="shortest_path_code&#39;vc.7.0.2" expl="VC for shortest_path_code" proved="true">
-    <proof prover="7"><result status="valid" time="0.018595" steps="128123"/></proof>
+    <proof prover="8"><result status="valid" time="0.010934" steps="44"/></proof>
     </goal>
     <goal name="shortest_path_code&#39;vc.7.0.3" expl="VC for shortest_path_code" proved="true">
-    <proof prover="3"><result status="valid" time="0.026962" steps="16788"/></proof>
+    <proof prover="7"><result status="valid" time="0.017952" steps="133218"/></proof>
     </goal>
     <goal name="shortest_path_code&#39;vc.7.0.4" expl="VC for shortest_path_code" proved="true">
-    <proof prover="7"><result status="valid" time="0.050388" steps="298507"/></proof>
+    <proof prover="7"><result status="valid" time="0.016098" steps="119001"/></proof>
     </goal>
     <goal name="shortest_path_code&#39;vc.7.0.5" expl="VC for shortest_path_code" proved="true">
-    <transf name="unfold" proved="true" arg1="inv" arg2="in" arg3="LoopInvariant3">
-     <goal name="shortest_path_code&#39;vc.7.0.5.0" expl="VC for shortest_path_code" proved="true">
-     <transf name="destruct_rec" proved="true" arg1="LoopInvariant3">
-      <goal name="shortest_path_code&#39;vc.7.0.5.0.0" expl="VC for shortest_path_code" proved="true">
-      <proof prover="3"><result status="valid" time="0.029783" steps="17219"/></proof>
-      </goal>
-     </transf>
-     </goal>
-    </transf>
+    <proof prover="7"><result status="valid" time="0.054164" steps="305705"/></proof>
     </goal>
     <goal name="shortest_path_code&#39;vc.7.0.6" expl="VC for shortest_path_code" proved="true">
-    <proof prover="8"><result status="valid" time="0.028527" steps="479"/></proof>
+    <proof prover="8"><result status="valid" time="0.022949" steps="309"/></proof>
     </goal>
     <goal name="shortest_path_code&#39;vc.7.0.7" expl="VC for shortest_path_code" proved="true">
-    <proof prover="7"><result status="valid" time="0.056553" steps="289982"/></proof>
+    <proof prover="3"><result status="valid" time="0.032818" steps="18147"/></proof>
     </goal>
     <goal name="shortest_path_code&#39;vc.7.0.8" expl="VC for shortest_path_code" proved="true">
-    <proof prover="7"><result status="valid" time="0.017877" steps="128187"/></proof>
+    <proof prover="7"><result status="valid" time="0.065786" steps="328756"/></proof>
+    </goal>
+    <goal name="shortest_path_code&#39;vc.7.0.9" expl="VC for shortest_path_code" proved="true">
+    <proof prover="8"><result status="valid" time="0.021587" steps="224"/></proof>
     </goal>
    </transf>
    </goal>
   </transf>
   </goal>
   <goal name="shortest_path_code&#39;vc.8" expl="loop invariant init" proved="true">
-  <proof prover="3"><result status="valid" time="0.068724" steps="23911"/></proof>
+  <proof prover="3"><result status="valid" time="0.043437" steps="25007"/></proof>
   </goal>
   <goal name="shortest_path_code&#39;vc.9" expl="precondition" proved="true">
-  <proof prover="3"><result status="valid" time="0.011832" steps="14852"/></proof>
+  <proof prover="7"><result status="valid" time="0.004288" steps="7685"/></proof>
   </goal>
   <goal name="shortest_path_code&#39;vc.10" expl="assertion" proved="true">
-  <proof prover="3"><result status="valid" time="0.032849" steps="19074"/></proof>
+  <proof prover="3"><result status="valid" time="0.033818" steps="19412"/></proof>
   </goal>
   <goal name="shortest_path_code&#39;vc.11" expl="loop variant decrease" proved="true">
-  <proof prover="7"><result status="valid" time="0.020442" steps="137594"/></proof>
+  <proof prover="8"><result status="valid" time="0.014171" steps="94"/></proof>
   </goal>
   <goal name="shortest_path_code&#39;vc.12" expl="loop invariant preservation" proved="true">
-  <proof prover="7"><result status="valid" time="0.019732" steps="135607"/></proof>
-  </goal>
-  <goal name="shortest_path_code&#39;vc.13" expl="loop invariant preservation">
-  <transf name="split_vc" >
-   <goal name="shortest_path_code&#39;vc.13.0" expl="loop invariant preservation" proved="true">
-   <proof prover="7"><result status="valid" time="0.003612" steps="3864"/></proof>
+  <transf name="assert" proved="true" arg1="(path_with_len src u d[u])">
+   <goal name="shortest_path_code&#39;vc.12.0" expl="asserted formula" proved="true">
+   <proof prover="3"><result status="valid" time="0.038927" steps="21762"/></proof>
    </goal>
-   <goal name="shortest_path_code&#39;vc.13.1" expl="loop invariant preservation">
-   <transf name="unfold" arg1="inv">
-    <goal name="shortest_path_code&#39;vc.13.1.0" expl="VC for shortest_path_code">
-    <transf name="split_vc" >
-     <goal name="shortest_path_code&#39;vc.13.1.0.0" expl="VC for shortest_path_code" proved="true">
-     <proof prover="8"><result status="valid" time="0.028703" steps="371"/></proof>
+   <goal name="shortest_path_code&#39;vc.12.1" expl="loop invariant preservation" proved="true">
+   <transf name="assert" proved="true" arg1="(path_with_len src y (d[u] + weight u y))">
+    <goal name="shortest_path_code&#39;vc.12.1.0" expl="asserted formula" proved="true">
+    <proof prover="3"><result status="valid" time="0.889005" steps="210257"/></proof>
+    </goal>
+    <goal name="shortest_path_code&#39;vc.12.1.1" expl="loop invariant preservation" proved="true">
+    <proof prover="3"><result status="valid" time="0.033076" steps="19693"/></proof>
+    </goal>
+   </transf>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="shortest_path_code&#39;vc.13" expl="loop invariant preservation" proved="true">
+  <transf name="unfold" proved="true" arg1="inv">
+   <goal name="shortest_path_code&#39;vc.13.0" expl="VC for shortest_path_code" proved="true">
+   <transf name="split_vc" proved="true" >
+    <goal name="shortest_path_code&#39;vc.13.0.0" expl="VC for shortest_path_code" proved="true">
+    <proof prover="8"><result status="valid" time="0.030550" steps="397"/></proof>
+    </goal>
+    <goal name="shortest_path_code&#39;vc.13.0.1" expl="VC for shortest_path_code" proved="true">
+    <proof prover="7"><result status="valid" time="0.076028" steps="394024"/></proof>
+    </goal>
+    <goal name="shortest_path_code&#39;vc.13.0.2" expl="VC for shortest_path_code" proved="true">
+    <proof prover="7"><result status="valid" time="0.016342" steps="120424"/></proof>
+    </goal>
+    <goal name="shortest_path_code&#39;vc.13.0.3" expl="VC for shortest_path_code" proved="true">
+    <proof prover="7"><result status="valid" time="0.015437" steps="120414"/></proof>
+    </goal>
+    <goal name="shortest_path_code&#39;vc.13.0.4" expl="VC for shortest_path_code" proved="true">
+    <proof prover="7"><result status="valid" time="0.033292" steps="200472"/></proof>
+    </goal>
+    <goal name="shortest_path_code&#39;vc.13.0.5" expl="VC for shortest_path_code" proved="true">
+    <proof prover="7"><result status="valid" time="0.119619" steps="584299"/></proof>
+    </goal>
+    <goal name="shortest_path_code&#39;vc.13.0.6" expl="VC for shortest_path_code" proved="true">
+    <proof prover="7"><result status="valid" time="0.078250" steps="412279"/></proof>
+    </goal>
+    <goal name="shortest_path_code&#39;vc.13.0.7" expl="VC for shortest_path_code" proved="true">
+    <transf name="destruct_rec" proved="true" arg1="H">
+     <goal name="shortest_path_code&#39;vc.13.0.7.0" expl="VC for shortest_path_code" proved="true">
+     <transf name="case" proved="true" arg1="(n = y)">
+      <goal name="shortest_path_code&#39;vc.13.0.7.0.0" expl="true case" proved="true">
+      <transf name="assert" proved="true" arg1="(path_with_len src u d[u])">
+       <goal name="shortest_path_code&#39;vc.13.0.7.0.0.0" expl="asserted formula" proved="true">
+       <proof prover="7"><result status="valid" time="0.077585" steps="400815"/></proof>
+       </goal>
+       <goal name="shortest_path_code&#39;vc.13.0.7.0.0.1" expl="true case" proved="true">
+       <proof prover="3"><result status="valid" time="0.915850" steps="216197"/></proof>
+       </goal>
+      </transf>
+      </goal>
+      <goal name="shortest_path_code&#39;vc.13.0.7.0.1" expl="false case" proved="true">
+      <proof prover="7"><result status="valid" time="0.079288" steps="410868"/></proof>
+      </goal>
+     </transf>
      </goal>
-     <goal name="shortest_path_code&#39;vc.13.1.0.1" expl="VC for shortest_path_code" proved="true">
-     <proof prover="3"><result status="valid" time="0.074648" steps="31267"/></proof>
-     </goal>
-     <goal name="shortest_path_code&#39;vc.13.1.0.2" expl="VC for shortest_path_code" proved="true">
-     <proof prover="7"><result status="valid" time="0.014265" steps="117328"/></proof>
-     </goal>
-     <goal name="shortest_path_code&#39;vc.13.1.0.3" expl="VC for shortest_path_code">
-     <proof prover="3"><result status="timeout" time="5.000000" steps="750139"/></proof>
-     <proof prover="7"><result status="timeout" time="5.000000" steps="17482002"/></proof>
-     <proof prover="8"><result status="timeout" time="5.000000" steps="64617"/></proof>
-     </goal>
-     <goal name="shortest_path_code&#39;vc.13.1.0.4" expl="VC for shortest_path_code" proved="true">
-     <proof prover="7"><result status="valid" time="0.029155" steps="179549"/></proof>
-     </goal>
-     <goal name="shortest_path_code&#39;vc.13.1.0.5" expl="VC for shortest_path_code" proved="true">
-     <proof prover="7"><result status="valid" time="0.031919" steps="196591"/></proof>
-     </goal>
-     <goal name="shortest_path_code&#39;vc.13.1.0.6" expl="VC for shortest_path_code">
-     <proof prover="3"><result status="timeout" time="5.000000" steps="665617"/></proof>
-     <proof prover="7"><result status="timeout" time="5.000000" steps="18138270"/></proof>
-     <proof prover="8"><result status="timeout" time="5.000000" steps="67510"/></proof>
-     </goal>
-     <goal name="shortest_path_code&#39;vc.13.1.0.7" expl="VC for shortest_path_code">
-     <proof prover="3"><result status="timeout" time="5.000000" steps="700711"/></proof>
-     <proof prover="7"><result status="timeout" time="5.000000" steps="17698778"/></proof>
-     <proof prover="8"><result status="timeout" time="5.000000" steps="68012"/></proof>
-     </goal>
-     <goal name="shortest_path_code&#39;vc.13.1.0.8" expl="VC for shortest_path_code" proved="true">
-     <proof prover="7"><result status="valid" time="0.019001" steps="134426"/></proof>
+     <goal name="shortest_path_code&#39;vc.13.0.7.1" expl="VC for shortest_path_code" proved="true">
+     <proof prover="7"><result status="valid" time="0.079971" steps="412280"/></proof>
      </goal>
     </transf>
+    </goal>
+    <goal name="shortest_path_code&#39;vc.13.0.8" expl="VC for shortest_path_code" proved="true">
+    <proof prover="3"><result status="valid" time="0.400197" steps="92806"/></proof>
+    </goal>
+    <goal name="shortest_path_code&#39;vc.13.0.9" expl="VC for shortest_path_code" proved="true">
+    <proof prover="7"><result status="valid" time="0.019382" steps="137888"/></proof>
     </goal>
    </transf>
    </goal>
   </transf>
   </goal>
   <goal name="shortest_path_code&#39;vc.14" expl="loop invariant preservation" proved="true">
-  <proof prover="3"><result status="valid" time="0.120150" steps="38098"/></proof>
+  <proof prover="3"><result status="valid" time="0.321249" steps="78966"/></proof>
   </goal>
-  <goal name="shortest_path_code&#39;vc.15" expl="assertion">
-  <transf name="split_vc" >
-   <goal name="shortest_path_code&#39;vc.15.0" expl="assertion" proved="true">
-   <proof prover="7"><result status="valid" time="0.018192" steps="131109"/></proof>
-   </goal>
-   <goal name="shortest_path_code&#39;vc.15.1" expl="assertion">
-   <transf name="unfold" arg1="inv" arg2="in" arg3="LoopInvariant1">
-    <goal name="shortest_path_code&#39;vc.15.1.0" expl="assertion">
-    <transf name="assert" arg1="(path_with_len src y x)">
-     <goal name="shortest_path_code&#39;vc.15.1.0.0" expl="asserted formula">
-     <transf name="assert" arg1="(path_with_len src u d[u])">
-      <goal name="shortest_path_code&#39;vc.15.1.0.0.0" expl="asserted formula">
-      <proof prover="3"><result status="timeout" time="5.000000" steps="748394"/></proof>
-      <proof prover="7"><result status="timeout" time="5.000000" steps="19378846"/></proof>
-      <proof prover="8"><result status="timeout" time="5.000000" steps="51461"/></proof>
+  <goal name="shortest_path_code&#39;vc.15" expl="assertion" proved="true">
+  <proof prover="7"><result status="valid" time="0.077098" steps="378601"/></proof>
+  </goal>
+  <goal name="shortest_path_code&#39;vc.16" expl="loop variant decrease" proved="true">
+  <proof prover="3"><result status="valid" time="0.031284" steps="19375"/></proof>
+  </goal>
+  <goal name="shortest_path_code&#39;vc.17" expl="loop invariant preservation" proved="true">
+  <proof prover="7"><result status="valid" time="0.020094" steps="136403"/></proof>
+  </goal>
+  <goal name="shortest_path_code&#39;vc.18" expl="loop invariant preservation" proved="true">
+  <transf name="unfold" proved="true" arg1="inv">
+   <goal name="shortest_path_code&#39;vc.18.0" expl="VC for shortest_path_code" proved="true">
+   <transf name="split_vc" proved="true" >
+    <goal name="shortest_path_code&#39;vc.18.0.0" expl="VC for shortest_path_code" proved="true">
+    <proof prover="7"><result status="valid" time="0.019794" steps="137973"/></proof>
+    </goal>
+    <goal name="shortest_path_code&#39;vc.18.0.1" expl="VC for shortest_path_code" proved="true">
+    <proof prover="8"><result status="valid" time="2.268140" steps="27696"/></proof>
+    </goal>
+    <goal name="shortest_path_code&#39;vc.18.0.2" expl="VC for shortest_path_code" proved="true">
+    <proof prover="3"><result status="valid" time="0.032636" steps="19474"/></proof>
+    </goal>
+    <goal name="shortest_path_code&#39;vc.18.0.3" expl="VC for shortest_path_code" proved="true">
+    <proof prover="7"><result status="valid" time="0.016016" steps="120894"/></proof>
+    </goal>
+    <goal name="shortest_path_code&#39;vc.18.0.4" expl="VC for shortest_path_code" proved="true">
+    <proof prover="7"><result status="valid" time="0.029820" steps="197011"/></proof>
+    </goal>
+    <goal name="shortest_path_code&#39;vc.18.0.5" expl="VC for shortest_path_code" proved="true">
+    <proof prover="7"><result status="valid" time="0.028344" steps="185727"/></proof>
+    </goal>
+    <goal name="shortest_path_code&#39;vc.18.0.6" expl="VC for shortest_path_code" proved="true">
+    <proof prover="7"><result status="valid" time="0.073513" steps="382167"/></proof>
+    </goal>
+    <goal name="shortest_path_code&#39;vc.18.0.7" expl="VC for shortest_path_code" proved="true">
+    <transf name="destruct_rec" proved="true" arg1="H">
+     <goal name="shortest_path_code&#39;vc.18.0.7.0" expl="VC for shortest_path_code" proved="true">
+     <transf name="case" proved="true" arg1="(n = y)">
+      <goal name="shortest_path_code&#39;vc.18.0.7.0.0" expl="true case" proved="true">
+      <transf name="assert" proved="true" arg1="(d1[u] = d[u])">
+       <goal name="shortest_path_code&#39;vc.18.0.7.0.0.0" expl="asserted formula" proved="true">
+       <proof prover="7"><result status="valid" time="0.031298" steps="191830"/></proof>
+       </goal>
+       <goal name="shortest_path_code&#39;vc.18.0.7.0.0.1" expl="true case" proved="true">
+       <transf name="assert" proved="true" arg1="(path_with_len src u d[u])">
+        <goal name="shortest_path_code&#39;vc.18.0.7.0.0.1.0" expl="asserted formula" proved="true">
+        <proof prover="7"><result status="valid" time="0.031118" steps="192437"/></proof>
+        </goal>
+        <goal name="shortest_path_code&#39;vc.18.0.7.0.0.1.1" expl="true case" proved="true">
+        <proof prover="3" obsolete="true"><result status="valid" time="0.987769" steps="221384"/></proof>
+        <transf name="unfold" proved="true" arg1="path_with_len" arg2="in" arg3="h">
+         <goal name="shortest_path_code&#39;vc.18.0.7.0.0.1.1.0" expl="true case" proved="true">
+         <transf name="destruct_rec" proved="true" arg1="h">
+          <goal name="shortest_path_code&#39;vc.18.0.7.0.0.1.1.0.0" expl="true case" proved="true">
+          <proof prover="3"><result status="valid" time="2.632297" steps="482749"/></proof>
+          </goal>
+         </transf>
+         </goal>
+        </transf>
+        </goal>
+       </transf>
+       </goal>
+      </transf>
       </goal>
-      <goal name="shortest_path_code&#39;vc.15.1.0.0.1" expl="asserted formula" proved="true">
-      <proof prover="3"><result status="valid" time="0.748723" steps="207734"/></proof>
+      <goal name="shortest_path_code&#39;vc.18.0.7.0.1" expl="false case" proved="true">
+      <proof prover="7"><result status="valid" time="0.072624" steps="380269"/></proof>
       </goal>
      </transf>
      </goal>
-     <goal name="shortest_path_code&#39;vc.15.1.0.1" expl="assertion" proved="true">
-     <proof prover="7"><result status="valid" time="0.730522" steps="3280959"/></proof>
+     <goal name="shortest_path_code&#39;vc.18.0.7.1" expl="VC for shortest_path_code" proved="true">
+     <proof prover="7"><result status="valid" time="0.071659" steps="382161"/></proof>
+     </goal>
+    </transf>
+    </goal>
+    <goal name="shortest_path_code&#39;vc.18.0.8" expl="VC for shortest_path_code" proved="true">
+    <proof prover="3"><result status="valid" time="0.459938" steps="91244"/></proof>
+    </goal>
+    <goal name="shortest_path_code&#39;vc.18.0.9" expl="VC for shortest_path_code" proved="true">
+    <proof prover="7"><result status="valid" time="0.019164" steps="138524"/></proof>
+    </goal>
+   </transf>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="shortest_path_code&#39;vc.19" expl="loop invariant preservation" proved="true">
+  <proof prover="3"><result status="valid" time="0.285442" steps="76944"/></proof>
+  </goal>
+  <goal name="shortest_path_code&#39;vc.20" expl="assertion" proved="true">
+  <proof prover="7"><result status="valid" time="0.004497" steps="7728"/></proof>
+  </goal>
+  <goal name="shortest_path_code&#39;vc.21" expl="loop variant decrease" proved="true">
+  <proof prover="7"><result status="valid" time="0.018926" steps="137415"/></proof>
+  </goal>
+  <goal name="shortest_path_code&#39;vc.22" expl="loop invariant preservation" proved="true">
+  <proof prover="3"><result status="valid" time="0.030801" steps="19867"/></proof>
+  </goal>
+  <goal name="shortest_path_code&#39;vc.23" expl="loop invariant preservation" proved="true">
+  <transf name="unfold" proved="true" arg1="inv">
+   <goal name="shortest_path_code&#39;vc.23.0" expl="VC for shortest_path_code" proved="true">
+   <transf name="split_vc" proved="true" >
+    <goal name="shortest_path_code&#39;vc.23.0.0" expl="VC for shortest_path_code" proved="true">
+    <proof prover="8"><result status="valid" time="0.014099" steps="69"/></proof>
+    </goal>
+    <goal name="shortest_path_code&#39;vc.23.0.1" expl="VC for shortest_path_code" proved="true">
+    <proof prover="7"><result status="valid" time="0.016040" steps="119735"/></proof>
+    </goal>
+    <goal name="shortest_path_code&#39;vc.23.0.2" expl="VC for shortest_path_code" proved="true">
+    <proof prover="7"><result status="valid" time="0.015773" steps="119747"/></proof>
+    </goal>
+    <goal name="shortest_path_code&#39;vc.23.0.3" expl="VC for shortest_path_code" proved="true">
+    <proof prover="8"><result status="valid" time="0.014428" steps="69"/></proof>
+    </goal>
+    <goal name="shortest_path_code&#39;vc.23.0.4" expl="VC for shortest_path_code" proved="true">
+    <proof prover="7"><result status="valid" time="0.015875" steps="119724"/></proof>
+    </goal>
+    <goal name="shortest_path_code&#39;vc.23.0.5" expl="VC for shortest_path_code" proved="true">
+    <proof prover="7"><result status="valid" time="0.014986" steps="120385"/></proof>
+    </goal>
+    <goal name="shortest_path_code&#39;vc.23.0.6" expl="VC for shortest_path_code" proved="true">
+    <proof prover="8"><result status="valid" time="0.027038" steps="371"/></proof>
+    </goal>
+    <goal name="shortest_path_code&#39;vc.23.0.7" expl="VC for shortest_path_code" proved="true">
+    <proof prover="8"><result status="valid" time="0.029280" steps="371"/></proof>
+    </goal>
+    <goal name="shortest_path_code&#39;vc.23.0.8" expl="VC for shortest_path_code" proved="true">
+    <proof prover="7"><result status="valid" time="0.029817" steps="193010"/></proof>
+    </goal>
+    <goal name="shortest_path_code&#39;vc.23.0.9" expl="VC for shortest_path_code" proved="true">
+    <proof prover="8"><result status="valid" time="0.029591" steps="372"/></proof>
+    </goal>
+   </transf>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="shortest_path_code&#39;vc.24" expl="loop invariant preservation" proved="true">
+  <transf name="unfold" proved="true" arg1="inv_succ2">
+   <goal name="shortest_path_code&#39;vc.24.0" expl="VC for shortest_path_code" proved="true">
+   <transf name="unfold" proved="true" arg1="inv_succ2" arg2="in" arg3="LoopInvariant2">
+    <goal name="shortest_path_code&#39;vc.24.0.0" expl="VC for shortest_path_code" proved="true">
+    <transf name="split_vc" proved="true" >
+     <goal name="shortest_path_code&#39;vc.24.0.0.0" expl="VC for shortest_path_code" proved="true">
+     <proof prover="3"><result status="valid" time="0.035883" steps="20887"/></proof>
+     </goal>
+     <goal name="shortest_path_code&#39;vc.24.0.0.1" expl="VC for shortest_path_code" proved="true">
+     <proof prover="3"><result status="valid" time="0.034345" steps="20522"/></proof>
      </goal>
     </transf>
     </goal>
@@ -654,133 +758,270 @@
    </goal>
   </transf>
   </goal>
-  <goal name="shortest_path_code&#39;vc.16" expl="assertion" proved="true">
-  <proof prover="3"><result status="valid" time="0.055835" steps="28943"/></proof>
-  </goal>
-  <goal name="shortest_path_code&#39;vc.17" expl="loop variant decrease" proved="true">
-  <proof prover="8"><result status="valid" time="0.015115" steps="109"/></proof>
-  </goal>
-  <goal name="shortest_path_code&#39;vc.18" expl="loop invariant preservation" proved="true">
-  <proof prover="7"><result status="valid" time="0.019138" steps="137091"/></proof>
-  </goal>
-  <goal name="shortest_path_code&#39;vc.19" expl="loop invariant preservation">
-  <proof prover="3" timelimit="1" obsolete="true"><result status="timeout" time="1.000000" steps="207907"/></proof>
-  <proof prover="7" timelimit="1" obsolete="true"><result status="timeout" time="1.000000" steps="4308177"/></proof>
-  <proof prover="8" timelimit="1" obsolete="true"><result status="timeout" time="1.000000" steps="16812"/></proof>
-  <transf name="split_vc" >
-   <goal name="shortest_path_code&#39;vc.19.0" expl="loop invariant preservation">
-   <proof prover="3"><result status="timeout" time="5.000000" steps="756167"/></proof>
-   <proof prover="7"><result status="timeout" time="5.000000" steps="17288279"/></proof>
-   <proof prover="8"><result status="timeout" time="5.000000" steps="75788"/></proof>
-   </goal>
-   <goal name="shortest_path_code&#39;vc.19.1" expl="loop invariant preservation" proved="true">
-   <proof prover="3"><result status="valid" time="0.011836" steps="15044"/></proof>
-   </goal>
-  </transf>
-  </goal>
-  <goal name="shortest_path_code&#39;vc.20" expl="loop invariant preservation" proved="true">
-  <proof prover="3"><result status="valid" time="0.140011" steps="38327"/></proof>
-  </goal>
-  <goal name="shortest_path_code&#39;vc.21" expl="assertion" proved="true">
-  <proof prover="8"><result status="valid" time="0.009338" steps="52"/></proof>
-  </goal>
-  <goal name="shortest_path_code&#39;vc.22" expl="loop variant decrease" proved="true">
-  <proof prover="7"><result status="valid" time="0.019925" steps="135888"/></proof>
-  </goal>
-  <goal name="shortest_path_code&#39;vc.23" expl="loop invariant preservation" proved="true">
-  <proof prover="7"><result status="valid" time="0.019082" steps="134036"/></proof>
-  </goal>
-  <goal name="shortest_path_code&#39;vc.24" expl="loop invariant preservation" proved="true">
-  <proof prover="7"><result status="valid" time="0.004427" steps="7556"/></proof>
-  </goal>
-  <goal name="shortest_path_code&#39;vc.25" expl="loop invariant preservation" proved="true">
-  <proof prover="3"><result status="valid" time="0.058900" steps="29648"/></proof>
-  </goal>
-  <goal name="shortest_path_code&#39;vc.26" expl="loop variant decrease">
-  <proof prover="3" timelimit="1" obsolete="true"><result status="timeout" time="1.000000" steps="167157"/></proof>
-  <proof prover="7" timelimit="1" obsolete="true"><result status="timeout" time="1.000000" steps="4139726"/></proof>
-  <proof prover="8" timelimit="1" obsolete="true"><result status="timeout" time="1.000000" steps="8985"/></proof>
-  <transf name="split_vc" >
-   <goal name="shortest_path_code&#39;vc.26.0" expl="loop variant decrease" proved="true">
-   <proof prover="7"><result status="valid" time="0.015795" steps="125241"/></proof>
-   </goal>
-   <goal name="shortest_path_code&#39;vc.26.1" expl="loop variant decrease">
-   <proof prover="3"><result status="timeout" time="5.000000" steps="517324"/></proof>
-   <proof prover="7"><result status="timeout" time="5.000000" steps="21235749"/></proof>
-   <proof prover="8"><result status="timeout" time="5.000000" steps="56569"/></proof>
-   </goal>
-  </transf>
-  </goal>
-  <goal name="shortest_path_code&#39;vc.27" expl="loop invariant preservation" proved="true">
-  <transf name="unfold" proved="true" arg1="inv">
-   <goal name="shortest_path_code&#39;vc.27.0" expl="VC for shortest_path_code" proved="true">
-   <transf name="split_vc" proved="true" >
-    <goal name="shortest_path_code&#39;vc.27.0.0" expl="VC for shortest_path_code" proved="true">
-    <proof prover="8"><result status="valid" time="0.013193" steps="47"/></proof>
-    </goal>
-    <goal name="shortest_path_code&#39;vc.27.0.1" expl="VC for shortest_path_code" proved="true">
-    <proof prover="7"><result status="valid" time="0.014486" steps="114877"/></proof>
-    </goal>
-    <goal name="shortest_path_code&#39;vc.27.0.2" expl="VC for shortest_path_code" proved="true">
-    <proof prover="7"><result status="valid" time="0.014525" steps="114994"/></proof>
-    </goal>
-    <goal name="shortest_path_code&#39;vc.27.0.3" expl="VC for shortest_path_code" proved="true">
-    <proof prover="7"><result status="valid" time="0.015081" steps="114994"/></proof>
-    </goal>
-    <goal name="shortest_path_code&#39;vc.27.0.4" expl="VC for shortest_path_code" proved="true">
-    <proof prover="3"><result status="valid" time="0.028302" steps="17427"/></proof>
-    </goal>
-    <goal name="shortest_path_code&#39;vc.27.0.5" expl="VC for shortest_path_code" proved="true">
-    <proof prover="7"><result status="valid" time="0.017843" steps="125973"/></proof>
-    </goal>
-    <goal name="shortest_path_code&#39;vc.27.0.6" expl="VC for shortest_path_code" proved="true">
-    <proof prover="3"><result status="valid" time="0.034015" steps="18609"/></proof>
-    </goal>
-    <goal name="shortest_path_code&#39;vc.27.0.7" expl="VC for shortest_path_code" proved="true">
-    <proof prover="7"><result status="valid" time="0.024706" steps="160066"/></proof>
-    </goal>
-    <goal name="shortest_path_code&#39;vc.27.0.8" expl="VC for shortest_path_code" proved="true">
-    <proof prover="3"><result status="valid" time="0.031250" steps="18329"/></proof>
+  <goal name="shortest_path_code&#39;vc.25" expl="assertion" proved="true">
+  <transf name="unfold" proved="true" arg1="inv" arg2="in" arg3="LoopInvariant1">
+   <goal name="shortest_path_code&#39;vc.25.0" expl="assertion" proved="true">
+   <transf name="split_premise_full" proved="true" >
+    <goal name="shortest_path_code&#39;vc.25.0.0" expl="assertion" proved="true">
+    <transf name="instantiate" proved="true" arg1="LoopInvariant5" arg2="y">
+     <goal name="shortest_path_code&#39;vc.25.0.0.0" expl="assertion" proved="true">
+     <transf name="destruct_rec" proved="true" arg1="Hinst">
+      <goal name="shortest_path_code&#39;vc.25.0.0.0.0" expl="destruct premise" proved="true">
+      <proof prover="7"><result status="valid" time="0.004894" steps="9841"/></proof>
+      </goal>
+      <goal name="shortest_path_code&#39;vc.25.0.0.0.1" expl="assertion" proved="true">
+      <proof prover="3"><result status="valid" time="4.038346" steps="868290"/></proof>
+      </goal>
+     </transf>
+     </goal>
+    </transf>
     </goal>
    </transf>
    </goal>
   </transf>
   </goal>
-  <goal name="shortest_path_code&#39;vc.28" expl="loop invariant preservation" proved="true">
-  <proof prover="3"><result status="valid" time="0.045778" steps="24601"/></proof>
+  <goal name="shortest_path_code&#39;vc.26" expl="loop variant decrease" proved="true">
+  <proof prover="7"><result status="valid" time="0.020013" steps="136473"/></proof>
   </goal>
-  <goal name="shortest_path_code&#39;vc.29" expl="loop invariant preservation">
-  <proof prover="3"><result status="timeout" time="5.000000" steps="483629"/></proof>
-  <proof prover="7"><result status="timeout" time="5.000000" steps="20246676"/></proof>
-  <proof prover="8"><result status="timeout" time="5.000000" steps="49817"/></proof>
+  <goal name="shortest_path_code&#39;vc.27" expl="loop invariant preservation" proved="true">
+  <proof prover="7"><result status="valid" time="0.019234" steps="134144"/></proof>
+  </goal>
+  <goal name="shortest_path_code&#39;vc.28" expl="loop invariant preservation" proved="true">
+  <proof prover="7"><result status="valid" time="0.004395" steps="7693"/></proof>
+  </goal>
+  <goal name="shortest_path_code&#39;vc.29" expl="loop invariant preservation" proved="true">
+  <transf name="unfold" proved="true" arg1="inv_succ2">
+   <goal name="shortest_path_code&#39;vc.29.0" expl="VC for shortest_path_code" proved="true">
+   <transf name="unfold" proved="true" arg1="inv_succ2" arg2="in" arg3="LoopInvariant2">
+    <goal name="shortest_path_code&#39;vc.29.0.0" expl="VC for shortest_path_code" proved="true">
+    <transf name="split_vc" proved="true" >
+     <goal name="shortest_path_code&#39;vc.29.0.0.0" expl="VC for shortest_path_code" proved="true">
+     <proof prover="7"><result status="valid" time="0.075239" steps="391255"/></proof>
+     </goal>
+     <goal name="shortest_path_code&#39;vc.29.0.0.1" expl="VC for shortest_path_code" proved="true">
+     <proof prover="7"><result status="valid" time="0.175046" steps="800878"/></proof>
+     </goal>
+    </transf>
+    </goal>
+   </transf>
+   </goal>
+  </transf>
   </goal>
   <goal name="shortest_path_code&#39;vc.30" expl="assertion" proved="true">
-  <proof prover="7"><result status="valid" time="0.865600" steps="3141653"/></proof>
+  <proof prover="7"><result status="valid" time="0.097728" steps="513978"/></proof>
   </goal>
-  <goal name="shortest_path_code&#39;vc.31" expl="postcondition">
-  <proof prover="3"><result status="timeout" time="5.000000" steps="407445"/></proof>
-  <proof prover="7"><result status="timeout" time="5.000000" steps="19074142"/></proof>
-  <proof prover="8"><result status="timeout" time="5.000000" steps="50938"/></proof>
+  <goal name="shortest_path_code&#39;vc.31" expl="assertion" proved="true">
+  <proof prover="7"><result status="valid" time="0.226198" steps="1040065"/></proof>
   </goal>
-  <goal name="shortest_path_code&#39;vc.20" expl="loop invariant preservation">
-  <proof prover="3"><undone/></proof>
-  <proof prover="7"><undone/></proof>
-  <proof prover="8"><undone/></proof>
+  <goal name="shortest_path_code&#39;vc.32" expl="loop variant decrease" proved="true">
+  <proof prover="3"><result status="valid" time="0.040486" steps="22795"/></proof>
+  <transf name="split_vc" proved="true" >
+   <goal name="shortest_path_code&#39;vc.32.0" expl="loop variant decrease" proved="true">
+   <proof prover="3"><result status="valid" time="0.042948" steps="22809"/></proof>
+   </goal>
+   <goal name="shortest_path_code&#39;vc.32.1" expl="loop variant decrease" proved="true">
+   <proof prover="8"><result status="valid" time="0.025130" steps="263"/></proof>
+   <transf name="assert" proved="true" arg1="(not mem u closed2)">
+    <goal name="shortest_path_code&#39;vc.32.1.0" expl="asserted formula" proved="true">
+    <proof prover="7"><result status="valid" time="0.018153" steps="130069"/></proof>
+    </goal>
+    <goal name="shortest_path_code&#39;vc.32.1.1" expl="loop variant decrease" proved="true">
+    <transf name="simplify_formula" proved="true" >
+     <goal name="shortest_path_code&#39;vc.32.1.1.0" expl="loop variant decrease" proved="true">
+     <proof prover="7"><result status="valid" time="0.018694" steps="130244"/></proof>
+     </goal>
+    </transf>
+    </goal>
+   </transf>
+   </goal>
+  </transf>
   </goal>
-  <goal name="shortest_path_code&#39;vc.26" expl="loop invariant preservation">
-  <proof prover="3"><undone/></proof>
-  <proof prover="7"><undone/></proof>
-  <proof prover="8"><undone/></proof>
+  <goal name="shortest_path_code&#39;vc.33" expl="loop invariant preservation" proved="true">
+  <transf name="unfold" proved="true" arg1="inv">
+   <goal name="shortest_path_code&#39;vc.33.0" expl="VC for shortest_path_code" proved="true">
+   <transf name="split_vc" proved="true" >
+    <goal name="shortest_path_code&#39;vc.33.0.0" expl="VC for shortest_path_code" proved="true">
+    <proof prover="3"><result status="valid" time="0.029486" steps="17831"/></proof>
+    </goal>
+    <goal name="shortest_path_code&#39;vc.33.0.1" expl="VC for shortest_path_code" proved="true">
+    <proof prover="7"><result status="valid" time="0.015324" steps="119069"/></proof>
+    </goal>
+    <goal name="shortest_path_code&#39;vc.33.0.2" expl="VC for shortest_path_code" proved="true">
+    <proof prover="8"><result status="valid" time="0.013298" steps="49"/></proof>
+    </goal>
+    <goal name="shortest_path_code&#39;vc.33.0.3" expl="VC for shortest_path_code" proved="true">
+    <proof prover="7"><result status="valid" time="0.015616" steps="119023"/></proof>
+    </goal>
+    <goal name="shortest_path_code&#39;vc.33.0.4" expl="VC for shortest_path_code" proved="true">
+    <proof prover="8"><result status="valid" time="0.013114" steps="50"/></proof>
+    </goal>
+    <goal name="shortest_path_code&#39;vc.33.0.5" expl="VC for shortest_path_code" proved="true">
+    <proof prover="7"><result status="valid" time="0.015279" steps="119805"/></proof>
+    </goal>
+    <goal name="shortest_path_code&#39;vc.33.0.6" expl="VC for shortest_path_code" proved="true">
+    <proof prover="3"><result status="valid" time="0.033555" steps="18874"/></proof>
+    </goal>
+    <goal name="shortest_path_code&#39;vc.33.0.7" expl="VC for shortest_path_code" proved="true">
+    <transf name="destruct_rec" proved="true" arg1="H">
+     <goal name="shortest_path_code&#39;vc.33.0.7.0" expl="VC for shortest_path_code" proved="true">
+     <proof prover="8"><result status="valid" time="0.023800" steps="261"/></proof>
+     </goal>
+     <goal name="shortest_path_code&#39;vc.33.0.7.1" expl="VC for shortest_path_code" proved="true">
+     <proof prover="3"><result status="valid" time="0.035595" steps="18977"/></proof>
+     </goal>
+    </transf>
+    </goal>
+    <goal name="shortest_path_code&#39;vc.33.0.8" expl="VC for shortest_path_code" proved="true">
+    <proof prover="7"><result status="valid" time="0.026455" steps="166978"/></proof>
+    </goal>
+    <goal name="shortest_path_code&#39;vc.33.0.9" expl="VC for shortest_path_code" proved="true">
+    <proof prover="8"><result status="valid" time="0.023741" steps="265"/></proof>
+    </goal>
+   </transf>
+   </goal>
+  </transf>
   </goal>
-  <goal name="shortest_path_code&#39;vc.13" expl="loop invariant preservation">
-  <proof prover="3"><undone/></proof>
-  <proof prover="7"><undone/></proof>
-  <proof prover="8"><undone/></proof>
+  <goal name="shortest_path_code&#39;vc.34" expl="loop invariant preservation" proved="true">
+  <proof prover="7"><result status="valid" time="0.047512" steps="261825"/></proof>
   </goal>
-  <goal name="shortest_path_code&#39;vc.6" expl="loop invariant init">
-  <proof prover="3"><undone/></proof>
-  <proof prover="7"><undone/></proof>
-  <proof prover="8"><undone/></proof>
+  <goal name="shortest_path_code&#39;vc.35" expl="loop invariant preservation" proved="true">
+  <transf name="case" proved="true" arg1="(mem src open)">
+   <goal name="shortest_path_code&#39;vc.35.0" expl="true case (loop invariant preservation)" proved="true">
+   <transf name="exists" proved="true" arg1="src">
+    <goal name="shortest_path_code&#39;vc.35.0.0" proved="true">
+    <transf name="exists" proved="true" arg1="(Nil: list int)">
+     <goal name="shortest_path_code&#39;vc.35.0.0.0" proved="true">
+     <proof prover="8"><result status="valid" time="0.109429" steps="1581"/></proof>
+     </goal>
+    </transf>
+    </goal>
+   </transf>
+   </goal>
+   <goal name="shortest_path_code&#39;vc.35.1" expl="false case (loop invariant preservation)" proved="true">
+   <transf name="instantiate" proved="true" arg1="inside_or_exit_shortest_path" arg2="(closed.to_fset), src, n, l">
+    <goal name="shortest_path_code&#39;vc.35.1.0" expl="false case (loop invariant preservation)" proved="true">
+    <transf name="destruct_rec" proved="true" arg1="Hinst">
+     <goal name="shortest_path_code&#39;vc.35.1.0.0" expl="destruct premise" proved="true">
+     <proof prover="1"><result status="valid" time="0.027107"/></proof>
+     <transf name="unfold" proved="true" arg1="inv" arg2="in" arg3="LoopInvariant7">
+      <goal name="shortest_path_code&#39;vc.35.1.0.0.0" expl="destruct premise" proved="true">
+      <proof prover="3" timelimit="1"><result status="valid" time="0.034952" steps="20479"/></proof>
+      <proof prover="7" timelimit="1"><result status="valid" time="0.018103" steps="130860"/></proof>
+      <proof prover="8" timelimit="1"><result status="valid" time="0.014944" steps="70"/></proof>
+      </goal>
+     </transf>
+     </goal>
+     <goal name="shortest_path_code&#39;vc.35.1.0.1" expl="destruct premise" proved="true">
+     <proof prover="7"><result status="valid" time="0.004248" steps="7782"/></proof>
+     </goal>
+     <goal name="shortest_path_code&#39;vc.35.1.0.2" expl="destruct premise" proved="true">
+     <proof prover="3"><result status="valid" time="0.011743" steps="15301"/></proof>
+     </goal>
+     <goal name="shortest_path_code&#39;vc.35.1.0.3" expl="false case (loop invariant preservation)" proved="true">
+     <transf name="unfold" proved="true" arg1="inv_succ" arg2="in" arg3="LoopInvariant">
+      <goal name="shortest_path_code&#39;vc.35.1.0.3.0" expl="false case (loop invariant preservation)" proved="true">
+      <transf name="inst_rem" proved="true" arg1="LoopInvariant" arg2="y">
+       <goal name="shortest_path_code&#39;vc.35.1.0.3.0.0" expl="false case (loop invariant preservation)" proved="true">
+       <transf name="destruct_rec" proved="true" arg1="Hinst">
+        <goal name="shortest_path_code&#39;vc.35.1.0.3.0.0.0" expl="destruct premise" proved="true">
+        <proof prover="7"><result status="valid" time="0.004245" steps="7831"/></proof>
+        </goal>
+        <goal name="shortest_path_code&#39;vc.35.1.0.3.0.0.1" expl="false case (loop invariant preservation)" proved="true">
+        <transf name="inst_rem" proved="true" arg1="Hinst" arg2="z">
+         <goal name="shortest_path_code&#39;vc.35.1.0.3.0.0.1.0" expl="false case (loop invariant preservation)" proved="true">
+         <transf name="destruct_rec" proved="true" arg1="Hinst">
+          <goal name="shortest_path_code&#39;vc.35.1.0.3.0.0.1.0.0" expl="destruct premise" proved="true">
+          <proof prover="7"><result status="valid" time="0.015316" steps="121629"/></proof>
+          </goal>
+          <goal name="shortest_path_code&#39;vc.35.1.0.3.0.0.1.0.1" expl="false case (loop invariant preservation)" proved="true">
+          <proof prover="8"><result status="valid" time="0.009818" steps="60"/></proof>
+          </goal>
+          <goal name="shortest_path_code&#39;vc.35.1.0.3.0.0.1.0.2" expl="false case (loop invariant preservation)" proved="true">
+          <transf name="assert" proved="true" arg1="(shortest_path src (l1 ++ Cons y Nil) z)">
+           <goal name="shortest_path_code&#39;vc.35.1.0.3.0.0.1.0.2.0" expl="asserted formula" proved="true">
+           <transf name="case" proved="true" arg1="(l2 = Nil)">
+            <goal name="shortest_path_code&#39;vc.35.1.0.3.0.0.1.0.2.0.0" expl="true case (asserted formula)" proved="true">
+            <proof prover="7"><result status="valid" time="0.021741" steps="138104"/></proof>
+            </goal>
+            <goal name="shortest_path_code&#39;vc.35.1.0.3.0.0.1.0.2.0.1" expl="false case (asserted formula)" proved="true">
+            <transf name="assert" proved="true" arg1="(exists l2&#39;. l2 = Cons z l2&#39;)">
+             <goal name="shortest_path_code&#39;vc.35.1.0.3.0.0.1.0.2.0.1.0" expl="asserted formula" proved="true">
+             <proof prover="7"><result status="valid" time="0.029484" steps="181441"/></proof>
+             </goal>
+             <goal name="shortest_path_code&#39;vc.35.1.0.3.0.0.1.0.2.0.1.1" expl="false case (asserted formula)" proved="true">
+             <transf name="destruct_rec" proved="true" arg1="h1">
+              <goal name="shortest_path_code&#39;vc.35.1.0.3.0.0.1.0.2.0.1.1.0" expl="false case (asserted formula)" proved="true">
+              <transf name="assert" proved="true" arg1="(l = (l1 ++ Cons y Nil) ++ (Cons z l2&#39;))">
+               <goal name="shortest_path_code&#39;vc.35.1.0.3.0.0.1.0.2.0.1.1.0.0" expl="asserted formula" proved="true">
+               <proof prover="3"><result status="valid" time="0.076885" steps="35950"/></proof>
+               </goal>
+               <goal name="shortest_path_code&#39;vc.35.1.0.3.0.0.1.0.2.0.1.1.0.1" expl="false case (asserted formula)" proved="true">
+               <transf name="instantiate" proved="true" arg1="shortest_path_decomposition" arg2="src, z, n, (l1 ++ (Cons y Nil)), l2&#39;">
+                <goal name="shortest_path_code&#39;vc.35.1.0.3.0.0.1.0.2.0.1.1.0.1.0" expl="false case (asserted formula)" proved="true">
+                <proof prover="3"><result status="valid" time="0.018227" steps="16403"/></proof>
+                </goal>
+               </transf>
+               </goal>
+              </transf>
+              </goal>
+             </transf>
+             </goal>
+            </transf>
+            </goal>
+           </transf>
+           </goal>
+           <goal name="shortest_path_code&#39;vc.35.1.0.3.0.0.1.0.2.1" expl="false case (loop invariant preservation)" proved="true">
+           <transf name="assert" proved="true" arg1="(d[z] &gt;= path_weight (l1 ++ Cons y Nil) z)">
+            <goal name="shortest_path_code&#39;vc.35.1.0.3.0.0.1.0.2.1.0" expl="asserted formula" proved="true">
+            <proof prover="7"><result status="valid" time="0.824441" steps="3238991"/></proof>
+            </goal>
+            <goal name="shortest_path_code&#39;vc.35.1.0.3.0.0.1.0.2.1.1" expl="false case (loop invariant preservation)" proved="true">
+            <transf name="assert" proved="true" arg1="(d[y] + weight y z = path_weight (l1 ++ Cons y (Nil: list int)) z)">
+             <goal name="shortest_path_code&#39;vc.35.1.0.3.0.0.1.0.2.1.1.0" expl="asserted formula" proved="true">
+             <transf name="assert" proved="true" arg1="(d[y] = path_weight l1 y)">
+              <goal name="shortest_path_code&#39;vc.35.1.0.3.0.0.1.0.2.1.1.0.0" expl="asserted formula" proved="true">
+              <proof prover="7"><result status="valid" time="4.410450" steps="16748205"/></proof>
+              </goal>
+              <goal name="shortest_path_code&#39;vc.35.1.0.3.0.0.1.0.2.1.1.0.1" expl="asserted formula" proved="true">
+              <proof prover="7"><result status="valid" time="0.015176" steps="119520"/></proof>
+              </goal>
+             </transf>
+             </goal>
+             <goal name="shortest_path_code&#39;vc.35.1.0.3.0.0.1.0.2.1.1.1" expl="false case (loop invariant preservation)" proved="true">
+             <proof prover="8"><result status="valid" time="0.683700" steps="7380"/></proof>
+             </goal>
+            </transf>
+            </goal>
+           </transf>
+           </goal>
+          </transf>
+          </goal>
+         </transf>
+         </goal>
+        </transf>
+        </goal>
+       </transf>
+       </goal>
+      </transf>
+      </goal>
+     </transf>
+     </goal>
+    </transf>
+    </goal>
+   </transf>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="shortest_path_code&#39;vc.36" expl="assertion" proved="true">
+  <proof prover="7"><result status="valid" time="0.345687" steps="1233541"/></proof>
+  </goal>
+  <goal name="shortest_path_code&#39;vc.37" expl="postcondition" proved="true">
+  <proof prover="7"><result status="valid" time="0.027658" steps="150296"/></proof>
+  <transf name="unfold" proved="true" arg1="path_with_len" arg2="in" arg3="Assert">
+   <goal name="shortest_path_code&#39;vc.37.0" expl="postcondition" proved="true">
+   <proof prover="7"><result status="valid" time="0.024468" steps="150563"/></proof>
+   </goal>
+  </transf>
   </goal>
  </transf>
  </goal>

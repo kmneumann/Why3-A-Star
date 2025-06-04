@@ -40,23 +40,26 @@ module GraphDef
   
   type vertex = int
   
-  clone graph.IntPathWeight with type vertex = vertex
   clone set.SetImp with type elt = vertex
   
   constant graph: fset vertex
   
+  val ghost function successors (x: vertex): fset vertex
+    ensures { subset result graph }
+    ensures { not mem x result }
+  
+  val successors_impl (x: vertex): set
+    ensures { result = successors x }
+  
+  predicate edge (a b: vertex) = mem b (successors a)
+  
+  clone graph.IntPathWeight with type vertex = vertex, predicate edge = edge
+  
   axiom Positive_weight: forall a, b. weight a b > 0
-  axiom Non_self_edges: forall a. not edge a a
   
   predicate shortest_path (a: vertex) (l: list vertex) (b: vertex) = 
     path a l b /\ 
     (forall l'. path a l' b -> path_weight l b <= path_weight l' b)
-  
-  val ghost function successors (x: vertex): fset vertex
-    ensures { forall n. mem n result <-> edge x n }
-  
-  val successors_impl (x: vertex): set
-    ensures { result = successors x }
   
   predicate closed_under_succ (v: fset vertex) = 
     forall n. mem n v -> forall m. edge n m -> mem m v
@@ -189,8 +192,9 @@ module GraphDef
   predicate inv_src (src: vertex) (s q: set) =
     mem src s \/ mem src q
 
-  predicate inv (src: vertex) (s q: set) (d: t int) =
+  predicate inv (src dst: vertex) (s q: set) (d: t int) =
     inv_src src s q /\ d[src] = 0 /\
+    not mem dst s /\
     (* S and Q are contained in V *)
     subset s graph /\ subset q graph /\
     (* S and Q are disjoint *)
@@ -214,7 +218,7 @@ module GraphDef
     forall x: vertex. mem x s ->
     forall y: vertex. mem y (successors x) ->
     (x<>u \/ (x=u /\ not (mem y su))) ->
-    (mem y s \/ mem y q) /\ d[y] + h y <= d[x] + weight x y + h y
+    (mem y s \/ mem y q) /\ d[y] <= d[x] + weight x y 
     
 
   (* Initialisation of visited, q, and d. *)
@@ -228,49 +232,51 @@ module GraphDef
     
   exception Found (list vertex)
   
+  
   let shortest_path_code (src dst: vertex) (h: vertex -> int): option int
     requires { consistent h dst /\ positive h }
+    requires { closed_under_succ graph }
     requires { mem src graph /\ mem dst graph }
     returns  { result -> 
       match result with 
       | Some n -> shortest_path_with_len src dst n
-      | None -> forall n. not shortest_path_with_len src dst n
+      | None -> forall l. not path src l dst 
       end
      }
   = init src;
     while not is_empty open do
-      invariant { inv src closed open d }
+      invariant { inv src dst closed open d }
       invariant { inv_succ src closed open d }
       invariant { 
-          forall n, dist. shortest_path_with_len src n dist -> not (mem n closed) -> 
-            (exists u. mem u open /\ shortest_path_with_len src u d[u] /\ shortest_path_with_len u n (dist - d[u]))
+          forall n, l. shortest_path src l n -> not (mem n closed) -> 
+            (exists u, l1 l2. mem u open /\ shortest_path src l1 u /\ shortest_path u l2 n /\ l = l1 ++ l2 /\ d[u] = path_weight l1 u)
         }
       variant   { cardinal graph - cardinal closed }
       let u = q_extract_min h in
       assert { shortest_path_with_len src u d[u] };
-      add u closed;
       if eq u dst then return Some d[u];
+      add u closed;
       let su = successors_impl u in
       while not is_empty su do
-        invariant { closed = (old closed) }
         invariant { subset su (successors u) }
-        invariant { inv src closed open d  }
+        invariant { inv src dst closed open d  }
         invariant { inv_succ2 src closed open d u su h }
         variant   { cardinal su }
-        
         let y = choose_and_remove su in
         let x = d[u] + weight u y in
-        if not (mem y open || mem y closed) then begin 
-          add y open;
-          d[y] <- x
-        end else if x < d[y] then begin 
-          assert { not mem y closed };
-          remove y closed;
-          add y open;
-          d[y] <- x
+        if not (mem y closed) then begin 
+          if not (mem y open) then begin
+            add y open;
+            d[y] <- x
+          end else if x < d[y] then begin 
+            add y open;
+            d[y] <- x
+          end
         end;
         assert { d[y] <= d[u] + weight u y }
-      done
+      done;
+      assert { forall m. edge u m -> mem m closed \/ mem m open };
+      assert { forall y. edge u y -> d[y] <= d[u] + weight u y }
     done;
     assert { forall n, ds. path_with_len src n ds -> mem n closed };
     None
