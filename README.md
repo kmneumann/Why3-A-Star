@@ -1,7 +1,12 @@
 # Why3 and Proving A* Automatically
+Author: Kajetan M. Neumann
+
+Date: 22 June, 2025
+
 This repository is code developed as part of a Bachelor's research project: "Why3 and Proving A* Automatically - A Case Study of Why3 as a Tool for Automated Software Verification". The project aimed to implement and verify the A* algorithm using Why3. An electronic version of this thesis is available at https://repository.tudelft.nl/.
 
 A more user-friendly format of the proof can be seen in the `astar.html` file (generated using Why3's `doc` command). 
+
 
 ## Prerequisites
 To run the code, you will need the following versions of software:
