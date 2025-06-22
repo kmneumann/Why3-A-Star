@@ -1,0 +1,287 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<link rel="stylesheet" href="style.css" type="text/css">
+<title>astar.html</title>
+</head>
+<body>
+<div class="why3doc">
+<h1>A Star</h1>
+<pre><span class="comment">(* Dijkstra&#39;s shortest path algorithm.
+
+   This proof follows Cormen et al&#39;s &quot;Algorithms&quot;.
+
+   Author: Jean-Christophe Filliâtre (CNRS) *)</span>
+
+<span class="keyword">module</span> <a name="ImpmapNoDom_">ImpmapNoDom</a>
+
+  <span class="keyword">use</span> map.<a href="map.html#Map_">Map</a>
+  <span class="keyword">use</span> map.<a href="map.html#Const_">Const</a>
+
+  <span class="keyword">type</span> <a name="key_14">key</a>
+
+  <span class="keyword">type</span> <a name="t_16">t</a> &#39;a = <span class="keyword">abstract</span> { <span class="keyword">mutable</span> <a name="contents_16">contents</a>: <a href="map.html#map_9">map</a> <a href="#key_14">key</a> &#39;a }
+
+  <span class="keyword">val</span> <span class="keyword">function</span> <a name="create_18">create</a> (x: &#39;a): <a href="#t_16">t</a> &#39;a
+    <span class="keyword">ensures</span> { result.<a href="#contents_16">contents</a> = <a href="map.html#const_26">const</a> x }
+
+  <span class="keyword">val</span> <span class="keyword">function</span> (<a name="mixfix%20%5B%5D_21">[]</a>) (m: <a href="#t_16">t</a> &#39;a) (k: <a href="#key_14">key</a>): &#39;a
+    <span class="keyword">ensures</span> { result = m.<a href="#contents_16">contents</a>[k] }
+
+  <span class="keyword">val</span> <span class="keyword">ghost</span> <span class="keyword">function</span> (<a name="mixfix%20%5B%3C-%5D_24">[&lt;-]</a>) (m: <a href="#t_16">t</a> &#39;a) (k: <a href="#key_14">key</a>) (v: &#39;a): <a href="#t_16">t</a> &#39;a
+    <span class="keyword">ensures</span> { result.<a href="#contents_16">contents</a> = m.<a href="#contents_16">contents</a>[k &lt;- v] }
+
+  <span class="keyword">val</span> (<a name="mixfix%20%5B%5D%3C-_27">[]&lt;-</a>) (m: <a href="#t_16">t</a> &#39;a) (k: <a href="#key_14">key</a>) (v: &#39;a): unit
+    <span class="keyword">writes</span> { m }
+    <span class="keyword">ensures</span> { m = (<span class="keyword">old</span> m)[k &lt;- v] }
+
+<span class="keyword">end</span>
+
+<span class="keyword">module</span> <a name="AStar_">AStar</a>
+
+  <span class="keyword">use</span> int.<a href="int.html#Int_">Int</a>
+  <span class="keyword">use</span> list.<a href="list.html#List_">List</a>
+  <span class="keyword">use</span> list.<a href="list.html#Append_">Append</a>
+  <span class="keyword">use</span> option.<a href="option.html#Option_">Option</a>
+
+</pre>
+<p>Graph &amp; Paths Definitions: *</p>
+<pre>  <span class="keyword">type</span> <a name="vertex_44">vertex</a>
+
+  <span class="keyword">clone</span> set.<a href="set.html#SetImp_">SetImp</a> <span class="keyword">with</span> <span class="keyword">type</span> <a href="set.html#elt_630">elt</a> = <a href="#vertex_44">vertex</a>
+
+  <span class="keyword">constant</span> <a name="graph_48">graph</a>: <a href="set.html#fset_264">fset</a> <a href="#vertex_44">vertex</a>
+
+  <span class="keyword">val</span> <span class="keyword">ghost</span> <span class="keyword">function</span> <a name="successors_50">successors</a> (x: <a href="#vertex_44">vertex</a>): <a href="set.html#fset_264">fset</a> <a href="#vertex_44">vertex</a>
+    <span class="keyword">ensures</span> { <a href="#subset_46">subset</a> result <a href="#graph_48">graph</a> }
+    <span class="keyword">ensures</span> { <span class="keyword">not</span> <a href="#mem_46">mem</a> x result }
+
+  <span class="keyword">val</span> <a name="successors_impl_54">successors_impl</a> (x: <a href="#vertex_44">vertex</a>): <a href="set.html#set_635">set</a>
+    <span class="keyword">ensures</span> { result = <a href="#successors_50">successors</a> x }
+
+  <span class="keyword">predicate</span> <a name="edge_57">edge</a> (a b: <a href="#vertex_44">vertex</a>) = <a href="set.html#mem_270">mem</a> b (<a href="#successors_50">successors</a> a)
+
+  <span class="keyword">clone</span> graph.<a href="graph.html#IntPathWeight_">IntPathWeight</a> <span class="keyword">with</span> <span class="keyword">type</span> <a href="graph.html#vertex_9">vertex</a> = <a href="#vertex_44">vertex</a>, <span class="keyword">predicate</span> <a href="graph.html#edge_11">edge</a> = <a href="#edge_57">edge</a>
+
+  <span class="keyword">axiom</span> <a name="Positive_weight'lemma_61">Positive_weight</a>: <span class="keyword">forall</span> a, b. <a href="#weight_59">weight</a> a b <a href="int.html#infix%20%3E_24">&gt;</a> 0
+
+  <span class="keyword">predicate</span> <a name="shortest_path_63">shortest_path</a> (a: <a href="#vertex_44">vertex</a>) (l: <a href="list.html#list_8">list</a> <a href="#vertex_44">vertex</a>) (b: <a href="#vertex_44">vertex</a>) =
+    <a href="graph.html#path_13">path</a> a l b /\
+    (<span class="keyword">forall</span> l&#39;. <a href="graph.html#path_13">path</a> a l&#39; b -&gt; <a href="graph.html#path_weight_54">path_weight</a> l b <a href="int.html#infix%20%3C=_25">&lt;=</a> <a href="graph.html#path_weight_54">path_weight</a> l&#39; b)
+
+  <span class="keyword">predicate</span> <a name="path_with_len_67">path_with_len</a> (a b: <a href="#vertex_44">vertex</a>) (d: int) =
+    <span class="keyword">exists</span> l. <a href="graph.html#path_13">path</a> a l b /\ (<a href="graph.html#path_weight_54">path_weight</a> l b = d)
+
+  <span class="keyword">predicate</span> <a name="shortest_path_with_len_70">shortest_path_with_len</a> (a b: <a href="#vertex_44">vertex</a>) (d: int) =
+    <span class="keyword">exists</span> l. <a href="#shortest_path_63">shortest_path</a> a l b /\ (<a href="graph.html#path_weight_54">path_weight</a> l b = d)
+
+  <span class="keyword">predicate</span> <a name="closed_under_succ_73">closed_under_succ</a> (v: <a href="set.html#fset_264">fset</a> <a href="#vertex_44">vertex</a>) =
+    <span class="keyword">forall</span> n. <a href="set.html#mem_270">mem</a> n v -&gt; <span class="keyword">forall</span> m. <a href="#edge_57">edge</a> n m -&gt; <a href="set.html#mem_270">mem</a> m v
+
+</pre>
+<p>Lemmas on Graph &amp; Paths: *</p>
+<pre>  <span class="keyword">lemma</span> <a name="path_nonneg'lemma_79">path_nonneg</a>:
+    <span class="keyword">forall</span> x, y, l. <a href="graph.html#path_13">path</a> x l y -&gt; <a href="graph.html#path_weight_54">path_weight</a> l y <a href="int.html#infix%20%3E=_26">&gt;=</a> 0
+
+  <span class="keyword">lemma</span> <a name="shortest_path_nonneg'lemma_82">shortest_path_nonneg</a>:
+    <span class="keyword">forall</span> x, y, l. <a href="#shortest_path_63">shortest_path</a> x l y -&gt; <a href="graph.html#path_weight_54">path_weight</a> l y <a href="int.html#infix%20%3E=_26">&gt;=</a> 0
+
+  <span class="keyword">lemma</span> <a name="shortest_path_decomposition'lemma_85">shortest_path_decomposition</a>:
+    <span class="keyword">forall</span> x y z: <a href="#vertex_44">vertex</a>, l1 l2: <a href="list.html#list_8">list</a> <a href="#vertex_44">vertex</a>.
+    <a href="#shortest_path_63">shortest_path</a> x (l1 <a href="list.html#infix%20++_202">++</a> <a href="list.html#Cons_8">Cons</a> y l2) z -&gt; <a href="#shortest_path_63">shortest_path</a> x l1 y /\ <a href="#shortest_path_63">shortest_path</a> y (<a href="list.html#Cons_8">Cons</a> y l2) z
+
+  <span class="keyword">lemma</span> <a name="shortest_path_negation'lemma_89">shortest_path_negation</a>:
+    <span class="keyword">forall</span> a, b, l. <span class="keyword">not</span> (<a href="#shortest_path_63">shortest_path</a> a l b) -&gt;
+    <span class="keyword">not</span> (<a href="graph.html#path_13">path</a> a l b) \/ (<span class="keyword">exists</span> l&#39;. <a href="graph.html#path_13">path</a> a l&#39; b /\ <a href="graph.html#path_weight_54">path_weight</a> l&#39; b <a href="int.html#infix%20%3C_21">&lt;</a> <a href="graph.html#path_weight_54">path_weight</a> l b)
+
+  <span class="keyword">lemma</span> <a name="path_weight_sub_path'lemma_93">path_weight_sub_path</a>:
+    <span class="keyword">forall</span> x y z: <a href="#vertex_44">vertex</a>, l1 l2 l3: <a href="list.html#list_8">list</a> <a href="#vertex_44">vertex</a>.
+    <a href="graph.html#path_weight_54">path_weight</a> (l1 <a href="list.html#infix%20++_202">++</a> (<a href="list.html#Cons_8">Cons</a> x l2) <a href="list.html#infix%20++_202">++</a> (<a href="list.html#Cons_8">Cons</a> y l3)) z =
+    <a href="graph.html#path_weight_54">path_weight</a> l1 x <a href="int.html#infix%20+_19">+</a> <a href="graph.html#path_weight_54">path_weight</a> (<a href="list.html#Cons_8">Cons</a> x l2) y <a href="int.html#infix%20+_19">+</a> <a href="graph.html#path_weight_54">path_weight</a> (<a href="list.html#Cons_8">Cons</a> y l3) z
+
+  <span class="keyword">lemma</span> <a name="optimal_substructure_property'lemma_98">optimal_substructure_property</a>:
+    <span class="keyword">forall</span> s, t, a, b, l1, l2, l_ab.
+    <a href="#shortest_path_63">shortest_path</a> s (l1 <a href="list.html#infix%20++_202">++</a> (<a href="list.html#Cons_8">Cons</a> a l_ab) <a href="list.html#infix%20++_202">++</a> (<a href="list.html#Cons_8">Cons</a> b l2)) t -&gt;
+    <a href="#shortest_path_63">shortest_path</a> a (<a href="list.html#Cons_8">Cons</a> a l_ab) b
+
+  <span class="keyword">lemma</span> <a name="sub_path'lemma_103">sub_path</a>:
+    <span class="keyword">forall</span> x, a, b, z, l1, l2.
+        <a href="graph.html#path_13">path</a> x l1 a -&gt; <a href="graph.html#path_13">path</a> b l2 z -&gt; <a href="#edge_57">edge</a> a b -&gt; <a href="graph.html#path_13">path</a> x (l1 <a href="list.html#infix%20++_202">++</a> (<a href="list.html#Cons_8">Cons</a> a l2)) z
+
+  <span class="keyword">lemma</span> <a name="sub_path_inversion'lemma_107">sub_path_inversion</a>:
+    <span class="keyword">forall</span> x z: <a href="#vertex_44">vertex</a>, l: <a href="list.html#list_8">list</a> <a href="#vertex_44">vertex</a>. <a href="graph.html#path_13">path</a> x l z -&gt;
+       (x = z /\ l = <a href="list.html#Nil_8">Nil</a>)
+    \/ (<span class="keyword">exists</span> a, b, l1, l2.
+        <a href="graph.html#path_13">path</a> x l1 a /\ <a href="graph.html#path_13">path</a> b l2 z /\ <a href="#edge_57">edge</a> a b /\ l = l1 <a href="list.html#infix%20++_202">++</a> (<a href="list.html#Cons_8">Cons</a> a l2))
+
+  <span class="keyword">lemma</span> <a name="inside_or_exit_path'lemma_113">inside_or_exit_path</a>:
+    <span class="keyword">forall</span> s, src, v, l. <a href="set.html#mem_270">mem</a> src s -&gt; <a href="graph.html#path_13">path</a> src l v -&gt; <span class="keyword">not</span> (<a href="set.html#mem_270">mem</a> v s) -&gt;
+      (<span class="keyword">exists</span> y, z, l1, l2.
+        <a href="set.html#mem_270">mem</a> y s /\ <span class="keyword">not</span> (<a href="set.html#mem_270">mem</a> z s) /\ <a href="#edge_57">edge</a> y z /\
+        <a href="graph.html#path_13">path</a> src l1 y /\ <a href="graph.html#path_13">path</a> z l2 v /\ l = l1 <a href="list.html#infix%20++_202">++</a> <a href="list.html#Cons_8">Cons</a> y l2)
+
+  <span class="keyword">lemma</span> <a name="inside_or_exit_shortest_path'lemma_119">inside_or_exit_shortest_path</a>:
+    <span class="keyword">forall</span> s, src, v, l. <a href="set.html#mem_270">mem</a> src s -&gt; <a href="#shortest_path_63">shortest_path</a> src l v -&gt; <span class="keyword">not</span> (<a href="set.html#mem_270">mem</a> v s) -&gt;
+      (<span class="keyword">exists</span> y, z, l1, l2.
+        <a href="set.html#mem_270">mem</a> y s /\ <span class="keyword">not</span> (<a href="set.html#mem_270">mem</a> z s) /\ <a href="#edge_57">edge</a> y z /\
+        <a href="#shortest_path_63">shortest_path</a> src l1 y /\ <a href="#shortest_path_63">shortest_path</a> z l2 v /\ l = l1 <a href="list.html#infix%20++_202">++</a> <a href="list.html#Cons_8">Cons</a> y l2)
+
+  <span class="keyword">lemma</span> <a name="path_imples_exists_shortest_path'lemma_125">path_imples_exists_shortest_path</a>:
+    <span class="keyword">forall</span> a, b, l. <a href="graph.html#path_13">path</a> a l b -&gt; (<span class="keyword">exists</span> l&#39;. <a href="graph.html#path_weight_54">path_weight</a> l&#39; b <a href="int.html#infix%20%3C=_25">&lt;=</a> <a href="graph.html#path_weight_54">path_weight</a> l b /\ <a href="#shortest_path_63">shortest_path</a> a l&#39; b)
+
+  <span class="keyword">lemma</span> <a name="path_zero'lemma_128">path_zero</a>:
+    <span class="keyword">forall</span> a, b, l. <a href="graph.html#path_13">path</a> a l b -&gt; <a href="graph.html#path_weight_54">path_weight</a> l b = 0 -&gt; l = <a href="list.html#Nil_8">Nil</a> /\ a = b
+
+  <span class="keyword">lemma</span> <a name="main_lemma'lemma_131">main_lemma</a>:
+    <span class="keyword">forall</span> src v: <a href="#vertex_44">vertex</a>. <span class="keyword">forall</span> l: <a href="list.html#list_8">list</a> <a href="#vertex_44">vertex</a>.
+    <a href="graph.html#path_13">path</a> src l v -&gt; <span class="keyword">not</span> (<a href="#shortest_path_63">shortest_path</a> src l v) -&gt;
+    v = src /\ l &lt;&gt; <a href="list.html#Nil_8">Nil</a>
+    \/
+    (<span class="keyword">exists</span> v&#39;: <a href="#vertex_44">vertex</a>. <span class="keyword">exists</span> l&#39;: <a href="list.html#list_8">list</a> <a href="#vertex_44">vertex</a>. <a href="#shortest_path_63">shortest_path</a> v&#39; l&#39; v /\ <a href="#edge_57">edge</a> src v&#39; /\ <a href="graph.html#path_weight_54">path_weight</a> (<a href="list.html#Cons_8">Cons</a> src l&#39;) v <a href="int.html#infix%20%3C_21">&lt;</a> <a href="graph.html#path_weight_54">path_weight</a> l v)
+
+  <span class="keyword">lemma</span> <a name="completeness_lemma'lemma_138">completeness_lemma</a>:
+    <span class="keyword">forall</span> s: <a href="set.html#set_635">set</a>.
+    <span class="comment">(* if s is closed under g_succ *)</span>
+    <a href="#closed_under_succ_73">closed_under_succ</a> s -&gt;
+    <span class="comment">(* and if s contains src *)</span>
+    <span class="keyword">forall</span> src: <a href="#vertex_44">vertex</a>. <a href="set.html#mem_270">mem</a> src s -&gt;
+    <span class="comment">(* then any vertex reachable from s is also in s *)</span>
+    <span class="keyword">forall</span> dst, l.
+    <a href="graph.html#path_13">path</a> src l dst -&gt; <a href="set.html#mem_270">mem</a> dst s
+
+</pre>
+<p>Admissibility &amp; Consistency Definitions *</p>
+<pre>  <span class="keyword">predicate</span> <a name="positive_151">positive</a> (f: <a href="#vertex_44">vertex</a> -&gt; int) =
+    (<span class="keyword">forall</span> n. f n <a href="int.html#infix%20%3E=_26">&gt;=</a> 0)
+
+  <span class="keyword">predicate</span> <a name="consistent_154">consistent</a> (f: <a href="#vertex_44">vertex</a> -&gt; int) (dst: <a href="#vertex_44">vertex</a>) =
+    f dst = 0 /\
+    (<span class="keyword">forall</span> a b:<a href="#vertex_44">vertex</a>.
+      <a href="#edge_57">edge</a> a b -&gt;
+      f a <a href="int.html#infix%20%3C=_25">&lt;=</a> <a href="#weight_59">weight</a> a b <a href="int.html#infix%20+_19">+</a> f b )
+
+  <span class="keyword">predicate</span> <a name="path_consistent_160">path_consistent</a> (f: <a href="#vertex_44">vertex</a> -&gt; int) (dst: <a href="#vertex_44">vertex</a>) =
+    f dst = 0 /\
+    (<span class="keyword">forall</span> a b:<a href="#vertex_44">vertex</a>, l: <a href="list.html#list_8">list</a> <a href="#vertex_44">vertex</a>.
+      <a href="graph.html#path_13">path</a> a l b -&gt;
+      f a <a href="int.html#infix%20%3C=_25">&lt;=</a> <a href="graph.html#path_weight_54">path_weight</a> l b <a href="int.html#infix%20+_19">+</a> f b )
+
+  <span class="keyword">predicate</span> <a name="admissible_166">admissible</a> (f: <a href="#vertex_44">vertex</a> -&gt; int) (dst: <a href="#vertex_44">vertex</a>) =
+    <span class="keyword">forall</span> a, l. <a href="graph.html#path_13">path</a> a l dst -&gt; f a <a href="int.html#infix%20%3C=_25">&lt;=</a> <a href="graph.html#path_weight_54">path_weight</a> l dst
+
+</pre>
+<p>Lemmas on Admissibility &amp; Consistency *</p>
+<pre>  <span class="keyword">lemma</span> <a name="consistent_implies_admissible'lemma_172">consistent_implies_admissible</a>:
+    <span class="keyword">forall</span> dst: <a href="#vertex_44">vertex</a>, f: (<a href="#vertex_44">vertex</a> -&gt; int). <a href="#positive_151">positive</a> f -&gt; <a href="#consistent_154">consistent</a> f dst -&gt; <a href="#admissible_166">admissible</a> f dst
+
+  <span class="keyword">lemma</span> <a name="consistent_is_path_consistent'lemma_175">consistent_is_path_consistent</a>:
+    <span class="keyword">forall</span> dst: <a href="#vertex_44">vertex</a>, f: (<a href="#vertex_44">vertex</a> -&gt; int). <a href="#positive_151">positive</a> f -&gt; <a href="#consistent_154">consistent</a> f dst &lt;-&gt; <a href="#path_consistent_160">path_consistent</a> f dst
+
+</pre>
+<p>Useful Function for Closing Vertices *</p>
+<pre>  <span class="keyword">clone</span> <a href="#ImpmapNoDom_">ImpmapNoDom</a> <span class="keyword">with</span> <span class="keyword">type</span> <a href="#key_14">key</a> = <a href="#vertex_44">vertex</a>
+
+  <span class="keyword">predicate</span> <a name="min_183">min</a> (m: <a href="#vertex_44">vertex</a>) (q: <a href="set.html#set_635">set</a>) (d: <a href="#t_16">t</a> int) (h: <a href="#vertex_44">vertex</a> -&gt; int) =
+    <a href="set.html#mem_270">mem</a> m q /\
+    (<span class="keyword">forall</span> x: <a href="#vertex_44">vertex</a>. <a href="set.html#mem_270">mem</a> x q -&gt; d[m] <a href="int.html#infix%20+_19">+</a> h m <a href="int.html#infix%20%3C=_25">&lt;=</a> d[x] <a href="int.html#infix%20+_19">+</a> h x)
+
+  <span class="keyword">val</span> <a name="q_extract_min_187">q_extract_min</a> (open: <a href="set.html#set_635">set</a>) (d: <a href="#t_16">t</a> int) (h: <a href="#vertex_44">vertex</a> -&gt; int) : <a href="#vertex_44">vertex</a>
+    <span class="keyword">writes</span>   { open }
+    <span class="keyword">requires</span> { <span class="keyword">not</span> <a href="#is_empty_46">is_empty</a> open }
+    <span class="keyword">ensures</span>  { <a href="#min_183">min</a> result (<span class="keyword">old</span> open) d h }
+    <span class="keyword">ensures</span>  { open = <a href="#remove_46">remove</a> result (<span class="keyword">old</span> open) }
+
+</pre>
+<p>Predicates Used in Invariants *</p>
+<pre>  <span class="keyword">predicate</span> <a name="inv_src_196">inv_src</a> (src: <a href="#vertex_44">vertex</a>) (s q: <a href="set.html#set_635">set</a>) =
+    <a href="set.html#mem_270">mem</a> src s \/ <a href="set.html#mem_270">mem</a> src q
+
+  <span class="keyword">predicate</span> <a name="inv_199">inv</a> (src dst: <a href="#vertex_44">vertex</a>) (s q: <a href="set.html#set_635">set</a>) (d: <a href="#t_16">t</a> int) =
+    <a href="#inv_src_196">inv_src</a> src s q /\
+    d[src] = 0 /\
+    <span class="keyword">not</span> <a href="set.html#mem_270">mem</a> dst s /\
+    <span class="comment">(* S and Q are contained in V *)</span>
+    <a href="set.html#subset_281">subset</a> s <a href="#graph_48">graph</a> /\ <a href="set.html#subset_281">subset</a> q <a href="#graph_48">graph</a> /\
+    <span class="comment">(* S and Q are disjoint *)</span>
+    <a href="set.html#disjoint_358">disjoint</a> s q /\
+    <span class="comment">(* we already found the shortest paths for vertices in S *)</span>
+    (<span class="keyword">forall</span> v: <a href="#vertex_44">vertex</a>. <a href="set.html#mem_270">mem</a> v s -&gt; <a href="#shortest_path_with_len_70">shortest_path_with_len</a> src v d[v]) /\
+    <span class="comment">(* there are paths for vertices in Q *)</span>
+    (<span class="keyword">forall</span> n. <a href="set.html#mem_270">mem</a> n q \/ <a href="set.html#mem_270">mem</a> n s -&gt; <a href="#path_with_len_67">path_with_len</a> src n d[n]) /\
+    (<span class="keyword">forall</span> n. <a href="set.html#mem_270">mem</a> n q -&gt; (<span class="keyword">exists</span> u. <a href="set.html#mem_270">mem</a> n (<a href="#successors_50">successors</a> u) /\ <a href="set.html#mem_270">mem</a> u s /\ d[u] <a href="int.html#infix%20+_19">+</a> <a href="#weight_59">weight</a> u n = d[n]) \/ n = src) /\
+    (<span class="keyword">forall</span> n. <span class="keyword">not</span> (<a href="set.html#mem_270">mem</a> n q /\ <a href="set.html#mem_270">mem</a> n s))
+
+  <span class="keyword">predicate</span> <a name="inv_succ_214">inv_succ</a> (_src: <a href="#vertex_44">vertex</a>) (s q: <a href="set.html#set_635">set</a>) (d: <a href="#t_16">t</a> int) =
+    <span class="comment">(* successors of vertices in S are either in S or in Q *)</span>
+    <span class="keyword">forall</span> x: <a href="#vertex_44">vertex</a>. <a href="set.html#mem_270">mem</a> x s -&gt;
+    <span class="keyword">forall</span> y: <a href="#vertex_44">vertex</a>. <a href="set.html#mem_270">mem</a> y (<a href="#successors_50">successors</a> x) -&gt;
+    (<a href="set.html#mem_270">mem</a> y s \/ <a href="set.html#mem_270">mem</a> y q) /\ d[y] <a href="int.html#infix%20%3C=_25">&lt;=</a> d[x] <a href="int.html#infix%20+_19">+</a> <a href="#weight_59">weight</a> x y
+
+  <span class="keyword">predicate</span> <a name="inv_succ2_220">inv_succ2</a> (_src: <a href="#vertex_44">vertex</a>) (s q: <a href="set.html#set_635">set</a>) (d: <a href="#t_16">t</a> int) (u: <a href="#vertex_44">vertex</a>) (su: <a href="set.html#set_635">set</a>) =
+    <span class="comment">(* successors of vertices in S are either in S or in Q,
+       unless they are successors of u still in su *)</span>
+    <span class="keyword">forall</span> x: <a href="#vertex_44">vertex</a>. <a href="set.html#mem_270">mem</a> x s -&gt;
+    <span class="keyword">forall</span> y: <a href="#vertex_44">vertex</a>. <a href="set.html#mem_270">mem</a> y (<a href="#successors_50">successors</a> x) -&gt;
+    (x&lt;&gt;u \/ (x=u /\ <span class="keyword">not</span> (<a href="set.html#mem_270">mem</a> y su))) -&gt;
+    (<a href="set.html#mem_270">mem</a> y s \/ <a href="set.html#mem_270">mem</a> y q) /\ d[y] <a href="int.html#infix%20%3C=_25">&lt;=</a> d[x] <a href="int.html#infix%20+_19">+</a> <a href="#weight_59">weight</a> x y
+
+</pre>
+<p>A Star Code *</p>
+<pre>  <span class="keyword">let</span> <a name="astar_code_231">astar_code</a> (src dst: <a href="#vertex_44">vertex</a>) (h: <a href="#vertex_44">vertex</a> -&gt; int): <a href="option.html#option_5">option</a> int
+    <span class="keyword">requires</span> { <a href="#consistent_154">consistent</a> h dst /\ <a href="#positive_151">positive</a> h }
+    <span class="keyword">requires</span> { <a href="#closed_under_succ_73">closed_under_succ</a> <a href="#graph_48">graph</a> }
+    <span class="keyword">requires</span> { <a href="#mem_46">mem</a> src <a href="#graph_48">graph</a> /\ <a href="#mem_46">mem</a> dst <a href="#graph_48">graph</a> }
+    <span class="keyword">returns</span>  { result -&gt;
+      <span class="keyword">match</span> result <span class="keyword">with</span>
+      | <a href="option.html#Some_5">Some</a> n -&gt; <a href="#shortest_path_with_len_70">shortest_path_with_len</a> src dst n
+      | <a href="option.html#None_5">None</a> -&gt; <span class="keyword">forall</span> l. <span class="keyword">not</span> <a href="graph.html#path_13">path</a> src l dst
+      <span class="keyword">end</span>
+     }
+  = <span class="keyword">let</span> closed: <a href="set.html#set_635">set</a> = <a href="#empty_46">empty</a> () <span class="keyword">in</span>
+    <span class="keyword">let</span> open: <a href="set.html#set_635">set</a> = <a href="#singleton_46">singleton</a> src <span class="keyword">in</span>
+    <span class="keyword">let</span> d: <a href="#t_16">t</a> int = <a href="#create_181">create</a> 0 <span class="keyword">in</span>
+    <span class="keyword">while</span> <span class="keyword">not</span> <a href="#is_empty_46">is_empty</a> open <span class="keyword">do</span>
+      <span class="keyword">invariant</span> { <a href="#inv_199">inv</a> src dst closed open d }
+      <span class="keyword">invariant</span> { <a href="#inv_succ_214">inv_succ</a> src closed open d }
+      <span class="keyword">invariant</span> {
+          <span class="keyword">forall</span> n, l. <a href="#shortest_path_63">shortest_path</a> src l n -&gt; <span class="keyword">not</span> (<a href="#mem_46">mem</a> n closed) -&gt;
+            (<span class="keyword">exists</span> u, l1 l2. <a href="#mem_46">mem</a> u open /\ <a href="#shortest_path_63">shortest_path</a> src l1 u /\ <a href="#shortest_path_63">shortest_path</a> u l2 n /\ l = l1 <a href="list.html#infix%20++_202">++</a> l2 /\ d[u] = <a href="graph.html#path_weight_54">path_weight</a> l1 u)
+        }
+      <span class="keyword">variant</span>   { <a href="#cardinal_46">cardinal</a> <a href="#graph_48">graph</a> <a href="int.html#infix%20-_23">-</a> <a href="#cardinal_46">cardinal</a> closed }
+      <span class="keyword">let</span> u = <a href="#q_extract_min_187">q_extract_min</a> open d h <span class="keyword">in</span>
+      <span class="keyword">assert</span> { <a href="#shortest_path_with_len_70">shortest_path_with_len</a> src u d[u] };
+      <span class="keyword">if</span> <a href="#eq_46">eq</a> u dst <span class="keyword">then</span> <span class="keyword">begin</span>
+       <span class="keyword">assert</span> { <span class="keyword">forall</span> v, s. <a href="#shortest_path_with_len_70">shortest_path_with_len</a> src v s -&gt; s <a href="int.html#infix%20+_19">+</a> h v <a href="int.html#infix%20%3C_21">&lt;</a> d[u] <a href="int.html#infix%20+_19">+</a> h u -&gt; <a href="#mem_46">mem</a> v closed };
+       <span class="keyword">return</span> <a href="option.html#Some_5">Some</a> d[u]
+      <span class="keyword">end</span>;
+      <a href="#add_46">add</a> u closed;
+      <span class="keyword">let</span> su = <a href="#successors_impl_54">successors_impl</a> u <span class="keyword">in</span>
+      <span class="keyword">while</span> <span class="keyword">not</span> <a href="#is_empty_46">is_empty</a> su <span class="keyword">do</span>
+        <span class="keyword">invariant</span> { <a href="#subset_46">subset</a> su (<a href="#successors_50">successors</a> u) }
+        <span class="keyword">invariant</span> { <a href="#inv_199">inv</a> src dst closed open d  }
+        <span class="keyword">invariant</span> { <a href="#inv_succ2_220">inv_succ2</a> src closed open d u su }
+        <span class="keyword">variant</span>   { <a href="#cardinal_46">cardinal</a> su }
+        <span class="keyword">let</span> y = <a href="#choose_and_remove_46">choose_and_remove</a> su <span class="keyword">in</span>
+        <span class="keyword">let</span> x = d[u] <a href="int.html#infix%20+_19">+</a> <a href="#weight_59">weight</a> u y <span class="keyword">in</span>
+        <span class="keyword">if</span> <span class="keyword">not</span> <a href="#mem_46">mem</a> y closed <span class="keyword">then</span> <span class="keyword">begin</span>
+          <span class="keyword">if</span> <span class="keyword">not</span> (<a href="#mem_46">mem</a> y open) || x <a href="int.html#infix%20%3C_21">&lt;</a> d[y] <span class="keyword">then</span> <span class="keyword">begin</span>
+              <a href="#add_46">add</a> y open;
+              d[y] &lt;- x
+          <span class="keyword">end</span>
+        <span class="keyword">end</span>;
+        <span class="keyword">assert</span> { d[y] <a href="int.html#infix%20%3C=_25">&lt;=</a> d[u] <a href="int.html#infix%20+_19">+</a> <a href="#weight_59">weight</a> u y }
+      <span class="keyword">done</span>;
+      <span class="keyword">assert</span> { <span class="keyword">forall</span> m. <a href="#edge_57">edge</a> u m -&gt; <a href="#mem_46">mem</a> m closed \/ <a href="#mem_46">mem</a> m open };
+    <span class="keyword">done</span>;
+    <span class="keyword">assert</span> { <span class="keyword">forall</span> v, l. <a href="graph.html#path_13">path</a> src l v -&gt; <a href="#mem_46">mem</a> v closed };
+    <span class="keyword">return</span> <a href="option.html#None_5">None</a>
+
+<span class="keyword">end</span></pre>
+
+</div>
+<hr>
+<p>Generated by why3doc 1.8.0</p>
+</body>
+</html>

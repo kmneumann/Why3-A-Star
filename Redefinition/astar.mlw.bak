@@ -1,0 +1,288 @@
+(** {1 A Star} *)
+
+(* Dijkstra's shortest path algorithm.
+
+   This proof follows Cormen et al's "Algorithms".
+
+   Author: Jean-Christophe Filliâtre (CNRS) *)
+
+module ImpmapNoDom
+
+  use map.Map
+  use map.Const
+
+  type key
+
+  type mutMap 'a = abstract { mutable contents: map key 'a }
+
+  val function create (x: 'a): mutMap 'a
+    ensures { result.contents = const x }
+
+  val function ([]) (m: mutMap 'a) (k: key): 'a
+    ensures { result = m.contents[k] }
+
+  val ghost function ([<-]) (m: mutMap 'a) (k: key) (v: 'a): mutMap 'a
+    ensures { result.contents = m.contents[k <- v] }
+
+  val ([]<-) (m: mutMap 'a) (k: key) (v: 'a): unit
+    writes { m }
+    ensures { m = (old m)[k <- v] }
+
+end
+
+
+
+module AStar
+  
+  use int.Int
+  use list.List
+  use list.Append
+  use option.Option
+  
+  (** Graph & Paths Definitions: *)
+  
+  type vertex 
+  
+  clone set.SetImp with type elt = vertex
+  
+  constant graph: fset vertex
+  
+  val ghost function successors (x: vertex): fset vertex
+    ensures { subset result graph }
+    ensures { not mem x result }
+  
+  val successors_impl (x: vertex): set
+    ensures { result = successors x }
+  
+  predicate edge (a b: vertex) = mem b (successors a)
+  
+  clone graph.IntPathWeight with 
+    type vertex = vertex, 
+    predicate edge = edge
+  
+  axiom positive_weight: forall a, b. weight a b > 0
+  
+  predicate shortest_path (a: vertex) (l: list vertex) (b: vertex) = 
+    path a l b /\ 
+    (forall l'. path a l' b -> path_weight l b <= path_weight l' b)
+  
+  predicate path_with_len (a b: vertex) (d: int) = 
+    exists l. path a l b /\ (path_weight l b = d)
+  
+  predicate shortest_path_with_len (a b: vertex) (d: int) = 
+    exists l. shortest_path a l b /\ (path_weight l b = d)
+  
+  predicate closed_under_succ (v: fset vertex) = 
+    forall n. mem n v -> forall m. edge n m -> mem m v
+    
+  
+  (** Lemmas on Graph & Paths: *)
+  
+  lemma path_nonneg: 
+    forall x, y, l. path x l y -> path_weight l y >= 0
+  
+  lemma shortest_path_nonneg: 
+    forall x, y, l. shortest_path x l y -> path_weight l y >= 0
+  
+  lemma shortest_path_decomposition:
+    forall x y z: vertex, l1 l2: list vertex.
+    shortest_path x (l1 ++ Cons y l2) z -> shortest_path x l1 y /\ shortest_path y (Cons y l2) z
+  
+  lemma shortest_path_negation:
+    forall a, b, l. not (shortest_path a l b) ->
+    not (path a l b) \/ (exists l'. path a l' b /\ path_weight l' b < path_weight l b)
+  
+  lemma path_weight_sub_path:
+    forall x y z: vertex, l1 l2 l3: list vertex.
+    path_weight (l1 ++ (Cons x l2) ++ (Cons y l3)) z =
+    path_weight l1 x + path_weight (Cons x l2) y + path_weight (Cons y l3) z
+  
+  lemma optimal_substructure_property:
+    forall s, t, a, b, l1, l2, l_ab. 
+    shortest_path s (l1 ++ (Cons a l_ab) ++ (Cons b l2)) t -> 
+    shortest_path a (Cons a l_ab) b
+  
+  lemma sub_path:
+    forall x, a, b, z, l1, l2.
+        path x l1 a -> path b l2 z -> edge a b -> path x (l1 ++ (Cons a l2)) z
+  
+  lemma sub_path_inversion:
+    forall x z: vertex, l: list vertex. path x l z ->
+       (x = z /\ l = Nil)
+    \/ (exists a, b, l1, l2.
+        path x l1 a /\ path b l2 z /\ edge a b /\ l = l1 ++ (Cons a l2))
+  
+  lemma inside_or_exit_path:
+    forall s, src, v, l. mem src s -> path src l v -> not (mem v s) ->
+      (exists y, z, l1, l2.
+        mem y s /\ not (mem z s) /\ edge y z /\
+        path src l1 y /\ path z l2 v /\ l = l1 ++ Cons y l2)
+  
+  lemma inside_or_exit_shortest_path:
+    forall s, src, v, l. mem src s -> shortest_path src l v -> not (mem v s) ->
+      (exists y, z, l1, l2.
+        mem y s /\ not (mem z s) /\ edge y z /\
+        shortest_path src l1 y /\ shortest_path z l2 v /\ l = l1 ++ Cons y l2)
+  
+  lemma path_imples_exists_shortest_path:
+    forall a, b, l. path a l b -> (exists l'. path_weight l' b <= path_weight l b /\ shortest_path a l' b)
+  
+  lemma path_zero:
+    forall a, b, l. path a l b -> path_weight l b = 0 -> l = Nil /\ a = b
+  
+  lemma main_lemma:
+    forall src v: vertex. forall l: list vertex.
+    path src l v -> not (shortest_path src l v) ->
+    v = src /\ l <> Nil
+    \/
+    (exists v': vertex. exists l': list vertex. shortest_path v' l' v /\ edge src v' /\ path_weight (Cons src l') v < path_weight l v)
+  
+  lemma completeness_lemma:
+    forall s: set.
+    (* if s is closed under g_succ *)
+    closed_under_succ s ->
+    (* and if s contains src *)
+    forall src: vertex. mem src s ->
+    (* then any vertex reachable from s is also in s *)
+    forall dst, l.
+    path src l dst -> mem dst s
+  
+  
+  (** Admissibility & Consistency Definitions: *)
+  
+  predicate positive (f: vertex -> int) = 
+    (forall n. f n >= 0)
+  
+  predicate admissible (f: vertex -> int) (dst: vertex) = 
+    forall a, l. path a l dst -> f a <= path_weight l dst
+  
+  predicate consistent (f: vertex -> int) (dst: vertex) = 
+    f dst = 0 /\
+    (forall a b:vertex.
+      edge a b ->
+      f a <= weight a b + f b )
+  
+  predicate path_consistent (f: vertex -> int) (dst: vertex) = 
+    f dst = 0 /\
+    (forall a b:vertex, l: list vertex.
+      path a l b ->
+      f a <= path_weight l b + f b )
+  
+  
+  (** Lemmas on Admissibility & Consistency: *)
+  
+  lemma consistent_implies_admissible:
+    forall dst: vertex, f: (vertex -> int). positive f -> consistent f dst -> admissible f dst
+  
+  lemma consistent_is_path_consistent:
+    forall dst: vertex, f: (vertex -> int). positive f -> consistent f dst <-> path_consistent f dst
+  
+  
+  (** Useful Function for Working With The CLOSED Set: *)
+  
+  clone ImpmapNoDom with type key = vertex
+  
+  predicate min (m: vertex) (q: set) (d: mutMap int) (h: vertex -> int) =
+    mem m q /\
+    (forall x: vertex. mem x q -> d[m] + h m <= d[x] + h x)
+
+  val get_min (open: set) (d: mutMap int) (h: vertex -> int) : vertex 
+    writes   { open }
+    requires { not is_empty open }
+    ensures  { min result (old open) d h }
+    ensures  { open = remove result (old open) }
+    
+  
+  (** Predicates Used in Invariants: *)
+    
+  predicate inv_src (src: vertex) (s q: set) =
+    mem src s \/ mem src q
+
+  predicate inv (src dst: vertex) (s q: set) (d: mutMap int) =
+    inv_src src s q /\ 
+    d[src] = 0 /\
+    not mem dst s /\
+    (* S and Q are contained in V *)
+    subset s graph /\ subset q graph /\
+    (* S and Q are disjoint *)
+    disjoint s q /\
+    (* we already found the shortest paths for vertices in S *)
+    (forall v: vertex. mem v s -> shortest_path_with_len src v d[v]) /\
+    (* there are paths for vertices in Q *)
+    (forall n. mem n q \/ mem n s -> path_with_len src n d[n]) /\
+    (forall n. mem n q -> (exists u. mem n (successors u) /\ mem u s /\ d[u] + weight u n = d[n]) \/ n = src) /\
+    (forall n. not (mem n q /\ mem n s))
+
+  predicate inv_succ (_src: vertex) (s q: set) (d: mutMap int) =
+    (* successors of vertices in S are either in S or in Q *)
+    forall x: vertex. mem x s ->
+    forall y: vertex. mem y (successors x) ->
+    (mem y s \/ mem y q) /\ d[y] <= d[x] + weight x y 
+
+  predicate inv_succ2 (_src: vertex) (s q: set) (d: mutMap int) (u: vertex) (su: set) =
+    (* successors of vertices in S are either in S or in Q,
+       unless they are successors of u still in su *)
+    forall x: vertex. mem x s ->
+    forall y: vertex. mem y (successors x) ->
+    (x<>u \/ (x=u /\ not (mem y su))) ->
+    (mem y s \/ mem y q) /\ d[y] <= d[x] + weight x y 
+    
+  
+  (** A Star Code: *)
+  
+  let astar_code (src dst: vertex) (h: vertex -> int): option int
+    requires { consistent h dst /\ positive h }
+    requires { closed_under_succ graph }
+    requires { mem src graph /\ mem dst graph }
+    returns  { result -> 
+      match result with 
+      | Some n -> shortest_path_with_len src dst n 
+      | None -> forall l. not path src l dst 
+      end
+     }
+  = let closed: set = empty () in
+    let open: set = singleton src in
+    let d: mutMap int = create 0 in
+    while not is_empty open do
+      invariant { inv src dst closed open d }
+      invariant { inv_succ src closed open d }
+      invariant {
+          forall n, l. shortest_path src l n -> not (mem n closed) -> 
+            (exists u, l1, l2. 
+              mem u open /\
+              shortest_path src l1 u /\ 
+              shortest_path u l2 n /\ 
+              l = l1 ++ l2 /\
+              d[u] = path_weight l1 u)
+        }
+      variant   { cardinal graph - cardinal closed }
+      let u = get_min open d h in
+      assert { shortest_path_with_len src u d[u] };
+      if eq u dst then begin
+       assert { forall v:vertex, s:int. shortest_path_with_len src v s -> s + h v < d[u] + h u -> mem v closed };
+       return Some d[u]
+      end;
+      add u closed;
+      let su = successors_impl u in
+      while not is_empty su do
+        invariant { subset su (successors u) }
+        invariant { inv src dst closed open d  }
+        invariant { inv_succ2 src closed open d u su }
+        variant   { cardinal su }
+        let y = choose_and_remove su in
+        let x = d[u] + weight u y in
+        if not mem y closed then begin 
+          if not (mem y open) || x < d[y] then begin
+              add y open;
+              d[y] <- x
+          end
+        end;
+        assert { d[y] <= d[u] + weight u y }
+      done;
+      assert { forall m. edge u m -> mem m closed \/ mem m open };
+    done;
+    assert { forall v, l. path src l v -> mem v closed };
+    return None
+    
+  
+end

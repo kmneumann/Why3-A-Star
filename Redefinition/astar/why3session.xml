@@ -1,0 +1,678 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
+"https://www.why3.org/why3session.dtd">
+<why3session shape_version="6">
+<prover id="0" name="Eprover" version="2.0" timelimit="5" steplimit="0" memlimit="1000"/>
+<prover id="1" name="Alt-Ergo" version="2.6.2" timelimit="5" steplimit="0" memlimit="1000"/>
+<prover id="2" name="CVC5" version="1.2.1" timelimit="5" steplimit="0" memlimit="1000"/>
+<prover id="3" name="Z3" version="4.15.0" timelimit="5" steplimit="0" memlimit="1000"/>
+<file format="whyml" proved="true">
+<path name=".."/><path name="astar.mlw"/>
+<theory name="AStar" proved="true">
+ <goal name="path_nonneg" proved="true">
+ <transf name="induction_pr" proved="true" >
+  <goal name="path_nonneg.0" proved="true">
+  <proof prover="1"><result status="valid" time="0.017936" steps="8"/></proof>
+  </goal>
+  <goal name="path_nonneg.1" proved="true">
+  <proof prover="1"><result status="valid" time="0.021927" steps="196"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="shortest_path_nonneg" proved="true">
+ <proof prover="3"><result status="valid" time="0.007907" steps="42351"/></proof>
+ </goal>
+ <goal name="shortest_path_decomposition" proved="true">
+ <transf name="unfold" proved="true" arg1="shortest_path">
+  <goal name="shortest_path_decomposition.0" proved="true">
+  <transf name="split_vc" proved="true" >
+   <goal name="shortest_path_decomposition.0.0" proved="true">
+   <proof prover="1"><result status="valid" time="0.012809" steps="8"/></proof>
+   </goal>
+   <goal name="shortest_path_decomposition.0.1" proved="true">
+   <proof prover="2"><result status="valid" time="0.158739" steps="48654"/></proof>
+   </goal>
+   <goal name="shortest_path_decomposition.0.2" proved="true">
+   <proof prover="1"><result status="valid" time="0.012662" steps="8"/></proof>
+   </goal>
+   <goal name="shortest_path_decomposition.0.3" proved="true">
+   <proof prover="2"><result status="valid" time="0.103333" steps="35374"/></proof>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="shortest_path_negation" proved="true">
+ <proof prover="1"><result status="valid" time="0.013358" steps="19"/></proof>
+ </goal>
+ <goal name="path_weight_sub_path" proved="true">
+ <proof prover="3"><result status="valid" time="0.008679" steps="47972"/></proof>
+ </goal>
+ <goal name="optimal_substructure_property" proved="true">
+ <proof prover="2"><result status="valid" time="0.017046" steps="7085"/></proof>
+ </goal>
+ <goal name="sub_path" proved="true">
+ <proof prover="1"><result status="valid" time="0.014338" steps="39"/></proof>
+ </goal>
+ <goal name="sub_path_inversion" proved="true">
+ <proof prover="3"><result status="valid" time="0.009593" steps="51977"/></proof>
+ </goal>
+ <goal name="inside_or_exit_path" proved="true">
+ <transf name="induction_pr" proved="true" >
+  <goal name="inside_or_exit_path.0" proved="true">
+  <proof prover="2"><result status="valid" time="0.008779" steps="7689"/></proof>
+  </goal>
+  <goal name="inside_or_exit_path.1" proved="true">
+  <transf name="introduce_premises" proved="true" >
+   <goal name="inside_or_exit_path.1.0" proved="true">
+   <transf name="case" proved="true" arg1="(mem y s)">
+    <goal name="inside_or_exit_path.1.0.0" expl="true case" proved="true">
+    <proof prover="1"><result status="valid" time="0.042424" steps="445"/></proof>
+    </goal>
+    <goal name="inside_or_exit_path.1.0.1" expl="false case" proved="true">
+    <transf name="exists" proved="true" arg1="src">
+     <goal name="inside_or_exit_path.1.0.1.0" proved="true">
+     <transf name="exists" proved="true" arg1="y">
+      <goal name="inside_or_exit_path.1.0.1.0.0" proved="true">
+      <proof prover="2"><result status="valid" time="0.365664" steps="97296"/></proof>
+      </goal>
+     </transf>
+     </goal>
+    </transf>
+    </goal>
+   </transf>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="inside_or_exit_shortest_path" proved="true">
+ <transf name="introduce_premises" proved="true" >
+  <goal name="inside_or_exit_shortest_path.0" proved="true">
+  <transf name="inst_rem" proved="true" arg1="inside_or_exit_path" arg2="s, src, v, l">
+   <goal name="inside_or_exit_shortest_path.0.0" proved="true">
+   <transf name="destruct_rec" proved="true" arg1="Hinst">
+    <goal name="inside_or_exit_shortest_path.0.0.0" expl="destruct premise" proved="true">
+    <proof prover="2"><result status="valid" time="0.014052" steps="7181"/></proof>
+    </goal>
+    <goal name="inside_or_exit_shortest_path.0.0.1" expl="destruct premise" proved="true">
+    <proof prover="3"><result status="valid" time="0.011693" steps="62781"/></proof>
+    </goal>
+    <goal name="inside_or_exit_shortest_path.0.0.2" expl="destruct premise" proved="true">
+    <proof prover="3"><result status="valid" time="0.003942" steps="5074"/></proof>
+    </goal>
+    <goal name="inside_or_exit_shortest_path.0.0.3" proved="true">
+    <transf name="inst_rem" proved="true" arg1="shortest_path_decomposition" arg2="src, y, v, l1, l2">
+     <goal name="inside_or_exit_shortest_path.0.0.3.0" proved="true">
+     <transf name="destruct_rec" proved="true" arg1="Hinst">
+      <goal name="inside_or_exit_shortest_path.0.0.3.0.0" expl="destruct premise" proved="true">
+      <proof prover="1"><result status="valid" time="0.020885" steps="18"/></proof>
+      </goal>
+      <goal name="inside_or_exit_shortest_path.0.0.3.0.1" proved="true">
+      <transf name="exists" proved="true" arg1="y">
+       <goal name="inside_or_exit_shortest_path.0.0.3.0.1.0" proved="true">
+       <transf name="exists" proved="true" arg1="z">
+        <goal name="inside_or_exit_shortest_path.0.0.3.0.1.0.0" proved="true">
+        <transf name="exists" proved="true" arg1="l1">
+         <goal name="inside_or_exit_shortest_path.0.0.3.0.1.0.0.0" proved="true">
+         <transf name="exists" proved="true" arg1="l2">
+          <goal name="inside_or_exit_shortest_path.0.0.3.0.1.0.0.0.0" proved="true">
+          <transf name="split_vc" proved="true" >
+           <goal name="inside_or_exit_shortest_path.0.0.3.0.1.0.0.0.0.0" proved="true">
+           <proof prover="2"><result status="valid" time="0.009544" steps="7218"/></proof>
+           </goal>
+           <goal name="inside_or_exit_shortest_path.0.0.3.0.1.0.0.0.0.1" proved="true">
+           <proof prover="3"><result status="valid" time="0.003801" steps="5099"/></proof>
+           </goal>
+           <goal name="inside_or_exit_shortest_path.0.0.3.0.1.0.0.0.0.2" proved="true">
+           <proof prover="2"><result status="valid" time="0.008757" steps="7218"/></proof>
+           </goal>
+           <goal name="inside_or_exit_shortest_path.0.0.3.0.1.0.0.0.0.3" proved="true">
+           <proof prover="2"><result status="valid" time="0.008510" steps="7218"/></proof>
+           </goal>
+           <goal name="inside_or_exit_shortest_path.0.0.3.0.1.0.0.0.0.4" proved="true">
+           <transf name="case" proved="true" arg1="(shortest_path z l2 v)">
+            <goal name="inside_or_exit_shortest_path.0.0.3.0.1.0.0.0.0.4.0" expl="true case" proved="true">
+            <proof prover="2"><result status="valid" time="0.008428" steps="7226"/></proof>
+            </goal>
+            <goal name="inside_or_exit_shortest_path.0.0.3.0.1.0.0.0.0.4.1" expl="false case" proved="true">
+            <transf name="inst_rem" proved="true" arg1="shortest_path_negation" arg2="z,v,l2">
+             <goal name="inside_or_exit_shortest_path.0.0.3.0.1.0.0.0.0.4.1.0" expl="false case" proved="true">
+             <transf name="destruct_rec" proved="true" arg1="Hinst">
+              <goal name="inside_or_exit_shortest_path.0.0.3.0.1.0.0.0.0.4.1.0.0" expl="destruct premise" proved="true">
+              <proof prover="2"><result status="valid" time="0.012115" steps="7162"/></proof>
+              </goal>
+              <goal name="inside_or_exit_shortest_path.0.0.3.0.1.0.0.0.0.4.1.0.1" expl="false case" proved="true">
+              <proof prover="2"><result status="valid" time="0.011147" steps="7165"/></proof>
+              </goal>
+              <goal name="inside_or_exit_shortest_path.0.0.3.0.1.0.0.0.0.4.1.0.2" expl="false case" proved="true">
+              <transf name="assert" proved="true" arg1="(shortest_path y (Cons y l&#39;) v)">
+               <goal name="inside_or_exit_shortest_path.0.0.3.0.1.0.0.0.0.4.1.0.2.0" expl="asserted formula" proved="true">
+               <proof prover="1"><result status="valid" time="0.052690" steps="717"/></proof>
+               </goal>
+               <goal name="inside_or_exit_shortest_path.0.0.3.0.1.0.0.0.0.4.1.0.2.1" expl="false case" proved="true">
+               <proof prover="1"><result status="valid" time="0.050643" steps="669"/></proof>
+               </goal>
+              </transf>
+              </goal>
+             </transf>
+             </goal>
+            </transf>
+            </goal>
+           </transf>
+           </goal>
+           <goal name="inside_or_exit_shortest_path.0.0.3.0.1.0.0.0.0.5" proved="true">
+           <proof prover="1"><result status="valid" time="0.011683" steps="22"/></proof>
+           </goal>
+          </transf>
+          </goal>
+         </transf>
+         </goal>
+        </transf>
+        </goal>
+       </transf>
+       </goal>
+      </transf>
+      </goal>
+     </transf>
+     </goal>
+    </transf>
+    </goal>
+   </transf>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="path_imples_exists_shortest_path" proved="true">
+ <transf name="introduce_premises" proved="true" >
+  <goal name="path_imples_exists_shortest_path.0" proved="true">
+  <transf name="assert" proved="true" arg1="(exists d, l. path a l b /\ path_weight l b = d)">
+   <goal name="path_imples_exists_shortest_path.0.0" expl="asserted formula" proved="true">
+   <proof prover="3"><result status="valid" time="0.014274" steps="50711"/></proof>
+   </goal>
+   <goal name="path_imples_exists_shortest_path.0.1" proved="true">
+   <transf name="destruct_rec" proved="true" arg1="h">
+    <goal name="path_imples_exists_shortest_path.0.1.0" proved="true">
+    <transf name="induction" proved="true" arg1="d">
+     <goal name="path_imples_exists_shortest_path.0.1.0.0" expl="base case" proved="true">
+     <proof prover="2"><result status="valid" time="0.026306" steps="8833"/></proof>
+     </goal>
+     <goal name="path_imples_exists_shortest_path.0.1.0.1" expl="recursive case" proved="true">
+     <proof prover="2"><result status="valid" time="0.020099" steps="7220"/></proof>
+     </goal>
+    </transf>
+    </goal>
+   </transf>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="path_zero" proved="true">
+ <proof prover="2"><result status="valid" time="0.052592" steps="24716"/></proof>
+ </goal>
+ <goal name="main_lemma" proved="true">
+ <transf name="induction_pr" proved="true" >
+  <goal name="main_lemma.0" proved="true">
+  <proof prover="1"><result status="valid" time="0.015654" steps="37"/></proof>
+  </goal>
+  <goal name="main_lemma.1" proved="true">
+  <proof prover="2"><result status="valid" time="1.665922" steps="290648"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="completeness_lemma" proved="true">
+ <proof prover="3"><result status="valid" time="0.012071" steps="79000"/></proof>
+ </goal>
+ <goal name="consistent_is_path_consistent" proved="true">
+ <transf name="unfold" proved="true" arg1="path_consistent">
+  <goal name="consistent_is_path_consistent.0" proved="true">
+  <transf name="split_vc" proved="true" >
+   <goal name="consistent_is_path_consistent.0.0" proved="true">
+   <proof prover="3"><result status="valid" time="0.009206" steps="60195"/></proof>
+   </goal>
+   <goal name="consistent_is_path_consistent.0.1" proved="true">
+   <transf name="assert" proved="true" arg1="(forall a, b, l. path a l b -&gt; f a &lt;= path_weight l b + f b)">
+    <goal name="consistent_is_path_consistent.0.1.0" expl="asserted formula" proved="true">
+    <transf name="induction_pr" proved="true" >
+     <goal name="consistent_is_path_consistent.0.1.0.0" expl="asserted formula" proved="true">
+     <proof prover="2"><result status="valid" time="0.029764" steps="8459"/></proof>
+     </goal>
+     <goal name="consistent_is_path_consistent.0.1.0.1" expl="asserted formula" proved="true">
+     <proof prover="2"><result status="valid" time="0.014587" steps="12890"/></proof>
+     </goal>
+    </transf>
+    </goal>
+    <goal name="consistent_is_path_consistent.0.1.1" proved="true">
+    <proof prover="3"><result status="valid" time="0.010060" steps="61656"/></proof>
+    </goal>
+   </transf>
+   </goal>
+   <goal name="consistent_is_path_consistent.0.2" proved="true">
+   <proof prover="2"><result status="valid" time="0.347083" steps="68344"/></proof>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="consistent_implies_admissible" proved="true">
+ <proof prover="2"><result status="valid" time="0.028135" steps="12439"/></proof>
+ </goal>
+ <goal name="astar_code&#39;vc" expl="VC for astar_code" proved="true">
+ <transf name="split_vc" proved="true" >
+  <goal name="astar_code&#39;vc.0" expl="loop invariant init" proved="true">
+  <transf name="unfold" proved="true" arg1="inv">
+   <goal name="astar_code&#39;vc.0.0" expl="VC for astar_code" proved="true">
+   <transf name="split_vc" proved="true" >
+    <goal name="astar_code&#39;vc.0.0.0" expl="VC for astar_code" proved="true">
+    <proof prover="1"><result status="valid" time="0.015615" steps="55"/></proof>
+    </goal>
+    <goal name="astar_code&#39;vc.0.0.1" expl="VC for astar_code" proved="true">
+    <proof prover="3"><result status="valid" time="0.014258" steps="99965"/></proof>
+    </goal>
+    <goal name="astar_code&#39;vc.0.0.2" expl="VC for astar_code" proved="true">
+    <proof prover="1"><result status="valid" time="0.016053" steps="80"/></proof>
+    </goal>
+    <goal name="astar_code&#39;vc.0.0.3" expl="VC for astar_code" proved="true">
+    <proof prover="3"><result status="valid" time="0.014181" steps="101050"/></proof>
+    </goal>
+    <goal name="astar_code&#39;vc.0.0.4" expl="VC for astar_code" proved="true">
+    <proof prover="3"><result status="valid" time="0.026971" steps="155345"/></proof>
+    </goal>
+    <goal name="astar_code&#39;vc.0.0.5" expl="VC for astar_code" proved="true">
+    <proof prover="1"><result status="valid" time="0.015316" steps="64"/></proof>
+    </goal>
+    <goal name="astar_code&#39;vc.0.0.6" expl="VC for astar_code" proved="true">
+    <proof prover="2"><result status="valid" time="0.018996" steps="9871"/></proof>
+    </goal>
+    <goal name="astar_code&#39;vc.0.0.7" expl="VC for astar_code" proved="true">
+    <proof prover="0"><result status="valid" time="0.068043"/></proof>
+    </goal>
+    <goal name="astar_code&#39;vc.0.0.8" expl="VC for astar_code" proved="true">
+    <proof prover="2"><result status="valid" time="0.017797" steps="9870"/></proof>
+    </goal>
+    <goal name="astar_code&#39;vc.0.0.9" expl="VC for astar_code" proved="true">
+    <proof prover="2"><result status="valid" time="0.018827" steps="9729"/></proof>
+    </goal>
+   </transf>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="astar_code&#39;vc.1" expl="loop invariant init" proved="true">
+  <proof prover="2"><result status="valid" time="0.029637" steps="11795"/></proof>
+  </goal>
+  <goal name="astar_code&#39;vc.2" expl="loop invariant init" proved="true">
+  <proof prover="2"><result status="valid" time="0.225348" steps="56798"/></proof>
+  </goal>
+  <goal name="astar_code&#39;vc.3" expl="precondition" proved="true">
+  <proof prover="3"><result status="valid" time="0.004293" steps="7545"/></proof>
+  </goal>
+  <goal name="astar_code&#39;vc.4" expl="assertion" proved="true">
+  <transf name="assert" proved="true" arg1="(exists k. shortest_path_with_len src u k)">
+   <goal name="astar_code&#39;vc.4.0" expl="asserted formula" proved="true">
+   <proof prover="0" timelimit="1"><result status="valid" time="0.372307"/></proof>
+   </goal>
+   <goal name="astar_code&#39;vc.4.1" expl="assertion" proved="true">
+   <proof prover="2"><result status="valid" time="1.271737" steps="263615"/></proof>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="astar_code&#39;vc.5" expl="assertion" proved="true">
+  <proof prover="2"><result status="valid" time="2.449269" steps="458070"/></proof>
+  </goal>
+  <goal name="astar_code&#39;vc.6" expl="postcondition" proved="true">
+  <proof prover="3"><result status="valid" time="0.005896" steps="23781"/></proof>
+  </goal>
+  <goal name="astar_code&#39;vc.7" expl="loop invariant init" proved="true">
+  <proof prover="3"><result status="valid" time="0.015391" steps="117742"/></proof>
+  </goal>
+  <goal name="astar_code&#39;vc.8" expl="loop invariant init" proved="true">
+  <proof prover="1"><result status="valid" time="1.730977" steps="18080"/></proof>
+  </goal>
+  <goal name="astar_code&#39;vc.9" expl="loop invariant init" proved="true">
+  <proof prover="2"><result status="valid" time="0.052936" steps="19128"/></proof>
+  </goal>
+  <goal name="astar_code&#39;vc.10" expl="precondition" proved="true">
+  <proof prover="2"><result status="valid" time="0.012865" steps="11116"/></proof>
+  </goal>
+  <goal name="astar_code&#39;vc.11" expl="assertion" proved="true">
+  <proof prover="2"><result status="valid" time="0.040329" steps="15300"/></proof>
+  </goal>
+  <goal name="astar_code&#39;vc.12" expl="loop variant decrease" proved="true">
+  <proof prover="2"><result status="valid" time="0.035855" steps="14949"/></proof>
+  </goal>
+  <goal name="astar_code&#39;vc.13" expl="loop invariant preservation" proved="true">
+  <proof prover="3"><result status="valid" time="0.019940" steps="150746"/></proof>
+  </goal>
+  <goal name="astar_code&#39;vc.14" expl="loop invariant preservation" proved="true">
+  <transf name="unfold" proved="true" arg1="inv">
+   <goal name="astar_code&#39;vc.14.0" expl="VC for astar_code" proved="true">
+   <transf name="split_vc" proved="true" >
+    <goal name="astar_code&#39;vc.14.0.0" expl="VC for astar_code" proved="true">
+    <proof prover="3"><result status="valid" time="0.019300" steps="152307"/></proof>
+    </goal>
+    <goal name="astar_code&#39;vc.14.0.1" expl="VC for astar_code" proved="true">
+    <proof prover="2"><result status="valid" time="0.627301" steps="144547"/></proof>
+    </goal>
+    <goal name="astar_code&#39;vc.14.0.2" expl="VC for astar_code" proved="true">
+    <proof prover="3"><result status="valid" time="0.016733" steps="135402"/></proof>
+    </goal>
+    <goal name="astar_code&#39;vc.14.0.3" expl="VC for astar_code" proved="true">
+    <proof prover="2"><result status="valid" time="0.038476" steps="14927"/></proof>
+    </goal>
+    <goal name="astar_code&#39;vc.14.0.4" expl="VC for astar_code" proved="true">
+    <proof prover="3"><result status="valid" time="0.032766" steps="210697"/></proof>
+    </goal>
+    <goal name="astar_code&#39;vc.14.0.5" expl="VC for astar_code" proved="true">
+    <proof prover="3"><result status="valid" time="0.120528" steps="607201"/></proof>
+    </goal>
+    <goal name="astar_code&#39;vc.14.0.6" expl="VC for astar_code" proved="true">
+    <proof prover="3"><result status="valid" time="0.071487" steps="399865"/></proof>
+    </goal>
+    <goal name="astar_code&#39;vc.14.0.7" expl="VC for astar_code" proved="true">
+    <transf name="case" proved="true" arg1="(n = y)">
+     <goal name="astar_code&#39;vc.14.0.7.0" expl="true case" proved="true">
+     <transf name="assert" proved="true" arg1="(path_with_len src u d[u])">
+      <goal name="astar_code&#39;vc.14.0.7.0.0" expl="asserted formula" proved="true">
+      <proof prover="3"><result status="valid" time="0.073155" steps="384238"/></proof>
+      </goal>
+      <goal name="astar_code&#39;vc.14.0.7.0.1" expl="true case" proved="true">
+      <proof prover="2"><result status="valid" time="1.259495" steps="152417"/></proof>
+      </goal>
+     </transf>
+     </goal>
+     <goal name="astar_code&#39;vc.14.0.7.1" expl="false case" proved="true">
+     <proof prover="2"><result status="valid" time="0.087344" steps="27387"/></proof>
+     </goal>
+    </transf>
+    </goal>
+    <goal name="astar_code&#39;vc.14.0.8" expl="VC for astar_code" proved="true">
+    <proof prover="2"><result status="valid" time="0.468203" steps="69788"/></proof>
+    </goal>
+    <goal name="astar_code&#39;vc.14.0.9" expl="VC for astar_code" proved="true">
+    <proof prover="2"><result status="valid" time="0.044034" steps="16083"/></proof>
+    </goal>
+   </transf>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="astar_code&#39;vc.15" expl="loop invariant preservation" proved="true">
+  <proof prover="2"><result status="valid" time="0.326285" steps="61817"/></proof>
+  </goal>
+  <goal name="astar_code&#39;vc.16" expl="assertion" proved="true">
+  <proof prover="1"><result status="valid" time="0.014889" steps="64"/></proof>
+  </goal>
+  <goal name="astar_code&#39;vc.17" expl="loop variant decrease" proved="true">
+  <proof prover="3"><result status="valid" time="0.020127" steps="146752"/></proof>
+  </goal>
+  <goal name="astar_code&#39;vc.18" expl="loop invariant preservation" proved="true">
+  <proof prover="3"><result status="valid" time="0.020498" steps="144064"/></proof>
+  </goal>
+  <goal name="astar_code&#39;vc.19" expl="loop invariant preservation" proved="true">
+  <proof prover="3"><result status="valid" time="0.004489" steps="8156"/></proof>
+  </goal>
+  <goal name="astar_code&#39;vc.20" expl="loop invariant preservation" proved="true">
+  <transf name="unfold" proved="true" arg1="inv_succ2">
+   <goal name="astar_code&#39;vc.20.0" expl="VC for astar_code" proved="true">
+   <transf name="split_vc" proved="true" >
+    <goal name="astar_code&#39;vc.20.0.0" expl="VC for astar_code" proved="true">
+    <proof prover="2"><result status="valid" time="0.092252" steps="29337"/></proof>
+    </goal>
+    <goal name="astar_code&#39;vc.20.0.1" expl="VC for astar_code" proved="true">
+    <proof prover="2"><result status="valid" time="0.098698" steps="31496"/></proof>
+    </goal>
+   </transf>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="astar_code&#39;vc.21" expl="assertion" proved="true">
+  <transf name="assert" proved="true" arg1="(shortest_path_with_len src y d[y])">
+   <goal name="astar_code&#39;vc.21.0" expl="asserted formula" proved="true">
+   <proof prover="3"><result status="valid" time="0.020687" steps="139318"/></proof>
+   </goal>
+   <goal name="astar_code&#39;vc.21.1" expl="assertion" proved="true">
+   <proof prover="2"><result status="valid" time="2.544018" steps="470172"/></proof>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="astar_code&#39;vc.22" expl="loop variant decrease" proved="true">
+  <proof prover="3"><result status="valid" time="0.020190" steps="141875"/></proof>
+  </goal>
+  <goal name="astar_code&#39;vc.23" expl="loop invariant preservation" proved="true">
+  <proof prover="2"><result status="valid" time="0.038981" steps="14668"/></proof>
+  </goal>
+  <goal name="astar_code&#39;vc.24" expl="loop invariant preservation" proved="true">
+  <transf name="unfold" proved="true" arg1="inv">
+   <goal name="astar_code&#39;vc.24.0" expl="VC for astar_code" proved="true">
+   <transf name="split_vc" proved="true" >
+    <goal name="astar_code&#39;vc.24.0.0" expl="VC for astar_code" proved="true">
+    <proof prover="1"><result status="valid" time="0.018688" steps="72"/></proof>
+    </goal>
+    <goal name="astar_code&#39;vc.24.0.1" expl="VC for astar_code" proved="true">
+    <proof prover="3"><result status="valid" time="0.015659" steps="124411"/></proof>
+    </goal>
+    <goal name="astar_code&#39;vc.24.0.2" expl="VC for astar_code" proved="true">
+    <proof prover="3"><result status="valid" time="0.015668" steps="124423"/></proof>
+    </goal>
+    <goal name="astar_code&#39;vc.24.0.3" expl="VC for astar_code" proved="true">
+    <proof prover="3"><result status="valid" time="0.016166" steps="124411"/></proof>
+    </goal>
+    <goal name="astar_code&#39;vc.24.0.4" expl="VC for astar_code" proved="true">
+    <proof prover="2"><result status="valid" time="0.036957" steps="14422"/></proof>
+    </goal>
+    <goal name="astar_code&#39;vc.24.0.5" expl="VC for astar_code" proved="true">
+    <proof prover="1"><result status="valid" time="0.018388" steps="73"/></proof>
+    </goal>
+    <goal name="astar_code&#39;vc.24.0.6" expl="VC for astar_code" proved="true">
+    <proof prover="2"><result status="valid" time="0.043670" steps="15476"/></proof>
+    </goal>
+    <goal name="astar_code&#39;vc.24.0.7" expl="VC for astar_code" proved="true">
+    <proof prover="3"><result status="valid" time="0.019628" steps="141126"/></proof>
+    </goal>
+    <goal name="astar_code&#39;vc.24.0.8" expl="VC for astar_code" proved="true">
+    <proof prover="3"><result status="valid" time="0.032025" steps="197943"/></proof>
+    </goal>
+    <goal name="astar_code&#39;vc.24.0.9" expl="VC for astar_code" proved="true">
+    <proof prover="2"><result status="valid" time="0.042214" steps="15310"/></proof>
+    </goal>
+   </transf>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="astar_code&#39;vc.25" expl="loop invariant preservation" proved="true">
+  <proof prover="2"><result status="valid" time="0.135373" steps="26436"/></proof>
+  </goal>
+  <goal name="astar_code&#39;vc.26" expl="assertion" proved="true">
+  <proof prover="3"><result status="valid" time="0.118975" steps="550074"/></proof>
+  </goal>
+  <goal name="astar_code&#39;vc.27" expl="loop variant decrease" proved="true">
+  <proof prover="3"><result status="valid" time="0.017912" steps="134112"/></proof>
+  </goal>
+  <goal name="astar_code&#39;vc.28" expl="loop invariant preservation" proved="true">
+  <proof prover="3"><result status="valid" time="0.004167" steps="7996"/></proof>
+  </goal>
+  <goal name="astar_code&#39;vc.29" expl="loop invariant preservation" proved="true">
+  <proof prover="3"><result status="valid" time="0.048660" steps="270304"/></proof>
+  </goal>
+  <goal name="astar_code&#39;vc.30" expl="loop invariant preservation" proved="true">
+  <transf name="case" proved="true" arg1="(mem src open)">
+   <goal name="astar_code&#39;vc.30.0" expl="true case (loop invariant preservation)" proved="true">
+   <proof prover="2"><result status="valid" time="2.663232" steps="407140"/></proof>
+   </goal>
+   <goal name="astar_code&#39;vc.30.1" expl="false case (loop invariant preservation)" proved="true">
+   <transf name="inst_rem" proved="true" arg1="inside_or_exit_shortest_path" arg2="(closed.to_fset), src, n, l">
+    <goal name="astar_code&#39;vc.30.1.0" expl="false case (loop invariant preservation)" proved="true">
+    <transf name="destruct_rec" proved="true" arg1="Hinst">
+     <goal name="astar_code&#39;vc.30.1.0.0" expl="destruct premise" proved="true">
+     <transf name="unfold" proved="true" arg1="inv" arg2="in" arg3="LoopInvariant7">
+      <goal name="astar_code&#39;vc.30.1.0.0.0" expl="destruct premise" proved="true">
+      <proof prover="3"><result status="valid" time="0.017730" steps="132817"/></proof>
+      </goal>
+     </transf>
+     </goal>
+     <goal name="astar_code&#39;vc.30.1.0.1" expl="destruct premise" proved="true">
+     <proof prover="3"><result status="valid" time="0.004445" steps="7928"/></proof>
+     </goal>
+     <goal name="astar_code&#39;vc.30.1.0.2" expl="destruct premise" proved="true">
+     <proof prover="3"><result status="valid" time="0.004292" steps="7930"/></proof>
+     </goal>
+     <goal name="astar_code&#39;vc.30.1.0.3" expl="false case (loop invariant preservation)" proved="true">
+     <transf name="unfold" proved="true" arg1="inv_succ" arg2="in" arg3="LoopInvariant">
+      <goal name="astar_code&#39;vc.30.1.0.3.0" expl="false case (loop invariant preservation)" proved="true">
+      <transf name="inst_rem" proved="true" arg1="LoopInvariant" arg2="y">
+       <goal name="astar_code&#39;vc.30.1.0.3.0.0" expl="false case (loop invariant preservation)" proved="true">
+       <transf name="destruct_rec" proved="true" arg1="Hinst">
+        <goal name="astar_code&#39;vc.30.1.0.3.0.0.0" expl="destruct premise" proved="true">
+        <proof prover="3"><result status="valid" time="0.004181" steps="7977"/></proof>
+        </goal>
+        <goal name="astar_code&#39;vc.30.1.0.3.0.0.1" expl="false case (loop invariant preservation)" proved="true">
+        <transf name="inst_rem" proved="true" arg1="Hinst" arg2="z">
+         <goal name="astar_code&#39;vc.30.1.0.3.0.0.1.0" expl="false case (loop invariant preservation)" proved="true">
+         <transf name="destruct_rec" proved="true" arg1="Hinst">
+          <goal name="astar_code&#39;vc.30.1.0.3.0.0.1.0.0" expl="destruct premise" proved="true">
+          <proof prover="3"><result status="valid" time="0.015863" steps="123707"/></proof>
+          </goal>
+          <goal name="astar_code&#39;vc.30.1.0.3.0.0.1.0.1" expl="false case (loop invariant preservation)" proved="true">
+          <transf name="assert" proved="true" arg1="(shortest_path src (l1 ++ Cons y Nil) z)">
+           <goal name="astar_code&#39;vc.30.1.0.3.0.0.1.0.1.0" expl="asserted formula" proved="true">
+           <transf name="case" proved="true" arg1="(l2 = Nil)">
+            <goal name="astar_code&#39;vc.30.1.0.3.0.0.1.0.1.0.0" expl="asserted formula (true case)" proved="true">
+            <proof prover="3"><result status="valid" time="0.004555" steps="7825"/></proof>
+            </goal>
+            <goal name="astar_code&#39;vc.30.1.0.3.0.0.1.0.1.0.1" expl="asserted formula (false case)" proved="true">
+            <transf name="assert" proved="true" arg1="(exists l2&#39;. l2 = Cons z l2&#39;)">
+             <goal name="astar_code&#39;vc.30.1.0.3.0.0.1.0.1.0.1.0" expl="asserted formula" proved="true">
+             <proof prover="3"><result status="valid" time="0.004346" steps="7829"/></proof>
+             </goal>
+             <goal name="astar_code&#39;vc.30.1.0.3.0.0.1.0.1.0.1.1" expl="asserted formula (false case)" proved="true">
+             <transf name="destruct_rec" proved="true" arg1="h1">
+              <goal name="astar_code&#39;vc.30.1.0.3.0.0.1.0.1.0.1.1.0" expl="asserted formula (false case)" proved="true">
+              <transf name="assert" proved="true" arg1="(l = (l1 ++ Cons y Nil) ++ (Cons z l2&#39;))">
+               <goal name="astar_code&#39;vc.30.1.0.3.0.0.1.0.1.0.1.1.0.0" expl="asserted formula" proved="true">
+               <proof prover="2"><result status="valid" time="0.013556" steps="11899"/></proof>
+               </goal>
+               <goal name="astar_code&#39;vc.30.1.0.3.0.0.1.0.1.0.1.1.0.1" expl="asserted formula (false case)" proved="true">
+               <proof prover="3"><result status="valid" time="0.006553" steps="7853"/></proof>
+               </goal>
+              </transf>
+              </goal>
+             </transf>
+             </goal>
+            </transf>
+            </goal>
+           </transf>
+           </goal>
+           <goal name="astar_code&#39;vc.30.1.0.3.0.0.1.0.1.1" expl="false case (loop invariant preservation)" proved="true">
+           <transf name="assert" proved="true" arg1="(d[z] &gt;= path_weight (l1 ++ Cons y Nil) z)">
+            <goal name="astar_code&#39;vc.30.1.0.3.0.0.1.0.1.1.0" expl="asserted formula" proved="true">
+            <proof prover="2"><result status="valid" time="0.013108" steps="11892"/></proof>
+            </goal>
+            <goal name="astar_code&#39;vc.30.1.0.3.0.0.1.0.1.1.1" expl="false case (loop invariant preservation)" proved="true">
+            <transf name="assert" proved="true" arg1="(d[y] + weight y z = path_weight (l1 ++ Cons y Nil) z)">
+             <goal name="astar_code&#39;vc.30.1.0.3.0.0.1.0.1.1.1.0" expl="asserted formula" proved="true">
+             <transf name="assert" proved="true" arg1="(exists l. shortest_path src l y /\ d[y] = path_weight l y)">
+              <goal name="astar_code&#39;vc.30.1.0.3.0.0.1.0.1.1.1.0.0" expl="asserted formula" proved="true">
+              <proof prover="3"><result status="valid" time="0.004387" steps="8063"/></proof>
+              </goal>
+              <goal name="astar_code&#39;vc.30.1.0.3.0.0.1.0.1.1.1.0.1" expl="asserted formula" proved="true">
+              <proof prover="3"><result status="valid" time="0.004627" steps="7873"/></proof>
+              </goal>
+             </transf>
+             </goal>
+             <goal name="astar_code&#39;vc.30.1.0.3.0.0.1.0.1.1.1.1" expl="false case (loop invariant preservation)" proved="true">
+             <proof prover="2"><result status="valid" time="0.012658" steps="11341"/></proof>
+             </goal>
+            </transf>
+            </goal>
+           </transf>
+           </goal>
+          </transf>
+          </goal>
+          <goal name="astar_code&#39;vc.30.1.0.3.0.0.1.0.2" expl="false case (loop invariant preservation)" proved="true">
+          <transf name="assert" proved="true" arg1="(shortest_path src (l1 ++ Cons y Nil) z)">
+           <goal name="astar_code&#39;vc.30.1.0.3.0.0.1.0.2.0" expl="asserted formula" proved="true">
+           <transf name="case" proved="true" arg1="(l2 = Nil)">
+            <goal name="astar_code&#39;vc.30.1.0.3.0.0.1.0.2.0.0" expl="asserted formula (true case)" proved="true">
+            <proof prover="3"><result status="valid" time="0.019112" steps="139902"/></proof>
+            </goal>
+            <goal name="astar_code&#39;vc.30.1.0.3.0.0.1.0.2.0.1" expl="asserted formula (false case)" proved="true">
+            <transf name="assert" proved="true" arg1="(exists l2&#39;. l2 = Cons z l2&#39;)">
+             <goal name="astar_code&#39;vc.30.1.0.3.0.0.1.0.2.0.1.0" expl="asserted formula" proved="true">
+             <proof prover="3"><result status="valid" time="0.027963" steps="179848"/></proof>
+             </goal>
+             <goal name="astar_code&#39;vc.30.1.0.3.0.0.1.0.2.0.1.1" expl="asserted formula (false case)" proved="true">
+             <transf name="destruct_rec" proved="true" arg1="h1">
+              <goal name="astar_code&#39;vc.30.1.0.3.0.0.1.0.2.0.1.1.0" expl="asserted formula (false case)" proved="true">
+              <transf name="assert" proved="true" arg1="(l = (l1 ++ Cons y Nil) ++ (Cons z l2&#39;))">
+               <goal name="astar_code&#39;vc.30.1.0.3.0.0.1.0.2.0.1.1.0.0" expl="asserted formula" proved="true">
+               <proof prover="2"><result status="valid" time="0.049260" steps="18065"/></proof>
+               </goal>
+               <goal name="astar_code&#39;vc.30.1.0.3.0.0.1.0.2.0.1.1.0.1" expl="asserted formula (false case)" proved="true">
+               <proof prover="1"><result status="valid" time="0.020266" steps="93"/></proof>
+               </goal>
+              </transf>
+              </goal>
+             </transf>
+             </goal>
+            </transf>
+            </goal>
+           </transf>
+           </goal>
+           <goal name="astar_code&#39;vc.30.1.0.3.0.0.1.0.2.1" expl="false case (loop invariant preservation)" proved="true">
+           <transf name="assert" proved="true" arg1="(d[z] &gt;= path_weight (l1 ++ Cons y Nil) z)">
+            <goal name="astar_code&#39;vc.30.1.0.3.0.0.1.0.2.1.0" expl="asserted formula" proved="true">
+            <proof prover="3"><result status="valid" time="0.693771" steps="2710725"/></proof>
+            </goal>
+            <goal name="astar_code&#39;vc.30.1.0.3.0.0.1.0.2.1.1" expl="false case (loop invariant preservation)" proved="true">
+            <transf name="assert" proved="true" arg1="(d[y] + weight y z = path_weight (l1 ++ Cons y Nil) z)">
+             <goal name="astar_code&#39;vc.30.1.0.3.0.0.1.0.2.1.1.0" expl="asserted formula" proved="true">
+             <transf name="assert" proved="true" arg1="(d[y] = path_weight l1 y)">
+              <goal name="astar_code&#39;vc.30.1.0.3.0.0.1.0.2.1.1.0.0" expl="asserted formula" proved="true">
+              <transf name="unfold" proved="true" arg1="inv" arg2="in" arg3="LoopInvariant2">
+               <goal name="astar_code&#39;vc.30.1.0.3.0.0.1.0.2.1.1.0.0.0" expl="asserted formula" proved="true">
+               <proof prover="2"><result status="valid" time="2.016340" steps="412090"/></proof>
+               </goal>
+              </transf>
+              </goal>
+              <goal name="astar_code&#39;vc.30.1.0.3.0.0.1.0.2.1.1.0.1" expl="asserted formula" proved="true">
+              <proof prover="3"><result status="valid" time="0.015718" steps="121565"/></proof>
+              </goal>
+             </transf>
+             </goal>
+             <goal name="astar_code&#39;vc.30.1.0.3.0.0.1.0.2.1.1.1" expl="false case (loop invariant preservation)" proved="true">
+             <proof prover="2"><result status="valid" time="0.127269" steps="33524"/></proof>
+             </goal>
+            </transf>
+            </goal>
+           </transf>
+           </goal>
+          </transf>
+          </goal>
+         </transf>
+         </goal>
+        </transf>
+        </goal>
+       </transf>
+       </goal>
+      </transf>
+      </goal>
+     </transf>
+     </goal>
+    </transf>
+    </goal>
+   </transf>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="astar_code&#39;vc.31" expl="assertion" proved="true">
+  <proof prover="3"><result status="valid" time="0.027411" steps="166234"/></proof>
+  </goal>
+  <goal name="astar_code&#39;vc.32" expl="postcondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.016051" steps="33"/></proof>
+  </goal>
+ </transf>
+ </goal>
+</theory>
+</file>
+</why3session>
