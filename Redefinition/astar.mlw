@@ -1,10 +1,22 @@
-(** {1 A Star} *)
+(** {1 A* Algorithm Proof} 
+  
+  A proof of the A* shortest path algorithm.
 
-(* Dijkstra's shortest path algorithm.
+  Based on the Why3 proof of Dijkstra's algorithm by Jean-Christophe Filliâtre (CNRS).
+   
+  Paper Title: Why3 and Proving A* Automatically - A Case Study of Why3 as a Tool for Automated Software Verification
 
-   This proof follows Cormen et al's "Algorithms".
+  Available at: https://repository.tudelft.nl/
 
-   Author: Jean-Christophe Filliâtre (CNRS) *)
+  Author: Kejatan Neumann (TU Delft)*)
+
+(** {2 Mutabe Map Mudole} 
+
+  This definition was taken from the Why3 proof of Dijkstra's algorithm.
+
+  We use it for the distance function in the A* algorithm.
+
+*)
 
 module ImpmapNoDom
 
@@ -15,22 +27,30 @@ module ImpmapNoDom
 
   type mutMap 'a = abstract { mutable contents: map key 'a }
 
+  (** initialises a map that with the given value for all keys *)
   val function create (x: 'a): mutMap 'a
     ensures { result.contents = const x }
 
+  (** retrives the value stored at the given key *)
   val function ([]) (m: mutMap 'a) (k: key): 'a
     ensures { result = m.contents[k] }
 
+  (** logic function that assigns the given value to the given key *)
   val ghost function ([<-]) (m: mutMap 'a) (k: key) (v: 'a): mutMap 'a
     ensures { result.contents = m.contents[k <- v] }
 
+  (** program function that assigns the given value to the given key *)
   val ([]<-) (m: mutMap 'a) (k: key) (v: 'a): unit
     writes { m }
     ensures { m = (old m)[k <- v] }
 
 end
 
+(** {2 A* Algorithm Module} 
 
+  This module implements the specification of A* listed in the paper.
+
+*)
 
 module AStar
   
@@ -39,97 +59,126 @@ module AStar
   use list.Append
   use option.Option
   
-  (** Graph & Paths Definitions: *)
+  (** {6 Graph & Paths Definitions} 
+  
+    Below is the code defininng the graph and paths, as described in the paper.
+  *)
   
   type vertex 
   
   clone set.SetImp with type elt = vertex
   
+  (** set of all vertices in the graph *)
   constant graph: fset vertex
   
+  (** logic (ghost) definition of the `successors` function *)
   val ghost function successors (x: vertex): fset vertex
     ensures { subset result graph }
     ensures { not mem x result }
   
+  (** program definition of the `successors` function *)
   val successors_impl (x: vertex): set
     ensures { result = successors x }
   
+  (** `edge` predicate used to link the above graph definition to `graph.IntPathWeight` *)
   predicate edge (a b: vertex) = mem b (successors a)
   
+  (** imports the definition of `path` and `path_weight` from the standard library *)
   clone graph.IntPathWeight with 
     type vertex = vertex, 
     predicate edge = edge
   
+  (** ensures edge weights can only be positive *)
   axiom positive_weight: forall a, b. weight a b > 0
   
+  (** definition of `shortest_path` *)
   predicate shortest_path (a: vertex) (l: list vertex) (b: vertex) = 
     path a l b /\ 
     (forall l'. path a l' b -> path_weight l b <= path_weight l' b)
   
+  (** alternate definition of `path` via its weight rather than a list *)
   predicate path_with_len (a b: vertex) (d: int) = 
     exists l. path a l b /\ (path_weight l b = d)
   
+  (** alternate definition of `shortest_path` via its weight rather than a list *)
   predicate shortest_path_with_len (a b: vertex) (d: int) = 
     exists l. shortest_path a l b /\ (path_weight l b = d)
   
+  (** predicate used to ensure that the edges in `graph` never lead outside of it *)
   predicate closed_under_succ (v: fset vertex) = 
     forall n. mem n v -> forall m. edge n m -> mem m v
     
   
-  (** Lemmas on Graph & Paths: *)
+  (** {6 Lemmas on Graph & Paths} 
+
+    Below are lemmas about the properties of the graph and paths on it.
+  *)
   
+  (** paths always have positive weight *)
   lemma path_nonneg: 
     forall x, y, l. path x l y -> path_weight l y >= 0
   
+  (** shortest paths always have positive weight *)
   lemma shortest_path_nonneg: 
     forall x, y, l. shortest_path x l y -> path_weight l y >= 0
   
+  (** a shortest path consiting of 2 parts, implies both parts are also shortest paths *)
   lemma shortest_path_decomposition:
     forall x y z: vertex, l1 l2: list vertex.
     shortest_path x (l1 ++ Cons y l2) z -> shortest_path x l1 y /\ shortest_path y (Cons y l2) z
   
+  (** if a list is not a shortest path, it either isn't a path or there is a path shorter than it *)
   lemma shortest_path_negation:
     forall a, b, l. not (shortest_path a l b) ->
     not (path a l b) \/ (exists l'. path a l' b /\ path_weight l' b < path_weight l b)
   
+  (** the weight of a path is equal to the sum of the weights of the sub-paths on it *)
   lemma path_weight_sub_path:
     forall x y z: vertex, l1 l2 l3: list vertex.
     path_weight (l1 ++ (Cons x l2) ++ (Cons y l3)) z =
     path_weight l1 x + path_weight (Cons x l2) y + path_weight (Cons y l3) z
   
+  (** a sub-path on a shortest path must also be a shortest path *)
   lemma optimal_substructure_property:
     forall s, t, a, b, l1, l2, l_ab. 
     shortest_path s (l1 ++ (Cons a l_ab) ++ (Cons b l2)) t -> 
     shortest_path a (Cons a l_ab) b
   
+  (** paths can be joined with an edge to make another valid path *)
   lemma sub_path:
     forall x, a, b, z, l1, l2.
         path x l1 a -> path b l2 z -> edge a b -> path x (l1 ++ (Cons a l2)) z
   
+  (** a path is either the nil-path, or it is two paths joined by an edge *)
   lemma sub_path_inversion:
     forall x z: vertex, l: list vertex. path x l z ->
        (x = z /\ l = Nil)
     \/ (exists a, b, l1, l2.
         path x l1 a /\ path b l2 z /\ edge a b /\ l = l1 ++ (Cons a l2))
   
+  (** a path from some `src` in the set `s` to some `v` outside of the set `s` must contain an edge which exists this set `s` *)
   lemma inside_or_exit_path:
     forall s, src, v, l. mem src s -> path src l v -> not (mem v s) ->
       (exists y, z, l1, l2.
         mem y s /\ not (mem z s) /\ edge y z /\
         path src l1 y /\ path z l2 v /\ l = l1 ++ Cons y l2)
   
+  (** a shortest path from some `src` in the set `s` to some `v` outside of the set `s` must contain an edge which exists this set `s` *)
   lemma inside_or_exit_shortest_path:
     forall s, src, v, l. mem src s -> shortest_path src l v -> not (mem v s) ->
       (exists y, z, l1, l2.
         mem y s /\ not (mem z s) /\ edge y z /\
         shortest_path src l1 y /\ shortest_path z l2 v /\ l = l1 ++ Cons y l2)
   
+  (** if the exists a path from `a` to `b`, there must exist a shortest path as well *)
   lemma path_imples_exists_shortest_path:
     forall a, b, l. path a l b -> (exists l'. path_weight l' b <= path_weight l b /\ shortest_path a l' b)
   
+  (** a path of weight zero must necessarily be the nil-path *)
   lemma path_zero:
     forall a, b, l. path a l b -> path_weight l b = 0 -> l = Nil /\ a = b
   
+  (** a path of weight zero must necessarily be the nil-path *)
   lemma main_lemma:
     forall src v: vertex. forall l: list vertex.
     path src l v -> not (shortest_path src l v) ->
@@ -137,31 +186,38 @@ module AStar
     \/
     (exists v': vertex. exists l': list vertex. shortest_path v' l' v /\ edge src v' /\ path_weight (Cons src l') v < path_weight l v)
   
+  (** this lemma was defined in the proof of Dijkstra's algorithm *)
   lemma completeness_lemma:
     forall s: set.
-    (* if s is closed under g_succ *)
+    (* if s is closed under `successors` *)
     closed_under_succ s ->
     (* and if s contains src *)
     forall src: vertex. mem src s ->
     (* then any vertex reachable from s is also in s *)
-    forall dst, l.
-    path src l dst -> mem dst s
+    forall dst, l. path src l dst -> mem dst s
   
   
-  (** Admissibility & Consistency Definitions: *)
+  (** {6 Heuristic Function Definitions} 
   
+    Here we define predicates about the Heuristic function.
+  *)
+  
+  (** the heuristic function must never return a negative value *)
   predicate positive (f: vertex -> int) = 
     (forall n. f n >= 0)
   
+  (** the heuristic function must be admissible *)
   predicate admissible (f: vertex -> int) (dst: vertex) = 
     forall a, l. path a l dst -> f a <= path_weight l dst
   
+  (** the heuristic function must be consistent *)
   predicate consistent (f: vertex -> int) (dst: vertex) = 
     f dst = 0 /\
     (forall a b:vertex.
       edge a b ->
       f a <= weight a b + f b )
   
+  (** alternate definition of consistentcy *)
   predicate path_consistent (f: vertex -> int) (dst: vertex) = 
     f dst = 0 /\
     (forall a b:vertex, l: list vertex.
@@ -169,22 +225,34 @@ module AStar
       f a <= path_weight l b + f b )
   
   
-  (** Lemmas on Admissibility & Consistency: *)
+  (** {6 Lemmas on Heuristic Function Properties} 
+
+    Here we define lemmas on the propertiesof a heuristic function (defined above).
+  *)
+
+  (** the two alternate definitions of consistency are equivelent *)
   lemma consistent_is_path_consistent:
     forall dst: vertex, f: (vertex -> int). positive f -> consistent f dst <-> path_consistent f dst
   
+  (** a consistent heuristic is also and admissible heuristic *)
   lemma consistent_implies_admissible:
     forall dst: vertex, f: (vertex -> int). positive f -> consistent f dst -> admissible f dst
   
   
-  (** Useful Function for Working With The CLOSED Set: *)
+  (** {6 Distnace Function and the CLOSED and OPEN Set Definitions} 
   
+    Here we define functions useful for dealing with the CLOSED and OPEN sets.
+  *)
+  
+  (** imports the mutable map function we use for the distance function *)
   clone ImpmapNoDom with type key = vertex
   
+  (** predicate defining a vertex with the smallest f(n) value in a set *)
   predicate min (m: vertex) (q: set) (d: mutMap int) (h: vertex -> int) =
     mem m q /\
     (forall x: vertex. mem x q -> d[m] + h m <= d[x] + h x)
 
+  (** program function which removes and returns the vertex in the given set with the smalles f(n) value *)
   val get_min (open: set) (d: mutMap int) (h: vertex -> int) : vertex 
     writes   { open }
     requires { not is_empty open }
@@ -192,42 +260,60 @@ module AStar
     ensures  { open = remove result (old open) }
     
   
-  (** Predicates Used in Invariants: *)
-    
+  (** {6 Predicates Used in Loop Invariants} 
+  
+  Below are predicates used to define the loop invariants of the A* algorithm.
+
+  They are added so that the actual code is easier to follow.
+
+  Note that for these predicates: `s` is the CLOSED set and `q` is the OPEN set
+  *)
+  
+  (** the source is either closed or open *)
   predicate inv_src (src: vertex) (s q: set) =
     mem src s \/ mem src q
 
-  predicate inv (src dst: vertex) (s q: set) (d: mutMap int) =
+  (** these invariants hold for both the outer and inner loops *)
+  predicate inv (src dst: vertex) (s q: set) (d: mutMap int) = 
+    (* The source is either closed or open: *)
     inv_src src s q /\ 
-    d[src] = 0 /\
-    not mem dst s /\
-    (* S and Q are contained in V *)
-    subset s graph /\ subset q graph /\
-    (* S and Q are disjoint *)
-    disjoint s q /\
-    (* we already found the shortest paths for vertices in S *)
+    (* The distance from src to src is zero: *)
+    d[src] = 0 /\ 
+    (* We have not yet closed the destination vertex: *)
+    not mem dst s /\ 
+    (* CLOSED and OPEN are subsets of the graph: *)
+    subset s graph /\ subset q graph /\ 
+    (* CLOSED and OPEN are disjoint: *)
+    disjoint s q /\ 
+    (* We already found the shortest paths for vertices in CLOSED: *)
     (forall v: vertex. mem v s -> shortest_path_with_len src v d[v]) /\
-    (* there are paths for vertices in Q *)
+    (* There are paths for vertices in OPEN: *)
     (forall n. mem n q \/ mem n s -> path_with_len src n d[n]) /\
+    (* For every open vertex `n`, there is a vertex in closed from which `n` succeeds: *)
     (forall n. mem n q -> (exists u. mem n (successors u) /\ mem u s /\ d[u] + weight u n = d[n]) \/ n = src) /\
+    (* No node is both open and closed at the same time: *)
     (forall n. not (mem n q /\ mem n s))
 
+  (** an invariant that holds for the outer loop *)
   predicate inv_succ (_src: vertex) (s q: set) (d: mutMap int) =
-    (* successors of vertices in S are either in S or in Q *)
+    (* successors of vertices in CLOSED are either in CLOSED or in OPEN: *)
     forall x: vertex. mem x s ->
     forall y: vertex. mem y (successors x) ->
     (mem y s \/ mem y q) /\ d[y] <= d[x] + weight x y 
 
+  (** an invariant that holds for the inner loop *)
   predicate inv_succ2 (_src: vertex) (s q: set) (d: mutMap int) (u: vertex) (su: set) =
-    (* successors of vertices in S are either in S or in Q,
-       unless they are successors of u still in su *)
+    (* successors of vertices in CLOSED are either in CLOSED or in OPEN, unless they are successors of `u` still in `su` *)
     forall x: vertex. mem x s ->
     forall y: vertex. mem y (successors x) ->
     (x<>u \/ (x=u /\ not (mem y su))) ->
     (mem y s \/ mem y q) /\ d[y] <= d[x] + weight x y 
     
   
-  (** A Star Code: *)
+  (** {6 The A* Algorithm} 
+  
+  Below is the impletation of the A* algorithm as described in the paper.
+  *)
   
   let astar_code (src dst: vertex) (h: vertex -> int): option int
     requires { consistent h dst /\ positive h }

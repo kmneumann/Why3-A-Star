@@ -170,12 +170,11 @@ module AStar
   
   
   (** Lemmas on Admissibility & Consistency: *)
+  lemma consistent_is_path_consistent:
+    forall dst: vertex, f: (vertex -> int). positive f -> consistent f dst <-> path_consistent f dst
   
   lemma consistent_implies_admissible:
     forall dst: vertex, f: (vertex -> int). positive f -> consistent f dst -> admissible f dst
-  
-  lemma consistent_is_path_consistent:
-    forall dst: vertex, f: (vertex -> int). positive f -> consistent f dst <-> path_consistent f dst
   
   
   (** Useful Function for Working With The CLOSED Set: *)
