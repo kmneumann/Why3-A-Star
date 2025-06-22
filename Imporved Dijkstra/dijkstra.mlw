@@ -283,7 +283,7 @@ module DijkstraShortestPath
   (* Algorithm's code. *)
 
   let shortest_path_code (src dst: vertex) (h: vertex -> int): option int
-    (*requires { not (admissible h dst) }*)
+    requires { not (admissible h dst) }
     requires { mem src v /\ mem dst v }
     ensures  { (forall d. not path src dst d) -> forall u, d. path src u d -> mem u closed }
     ensures  { forall a, d, d'. shortest_path src dst d -> shortest_path src a d' -> d' + h a < d -> mem a closed \/ mem a open }

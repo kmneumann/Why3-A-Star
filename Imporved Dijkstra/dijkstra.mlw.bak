@@ -71,7 +71,7 @@ module DijkstraShortestPath
         forall x: vertex. path x x 0
     | Path_cons: 
         forall x y a b: vertex. forall d1 d2: int.
-        path x y d1 -> path a b d2 -> mem a (g_succ y) -> path x b (d1 + weight y a + d2)
+        path x y d1 -> mem a (g_succ y) -> path x a (d1 + weight y a)
 
   predicate shortest_path (x y: vertex) (d: int) =
     path x y d /\ 
